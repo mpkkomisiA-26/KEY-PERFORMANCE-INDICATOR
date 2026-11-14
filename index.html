@@ -25,8 +25,9 @@
             --shadow: 0 4px 20px rgba(0, 153, 229, 0.08);
             --coquette-pink: #e5a4b4;
             --coquette-pink-deep: #c97b8e;
-            --vintage-cream: #f8f4ec;
-            --vintage-gold: #9a7445;
+            --tag-olive: #98a649;
+            --tag-olive-dark: #7d8b35;
+            --tag-olive-light: #adb962;
         }
 
         * {
@@ -43,12 +44,12 @@
         }
 
         /* =========================================================
-           WELCOME PAGE (ENCHANTED GARDEN & MPK DOOR THEME)
+           0. WELCOME PAGE (ENCHANTED GARDEN & MPK DOOR THEME)
            ========================================================= */
         .welcome-screen {
             position: relative;
             width: 100%;
-            min-height: 100vh;
+            min-height: 100dvh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -70,7 +71,6 @@
             pointer-events: none;
         }
 
-        /* Efek Tekstur Taman, Cahaya & Bunga Liar */
         .garden-mist {
             position: absolute;
             inset: 0;
@@ -97,7 +97,6 @@
             z-index: 1;
         }
 
-        /* Area Utama Tengah Welcome */
         .welcome-stage {
             position: relative;
             z-index: 3;
@@ -108,10 +107,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 1.5rem 1rem 0.5rem;
+            padding: 1.25rem 1rem 0.5rem;
         }
 
-        /* Tipografi Atas: "Welcome" & "to" */
         .welcome-typography {
             position: relative;
             width: 100%;
@@ -132,7 +130,7 @@
 
         .word-welcome {
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(3.3rem, 8vw, 5.4rem);
+            font-size: clamp(3rem, 8vw, 5.4rem);
             color: #ffffff;
             font-weight: 400;
             line-height: 1;
@@ -161,13 +159,12 @@
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
             font-weight: 700;
-            font-size: clamp(5.2rem, 13vw, 8.8rem);
+            font-size: clamp(4.6rem, 13vw, 8.8rem);
             color: #ffffff;
             line-height: 0.78;
             text-shadow: 0 6px 22px rgba(34, 48, 28, 0.35);
         }
 
-        /* Kunci Atas dengan Pita Pink */
         .top-key-ornament {
             position: absolute;
             top: 4px;
@@ -179,13 +176,10 @@
             animation: subtleSway 4.5s ease-in-out infinite;
         }
 
-        /* =========================================================
-           PINTU KLASIK TENGAH (INTERAKTIF 3D)
-           ========================================================= */
         .door-wrapper {
             position: relative;
-            width: clamp(230px, 34vw, 295px);
-            height: clamp(355px, 52vh, 455px);
+            width: clamp(210px, 34vw, 295px);
+            height: clamp(315px, 48dvh, 455px);
             perspective: 1300px;
             cursor: pointer;
             z-index: 4;
@@ -196,7 +190,6 @@
             transform: translateY(-3px);
         }
 
-        /* Kusen Pintu Putih Klasik */
         .door-frame {
             position: relative;
             width: 100%;
@@ -210,7 +203,6 @@
             border: 1px solid #dfd7c8;
         }
 
-        /* Mahkota / Cornice Atas Kusen */
         .door-frame::before {
             content: "";
             position: absolute;
@@ -224,7 +216,6 @@
             border: 1px solid #d8cfc0;
         }
 
-        /* Cahaya di Balik Pintu Saat Terbuka */
         .door-portal-glow {
             position: relative;
             width: 100%;
@@ -247,7 +238,6 @@
             opacity: 0.85;
         }
 
-        /* Daun Pintu Utama */
         .door-leaf {
             position: absolute;
             inset: 0;
@@ -266,7 +256,6 @@
             transform: rotateY(-82deg);
         }
 
-        /* Panel Ukiran Atas & Bawah Pintu */
         .door-panel-top {
             position: relative;
             height: 52%;
@@ -304,12 +293,11 @@
             border: 1px solid #dfd7c7;
         }
 
-        /* Plakat Ornate "MPK" Bermotif Bunga */
         .mpk-plaque {
             position: relative;
             z-index: 3;
             width: 88%;
-            padding: 0.75rem 0.5rem;
+            padding: 0.7rem 0.5rem;
             background:
                 radial-gradient(circle at 50% 18%, rgba(242, 168, 190, 0.42) 0%, transparent 34%),
                 radial-gradient(circle at 46% 84%, rgba(242, 168, 190, 0.42) 0%, transparent 36%),
@@ -326,14 +314,13 @@
 
         .mpk-plaque-title {
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(2.1rem, 4.5vw, 2.75rem);
+            font-size: clamp(2rem, 4.5vw, 2.75rem);
             color: #1f2421;
             line-height: 1.05;
             letter-spacing: 1px;
             text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
         }
 
-        /* Gagang Pintu Kuningan Antik + Pita Pink */
         .door-handle-assembly {
             position: absolute;
             left: 8px;
@@ -350,13 +337,12 @@
             transform: translateY(-50%) rotate(-6deg);
         }
 
-        /* Kunci Besar Kanan Bawah */
         .bottom-key-ornament {
             position: absolute;
             right: clamp(8px, 6vw, 75px);
             bottom: 84px;
-            width: clamp(110px, 18vw, 155px);
-            height: clamp(110px, 18vw, 155px);
+            width: clamp(95px, 18vw, 155px);
+            height: clamp(95px, 18vw, 155px);
             z-index: 6;
             cursor: pointer;
             filter: drop-shadow(0 8px 16px rgba(24, 34, 20, 0.35));
@@ -368,9 +354,8 @@
             transform: scale(1.07) rotate(-4deg);
         }
 
-        /* Tombol Petunjuk Klik Pintu */
         .door-cta-pill {
-            margin-top: 14px;
+            margin-top: 12px;
             background: rgba(255, 252, 247, 0.92);
             color: #4a3b32;
             border: 1.5px solid var(--coquette-pink);
@@ -398,18 +383,15 @@
             color: var(--coquette-pink-deep);
         }
 
-        /* =========================================================
-           BANNER LENGKUNG BAWAH: "Action over Promises"
-           ========================================================= */
         .welcome-bottom-banner {
             position: relative;
             z-index: 5;
             width: 100%;
-            height: 92px;
+            height: 86px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 0.5rem;
+            margin-top: 0.4rem;
         }
 
         .arch-bg-svg {
@@ -424,7 +406,7 @@
             position: relative;
             z-index: 2;
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(2rem, 5vw, 3.1rem);
+            font-size: clamp(1.9rem, 5vw, 3.1rem);
             color: #1e2421;
             font-weight: 400;
             padding-top: 14px;
@@ -436,8 +418,8 @@
         .corner-drape-right {
             position: absolute;
             bottom: 0;
-            width: clamp(95px, 16vw, 150px);
-            height: 92px;
+            width: clamp(90px, 16vw, 150px);
+            height: 86px;
             pointer-events: none;
             z-index: 3;
             filter: drop-shadow(0 -2px 6px rgba(0, 0, 0, 0.14));
@@ -457,62 +439,207 @@
         }
 
         /* =========================================================
-           MODAL LOGIN
+           1. HALAMAN LOGIN: BACKGROUND VINTAGE FLORAL CANVAS
+              & CENTER BOX OLIVE HANGTAG DENGAN TALI EMAS
            ========================================================= */
-        .modal-overlay {
+        .login-page-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
+            width: 100%;
+            min-height: 100dvh;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: clamp(2.8rem, 7vh, 4.2rem) 1rem 2.25rem;
+            background-color: #d7cfb1;
+            background-image:
+                radial-gradient(ellipse at 50% 15%, rgba(253, 250, 238, 0.72) 0%, transparent 45%),
+                radial-gradient(circle at 86% 64%, rgba(196, 104, 112, 0.44) 0%, rgba(212, 138, 140, 0.18) 26%, transparent 48%),
+                radial-gradient(circle at 12% 38%, rgba(192, 114, 112, 0.40) 0%, rgba(216, 156, 150, 0.16) 24%, transparent 45%),
+                radial-gradient(circle at 42% 58%, rgba(86, 102, 58, 0.44) 0%, rgba(114, 128, 78, 0.2) 25%, transparent 46%),
+                radial-gradient(circle at 14% 8%, rgba(110, 84, 54, 0.42) 0%, transparent 32%),
+                radial-gradient(circle at 18% 88%, rgba(252, 246, 234, 0.75) 0%, rgba(235, 214, 198, 0.3) 28%, transparent 50%),
+                repeating-linear-gradient(0deg, rgba(115, 104, 78, 0.06) 0px, rgba(115, 104, 78, 0.06) 1px, transparent 1px, transparent 4px),
+                repeating-linear-gradient(90deg, rgba(115, 104, 78, 0.06) 0px, rgba(115, 104, 78, 0.06) 1px, transparent 1px, transparent 4px),
+                linear-gradient(165deg, #dfd7b9 0%, #cfc69f 48%, #d8cfa9 100%);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .vintage-canvas-flora {
+            position: fixed;
+            inset: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.65);
-            display: none;
-            justify-content: center;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.78;
+        }
+
+        .login-tag-wrapper {
+            position: relative;
+            z-index: 2;
+            width: min(92vw, 430px);
+            margin: auto;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(6px);
-            padding: 1rem;
+            filter: drop-shadow(0 18px 34px rgba(56, 52, 34, 0.35));
+            animation: tagDropIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        .modal-card {
-            background: var(--card-bg);
-            padding: 2.25rem;
-            border-radius: 20px;
+        @keyframes tagDropIn {
+            from { opacity: 0; transform: translateY(14px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .tag-crown-svg {
             width: 100%;
-            max-width: 440px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            border-top: 6px solid var(--sman-blue);
-            animation: fadeIn 0.35s ease-out;
-        }
-
-        .modal-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-logo {
-            width: 64px;
-            height: 64px;
-            object-fit: contain;
-            margin-bottom: 0.75rem;
-        }
-
-        .modal-header h2 {
-            font-size: 1.35rem;
-            font-weight: 800;
-            color: var(--text-color);
-        }
-
-        .modal-header p {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-        }
-
-        .hint-text {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            margin-top: 0.25rem;
+            height: auto;
             display: block;
+            overflow: visible;
+            position: relative;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .tag-body-card {
+            position: relative;
+            width: 100%;
+            margin-top: -2px;
+            padding: 1.85rem clamp(1.35rem, 5vw, 2.15rem) 1.75rem;
+            background-color: #ffffff;
+            background-image:
+                radial-gradient(circle at 50% 0, transparent 6px, #ffffff 6.5px),
+                linear-gradient(90deg, #98a649 0%, #98a649 100%);
+            border-left: 7px solid #ffffff;
+            border-right: 7px solid #ffffff;
+            border-bottom: 8px solid #ffffff;
+            border-radius: 0 0 10px 10px;
+            box-shadow: inset 0 0 0 2px #82903a;
+        }
+
+        .tag-body-inner {
+            position: relative;
+            background:
+                radial-gradient(circle at 25% 20%, rgba(190, 204, 114, 0.32) 0%, transparent 45%),
+                radial-gradient(circle at 78% 65%, rgba(118, 132, 48, 0.28) 0%, transparent 50%),
+                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 2px, transparent 2px, transparent 6px),
+                linear-gradient(180deg, #99a74a 0%, #8f9e41 55%, #86953a 100%);
+            border: 1.5px solid #c5d182;
+            border-radius: 4px;
+            padding: 1.5rem clamp(1rem, 4vw, 1.5rem) 1.35rem;
+        }
+
+        .tag-body-card::before {
+            content: "";
+            position: absolute;
+            inset: -6px;
+            border: 2px dotted rgba(121, 145, 168, 0.65);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            pointer-events: none;
+        }
+
+        .tag-login-header {
+            text-align: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .tag-logo-badge {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+            background: rgba(255, 253, 245, 0.94);
+            padding: 5px;
+            border-radius: 50%;
+            border: 2px solid #d9c084;
+            box-shadow: 0 4px 12px rgba(45, 52, 20, 0.22);
+            margin-bottom: 0.6rem;
+        }
+
+        .tag-login-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.45rem, 5vw, 1.75rem);
+            font-weight: 700;
+            color: #fffdf5;
+            line-height: 1.15;
+            text-shadow: 0 2px 6px rgba(42, 48, 18, 0.35);
+        }
+
+        .tag-login-header p {
+            font-size: 0.78rem;
+            color: #f3f6df;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            margin-top: 0.2rem;
+        }
+
+        .tag-form-group {
+            margin-bottom: 0.95rem;
+        }
+
+        .tag-form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+            color: #fffdf5;
+            text-shadow: 0 1px 2px rgba(38, 44, 16, 0.28);
+        }
+
+        .tag-form-group input,
+        .tag-form-group select {
+            width: 100%;
+            padding: 0.68rem 0.85rem;
+            border: 1.5px solid #d5c18a;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            background: rgba(255, 253, 247, 0.96);
+            color: #262e18;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .tag-form-group input:focus,
+        .tag-form-group select:focus {
+            outline: none;
+            border-color: #f4d88c;
+            box-shadow: 0 0 0 3px rgba(244, 216, 140, 0.35);
+        }
+
+        .tag-hint-text {
+            font-size: 0.75rem;
+            color: #eef3d2;
+            margin-top: 0.3rem;
+            display: block;
+        }
+
+        .btn-tag-login {
+            width: 100%;
+            margin-top: 0.35rem;
+            padding: 0.78rem 1rem;
+            border: 1.5px solid #f0d794;
+            border-radius: 10px;
+            font-size: 0.94rem;
+            font-weight: 800;
+            cursor: pointer;
+            color: #3a2b14;
+            background: linear-gradient(180deg, #f8e6b4 0%, #dfc077 100%);
+            box-shadow: 0 5px 14px rgba(48, 54, 20, 0.28);
+            transition: transform 0.2s, filter 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+        }
+
+        .btn-tag-login:hover {
+            filter: brightness(1.04);
+            transform: translateY(-1px);
         }
 
         .back-welcome-link {
@@ -521,22 +648,24 @@
             justify-content: center;
             gap: 0.4rem;
             width: 100%;
-            margin-top: 0.9rem;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.82rem;
+            margin-top: 0.85rem;
+            background: rgba(255, 253, 245, 0.16);
+            border: 1px solid rgba(255, 253, 245, 0.32);
+            border-radius: 8px;
+            padding: 0.45rem 0.75rem;
+            color: #fffdf5;
+            font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
-            transition: color 0.2s;
+            transition: background 0.2s;
         }
 
         .back-welcome-link:hover {
-            color: var(--sman-blue);
+            background: rgba(255, 253, 245, 0.28);
         }
 
         /* =========================================================
-           APP CONTAINER & DASHBOARD STYLES
+           2. MAIN APP WRAPPER & DASHBOARD STYLES
            ========================================================= */
         .app-container {
             min-height: 100vh;
@@ -888,6 +1017,7 @@
             font-weight: 700;
             padding: 0.15rem 0.5rem;
             border-radius: 6px;
+            z-index: 2;
         }
 
         .folder-count-tag {
@@ -900,6 +1030,7 @@
             font-weight: 700;
             padding: 0.15rem 0.5rem;
             border-radius: 6px;
+            z-index: 2;
         }
 
         .folder-info {
@@ -959,6 +1090,13 @@
         .input-disabled {
             background: #f1f5f9;
             color: var(--text-muted);
+        }
+
+        .hint-text {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            display: block;
         }
 
         .btn {
@@ -1085,7 +1223,15 @@
             .grid-2col, .dashboard-grid-2 { grid-template-columns: 1fr; }
             .folder-grid { grid-template-columns: repeat(2, 1fr); }
             .top-key-ornament { left: -62px; width: 125px; }
-            .bottom-key-ornament { right: 6px; bottom: 78px; width: 95px; height: 95px; }
+            .bottom-key-ornament { right: 6px; bottom: 78px; width: 90px; height: 90px; }
+        }
+
+        @media(max-width: 420px) {
+            .welcome-stage { padding: 0.75rem 0.75rem 0.25rem; }
+            .door-wrapper { width: 205px; height: 295px; }
+            .login-page-overlay { padding: 3.1rem 0.75rem 1.75rem; }
+            .tag-body-card { padding: 1.5rem 0.85rem 1.25rem; }
+            .tag-body-inner { padding: 1.35rem 0.85rem 1.15rem; }
         }
     </style>
 </head>
@@ -1099,11 +1245,9 @@
         <div class="garden-sunbeam"></div>
 
         <div class="welcome-stage">
-            <!-- Header Tipografi "Welcome" & "to" -->
             <div class="welcome-typography">
                 <div class="word-welcome-wrap">
                     <span class="word-welcome">Welcome</span>
-                    <!-- Pita Satin Pink Kiri -->
                     <svg class="ribbon-left-accent" viewBox="0 0 160 90" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5 10 C40 25, 65 40, 82 46" stroke="#e9a9b9" stroke-width="8" stroke-linecap="round"/>
                         <path d="M82 46 C55 24, 38 36, 48 54 C56 66, 72 56, 82 46 Z" fill="#f2bcc9" stroke="#d18698" stroke-width="1.5"/>
@@ -1115,15 +1259,12 @@
                 </div>
 
                 <div class="word-to-wrap">
-                    <!-- Kunci Atas dengan Pita Pink -->
                     <svg class="top-key-ornament" viewBox="0 0 210 75" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Batang & Kepala Kunci Antik -->
                         <circle cx="28" cy="36" r="16" stroke="#8c673a" stroke-width="5" fill="#b48b57" fill-opacity="0.25"/>
                         <circle cx="28" cy="36" r="8" stroke="#6e4e28" stroke-width="2.5"/>
                         <rect x="44" y="33" width="142" height="6" rx="3" fill="url(#goldGradTop)"/>
                         <rect x="164" y="24" width="6" height="10" rx="1" fill="#7c5930"/>
                         <rect x="174" y="22" width="7" height="12" rx="1" fill="#7c5930"/>
-                        <!-- Pita Pink di Kunci -->
                         <path d="M84 36 C64 12, 46 22, 58 38 C66 48, 76 42, 84 36 Z" fill="#f3becb" stroke="#ce8396" stroke-width="1.5"/>
                         <path d="M84 36 C104 12, 122 22, 110 38 C102 48, 92 42, 84 36 Z" fill="#f3becb" stroke="#ce8396" stroke-width="1.5"/>
                         <path d="M82 38 C72 54, 62 64, 54 70" stroke="#e49bae" stroke-width="6" stroke-linecap="round"/>
@@ -1141,7 +1282,6 @@
                 </div>
             </div>
 
-            <!-- Pintu Utama MPK (Klik untuk Membuka) -->
             <div id="welcomeDoor" class="door-wrapper" onclick="openWelcomeDoor()" title="Klik pintu untuk masuk ke halaman login">
                 <div class="door-frame">
                     <div class="door-portal-glow">
@@ -1149,22 +1289,18 @@
                     </div>
 
                     <div class="door-leaf">
-                        <!-- Panel Atas + Plakat MPK -->
                         <div class="door-panel-top">
                             <div class="mpk-plaque">
                                 <div class="mpk-plaque-title">MPK</div>
                             </div>
                         </div>
 
-                        <!-- Gagang Pintu Kuningan + Pita Pink -->
                         <div class="door-handle-assembly">
                             <svg viewBox="0 0 70 90" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="14" y="10" width="10" height="66" rx="5" fill="#8d683b" stroke="#5e4321" stroke-width="1.5"/>
                                 <circle cx="19" cy="22" r="2.5" fill="#d6b382"/>
                                 <circle cx="19" cy="64" r="2.5" fill="#d6b382"/>
-                                <!-- Tuas Gagang -->
                                 <path d="M18 42 H54 C58 42, 60 45, 57 48 L48 51 H18 Z" fill="#b48a54" stroke="#684a25" stroke-width="1.5"/>
-                                <!-- Pita Pink Kecil di Gagang -->
                                 <path d="M22 44 C10 32, 4 40, 12 47 C16 50, 20 47, 22 44 Z" fill="#f3becb" stroke="#c97b8e" stroke-width="1.2"/>
                                 <path d="M22 44 C34 32, 40 40, 32 47 C28 50, 24 47, 22 44 Z" fill="#f3becb" stroke="#c97b8e" stroke-width="1.2"/>
                                 <path d="M21 46 L12 62" stroke="#e59eb0" stroke-width="4" stroke-linecap="round"/>
@@ -1173,29 +1309,24 @@
                             </svg>
                         </div>
 
-                        <!-- Panel Bawah -->
                         <div class="door-panel-bottom"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Kunci Antik Kanan Bawah -->
             <div class="bottom-key-ornament" onclick="openWelcomeDoor()" title="Gunakan kunci untuk membuka pintu">
                 <svg viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g transform="rotate(-42 90 90)">
-                        <!-- Kepala Kunci Filigree -->
                         <circle cx="132" cy="90" r="26" stroke="#8b6537" stroke-width="6" fill="#c59c67" fill-opacity="0.22"/>
                         <circle cx="132" cy="90" r="14" stroke="#6c4c26" stroke-width="3"/>
                         <circle cx="132" cy="70" r="5" fill="#9c7341"/>
                         <circle cx="152" cy="90" r="5" fill="#9c7341"/>
                         <circle cx="132" cy="110" r="5" fill="#9c7341"/>
-                        <!-- Batang & Gigi Kunci -->
                         <rect x="22" y="86" width="86" height="8" rx="4" fill="#9e7542"/>
                         <rect x="26" y="94" width="8" height="14" rx="1.5" fill="#7a572c"/>
                         <rect x="38" y="94" width="7" height="11" rx="1.5" fill="#7a572c"/>
                         <rect x="49" y="94" width="8" height="15" rx="1.5" fill="#7a572c"/>
                     </g>
-                    <!-- Pita Satin Pink di Atas Kunci -->
                     <path d="M126 42 C102 18, 84 30, 98 46 C108 56, 118 48, 126 42 Z" fill="#f3becb" stroke="#cc7e92" stroke-width="1.5"/>
                     <path d="M126 42 C150 18, 168 30, 154 46 C144 56, 134 48, 126 42 Z" fill="#f3becb" stroke="#cc7e92" stroke-width="1.5"/>
                     <path d="M124 44 C112 64, 98 76, 86 84" stroke="#e397ab" stroke-width="7" stroke-linecap="round"/>
@@ -1204,20 +1335,17 @@
                 </svg>
             </div>
 
-            <!-- Tombol Trigger Masuk -->
             <button type="button" class="door-cta-pill" onclick="openWelcomeDoor()">
                 <i class="fa-solid fa-key"></i> Buka Pintu &amp; Masuk Login
             </button>
         </div>
 
-        <!-- Banner Lengkung Bawah: "Action over Promises" -->
         <div class="welcome-bottom-banner">
             <svg class="arch-bg-svg" viewBox="0 0 1440 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0,110 L0,45 Q720,-20 1440,45 L1440,110 Z" fill="#fcfaf7"/>
                 <path d="M0,45 Q720,-20 1440,45" stroke="#d8cfc4" stroke-width="3" fill="none"/>
             </svg>
 
-            <!-- Tirai & Pita Sudut Kiri -->
             <svg class="corner-drape-left" viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0 25 Q45 35 62 110 L0 110 Z" fill="#ecc0cb"/>
                 <path d="M0 42 Q32 52 42 110 L0 110 Z" fill="#e2a5b4"/>
@@ -1228,7 +1356,6 @@
 
             <div class="motto-text">Action over Promises</div>
 
-            <!-- Tirai & Pita Sudut Kanan -->
             <svg class="corner-drape-right" viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0 25 Q45 35 62 110 L0 110 Z" fill="#ecc0cb"/>
                 <path d="M0 42 Q32 52 42 110 L0 110 Z" fill="#e2a5b4"/>
@@ -1240,35 +1367,112 @@
     </div>
 
     <!-- =========================================================
-         1. MODAL LOGIN BERDASARKAN ROLE
+         1. HALAMAN LOGIN: BACKGROUND VINTAGE FLORAL CANVAS
+            & CENTER BOX GIFT TAG HIJAU OLIVE DENGAN TALI EMAS
          ========================================================= -->
-    <div id="loginModal" class="modal-overlay">
-        <div class="modal-card">
-            <div class="modal-header">
-                <img src="logo-sman14.png" alt="Logo SMAN 14" onerror="this.src='https://via.placeholder.com/60?text=14'" class="modal-logo">
-                <h2>Login Sistem KPI OSIS/MPK</h2>
-                <p>SMA Negeri 14 Surabaya • FROM OSKA FOR US</p>
+    <div id="loginModal" class="login-page-overlay">
+        <svg class="vintage-canvas-flora" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M85 320 C110 420, 75 510, 125 605" stroke="#7d4a36" stroke-width="2.2" stroke-linecap="round" opacity="0.65"/>
+            <ellipse cx="127" cy="614" rx="8" ry="15" transform="rotate(-18 127 614)" fill="#5c4932" opacity="0.7"/>
+            <circle cx="1220" cy="520" r="140" fill="url(#roseWatercolor)" opacity="0.55"/>
+            <circle cx="190" cy="280" r="120" fill="url(#roseWatercolor)" opacity="0.45"/>
+            <circle cx="240" cy="780" r="150" fill="url(#creamPetal)" opacity="0.7"/>
+            <defs>
+                <radialGradient id="roseWatercolor">
+                    <stop offset="0%" stop-color="#c46972"/>
+                    <stop offset="65%" stop-color="#dca2a2" stop-opacity="0.4"/>
+                    <stop offset="100%" stop-color="#dca2a2" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="creamPetal">
+                    <stop offset="0%" stop-color="#fdf9ee"/>
+                    <stop offset="70%" stop-color="#f3e6d4" stop-opacity="0.45"/>
+                    <stop offset="100%" stop-color="#f3e6d4" stop-opacity="0"/>
+                </radialGradient>
+            </defs>
+        </svg>
+
+        <div class="login-tag-wrapper">
+            <svg class="tag-crown-svg" viewBox="0 0 430 142" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 142 L0 112 C28 102, 46 86, 52 64 C78 24, 142 6, 215 6 C288 6, 352 24, 378 64 C384 86, 402 102, 430 112 L430 142 Z"
+                      fill="#ffffff" stroke="#b6c292" stroke-width="1.5"/>
+
+                <path d="M58 64 C84 26, 146 10, 215 10 C284 10, 346 26, 372 64"
+                      stroke="#87a2bc" stroke-width="2" stroke-dasharray="5 6" fill="none"/>
+                <circle cx="72" cy="52" r="3.5" fill="#9e1b24"/>
+                <circle cx="285" cy="18" r="3.5" fill="#9e1b24"/>
+                <circle cx="386" cy="95" r="3.2" fill="#9e1b24"/>
+
+                <path d="M7 142 L7 117 C34 107, 52 91, 58 69 C83 31, 145 14, 215 14 C285 14, 347 31, 372 69 C378 91, 396 107, 423 117 L423 142 Z"
+                      fill="url(#oliveTagCrownGrad)" stroke="#7c8b35" stroke-width="1.5"/>
+
+                <line x1="48" y1="96" x2="382" y2="96" stroke="#7d8c37" stroke-width="1.2" opacity="0.55"/>
+                <line x1="48" y1="98" x2="382" y2="98" stroke="#c3cf7d" stroke-width="1" opacity="0.5"/>
+
+                <polygon points="205,40 227,40 242,54 242,74 227,88 205,88 190,74 190,54"
+                         fill="#e3c888" stroke="#9b793e" stroke-width="2"/>
+                <circle cx="216" cy="64" r="13" fill="#f7f3e8" stroke="#9b793e" stroke-width="1.8"/>
+
+                <path d="M210 61 C150 42, 72 18, 66 -12 C62 -32, 92 -38, 132 -26 C158 -18, 174 -4, 184 12"
+                      stroke="#5b3e19" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+                <path d="M210 61 C150 42, 72 18, 66 -12 C62 -32, 92 -38, 132 -26 C158 -18, 174 -4, 184 12"
+                      stroke="#b98c4a" stroke-width="3.2" stroke-dasharray="4 3" stroke-linecap="round" fill="none"/>
+
+                <ellipse cx="212" cy="60" rx="8" ry="6" transform="rotate(-25 212 60)" fill="#c99e5b" stroke="#5b3e19" stroke-width="2"/>
+
+                <path d="M215 62 C232 76, 232 108, 214 142 C207 154, 202 162, 198 168"
+                      stroke="#5b3e19" stroke-width="6" stroke-linecap="round" fill="none"/>
+                <path d="M215 62 C232 76, 232 108, 214 142 C207 154, 202 162, 198 168"
+                      stroke="#c39652" stroke-width="2.8" stroke-dasharray="4 3" stroke-linecap="round" fill="none"/>
+
+                <path d="M213 65 C218 96, 226 124, 246 148"
+                      stroke="#5b3e19" stroke-width="5.8" stroke-linecap="round" fill="none"/>
+                <path d="M213 65 C218 96, 226 124, 246 148"
+                      stroke="#c39652" stroke-width="2.6" stroke-dasharray="4 3" stroke-linecap="round" fill="none"/>
+
+                <defs>
+                    <linearGradient id="oliveTagCrownGrad" x1="215" y1="14" x2="215" y2="142" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#a5b358"/>
+                        <stop offset="65%" stop-color="#99a74a"/>
+                        <stop offset="100%" stop-color="#96a447"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            <div class="tag-body-card">
+                <div class="tag-body-inner">
+                    <div class="tag-login-header">
+                        <img src="logo-sman14.png" alt="Logo SMAN 14" onerror="this.src='https://via.placeholder.com/60?text=14'" class="tag-logo-badge">
+                        <h2>Login Sistem KPI OSIS/MPK</h2>
+                        <p>SMA Negeri 14 Surabaya • FROM OSKA FOR US</p>
+                    </div>
+
+                    <form id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="tag-form-group">
+                            <label><i class="fa-solid fa-user-shield"></i> Pilih Role Akses</label>
+                            <select id="roleSelect" required onchange="updateRoleHint()">
+                                <option value="BPH">User BPH</option>
+                                <option value="Komisi A">User Komisi A</option>
+                                <option value="Ketua Sekbid/Komisi">User Ketua Sekbid/Komisi</option>
+                                <option value="Anggota">User Anggota</option>
+                            </select>
+                        </div>
+
+                        <div class="tag-form-group">
+                            <label><i class="fa-solid fa-key"></i> Password Akses</label>
+                            <input type="password" id="passwordInput" placeholder="Masukkan password sesuai role..." required>
+                            <small id="passwordHint" class="tag-hint-text">Masukkan password yang telah diberikan oleh admin.</small>
+                        </div>
+
+                        <button type="submit" class="btn-tag-login">
+                            <i class="fa-solid fa-right-to-bracket"></i> Masuk Dashboard
+                        </button>
+
+                        <button type="button" class="back-welcome-link" onclick="backToWelcome()">
+                            <i class="fa-solid fa-arrow-left"></i> Kembali ke Halaman Utama
+                        </button>
+                    </form>
+                </div>
             </div>
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label><i class="fa-solid fa-user-shield"></i> Pilih Role Akses</label>
-                    <select id="roleSelect" required onchange="updateRoleHint()">
-                        <option value="BPH">User BPH</option>
-                        <option value="Komisi A">User Komisi A</option>
-                        <option value="Ketua Sekbid/Komisi">User Ketua Sekbid/Komisi</option>
-                        <option value="Anggota">User Anggota</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label><i class="fa-solid fa-key"></i> Password Akses</label>
-                    <input type="password" id="passwordInput" placeholder="Masukkan password sesuai role..." required>
-                    <small id="passwordHint" class="hint-text">Masukkan password yang telah diberikan oleh admin.</small>
-                </div>
-                <button type="submit" class="btn btn-primary btn-full"><i class="fa-solid fa-right-to-bracket"></i> Masuk Dashboard</button>
-                <button type="button" class="back-welcome-link" onclick="backToWelcome()">
-                    <i class="fa-solid fa-arrow-left"></i> Kembali ke Halaman Utama
-                </button>
-            </form>
         </div>
     </div>
 
@@ -1568,7 +1772,7 @@
 
     <script>
         // =========================================================
-        // 0. TRANSISI WELCOME PAGE -> LOGIN MODAL
+        // 0. TRANSISI WELCOME PAGE -> LOGIN PAGE
         // =========================================================
         let isDoorOpening = false;
 
@@ -1580,17 +1784,18 @@
             const welcomeEl = document.getElementById('welcomePage');
             const loginModal = document.getElementById('loginModal');
 
-            // Animasi pintu terbuka 3D
             if (doorEl) doorEl.classList.add('door-open');
 
-            // Transisi halus ke modal login setelah pintu terbuka
             setTimeout(() => {
                 if (welcomeEl) welcomeEl.classList.add('fade-out');
             }, 650);
 
             setTimeout(() => {
                 if (welcomeEl) welcomeEl.style.display = 'none';
-                if (loginModal) loginModal.style.display = 'flex';
+                if (loginModal) {
+                    loginModal.style.display = 'flex';
+                    loginModal.scrollTop = 0;
+                }
                 isDoorOpening = false;
             }, 1150);
         }
@@ -1611,28 +1816,124 @@
         }
 
         // =========================================================
-        // 1. PEMETAAN 16 SOURCE FOTO FOLDER (SEKBID 1-10 & KOMISI A-E + INTI)
+        // 1. PEMETAAN 16 SOURCE FOTO BLOGGER (SEKBID 1-10 & KOMISI A-E + INTI)
         // =========================================================
         const organisasi_folder_assets = {
             sekbid: [
-                { id: 1, slot: "Foto 1", nama: "Sekbid 1", bidang: "Kesiswaan / Keagamaan", image_url: "URL_FOTO_1_DISINI" },
-                { id: 2, slot: "Foto 2", nama: "Sekbid 2", bidang: "Bela Negara / PBB", image_url: "URL_FOTO_2_DISINI" },
-                { id: 3, slot: "Foto 3", nama: "Sekbid 3", bidang: "Pendahuluan Pancasila / Wawasan Kebangsaan", image_url: "URL_FOTO_3_DISINI" },
-                { id: 4, slot: "Foto 4", nama: "Sekbid 4", bidang: "Prestasi Akademik / Seni / Olahraga", image_url: "URL_FOTO_4_DISINI" },
-                { id: 5, slot: "Foto 5", nama: "Sekbid 5", bidang: "Demokrasi / HAM / Politik", image_url: "URL_FOTO_5_DISINI" },
-                { id: 6, slot: "Foto 6", nama: "Sekbid 6", bidang: "Kreativitas / Keterampilan / Kewirausahaan", image_url: "URL_FOTO_6_DISINI" },
-                { id: 7, slot: "Foto 7", nama: "Sekbid 7", bidang: "Kualitas Jasmani / Kesehatan / Gizi", image_url: "URL_FOTO_7_DISINI" },
-                { id: 8, slot: "Foto 8", nama: "Sekbid 8", bidang: "Sastra / Budaya", image_url: "URL_FOTO_8_DISINI" },
-                { id: 9, slot: "Foto 9", nama: "Sekbid 9", bidang: "Teknologi Informasi / TIK", image_url: "URL_FOTO_9_DISINI" },
-                { id: 10, slot: "Foto 10", nama: "Sekbid 10", bidang: "Komunikasi dalam Bahasa Inggris", image_url: "URL_FOTO_10_DISINI" }
+                {
+                    id: 1,
+                    slot: "Foto 1",
+                    nama: "Sekbid 1",
+                    bidang: "Kesiswaan / Keagamaan",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiljygeTGvn-DBtFW7AB2GdhVMFhKXFptr6CHpMCzSxwtIdLfwA6T-DijwoqoDDcJZodkRy9Y5g7WfDacT7aWaMZe44y4DBww5tBXg34mWLNH_Equ9XHFUNCB1KAZJ86EqLRGPKVCGvgI8ohhukp3E5DXaY84EDskCM-3TRr7XaWxw9tDwKTWNcCUBawgk/s736/0aaf5b6988ce226f8896624cccfa5052.jpg"
+                },
+                {
+                    id: 2,
+                    slot: "Foto 2",
+                    nama: "Sekbid 2",
+                    bidang: "Bela Negara / PBB",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjUF5y3m10qdPQBH3EvctBcLMUGzuaKWso6XuDj_G2Eeb5igq-6iD_DmpgaiMuf1t1w-2G2L4ooMIfQDWhYgKZixtHXd_Tfsv3EsNsO4MhazYnUhzCqZvDE_e0t2Zrl60gaFrCXLukjMtC3YC0srAbzKpQPcVflF7MelK96RBGBhGGCt0rA_ugwknn_o34/s512/1fadc436ba51a7ea30ab92db2f51cf8c.jpg"
+                },
+                {
+                    id: 3,
+                    slot: "Foto 3",
+                    nama: "Sekbid 3",
+                    bidang: "Pendahuluan Pancasila / Wawasan Kebangsaan",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj-A3LWvO1M7tS-ISfh8VoKLVW19JQfZa6Jtvf5jdYt2bNP1-2ZRMrU_e5Za2jr4O_Mv4LbEGLhn_zDoP0nkuhx90SbLiZxOMoqzyxhG_ieNeZr1atM4H7ZR7geiw-5NcEsiK8suMVa2GvKclKjti4ftOLgCDYDgeNg6j_kwMcsiEbbz-gj6fPHyOgpM70/s736/2ff9b5cf1163c1e2c98823e01577523d.jpg"
+                },
+                {
+                    id: 4,
+                    slot: "Foto 4",
+                    nama: "Sekbid 4",
+                    bidang: "Prestasi Akademik / Seni / Olahraga",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhse5s-6oNUARqD6lJZXyV-v68gYQXOZY5pNmgVuJFK-mKaHYGd0-iJfJDtcjNuDASRaRGYhpeTMjtPwSfik75j84d1KQQWhseXyjydZ3BVH4BxHBgQrdyDe-7Md4pRrWZhsVH_zwm6fUD7idVIfdW3yyArUBuKYTU5JKtEDLe1kB7Ec3YzWUK25ymnpg4/s512/6a4494d3753cc12cd1eb36ccd0028dad.jpg"
+                },
+                {
+                    id: 5,
+                    slot: "Foto 5",
+                    nama: "Sekbid 5",
+                    bidang: "Demokrasi / HAM / Politik",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLDSH1DFSJcxyUXzxoqQuW-TpPVZRD0qmCeNQ5q883fxqGOZS7nka33-J-xXzTm0cZgYOGvefBdI_ICiPBs-Ek_E10Y9JO53yYzwj610di90UCc5lJOweDVmYephM13o7VbaIJeFeOakaYM0Jd9UP5vY7oMEa5FJkKudjp0DLy6komg7Uq7njjlWhJU2s/s736/6c09b86524d4501bc7431e0029952809.jpg"
+                },
+                {
+                    id: 6,
+                    slot: "Foto 6",
+                    nama: "Sekbid 6",
+                    bidang: "Kreativitas / Keterampilan / Kewirausahaan",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjMomEt8Hq8WGaPPvfs0wEP1tX9xrfJzHVYFNTYkRjKG4AdXbLEA1xc7N6UpgQAyZaw_JXEvLlvylGShDcE_U19u995rdy2EJxFRhuVwk2eUJ_Zga8A1V5Vb72WLZZtHsOkoYXOJOOa49RDQYADbjk4YTt8gYgYWNZTkKe5_5GJym3blj4NqIDmby56fyQ/s736/046fe1add77ceca8aa7d740f8d360666.jpg"
+                },
+                {
+                    id: 7,
+                    slot: "Foto 7",
+                    nama: "Sekbid 7",
+                    bidang: "Kualitas Jasmani / Kesehatan / Gizi",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjZBU_f1i8CySs9oKaH8XKFaLNzvObn3JspeW-OqidlAR-uXbaGI4LzL3tGVIQerNppzvLltaAKEE1fQS-afE4DC-fZLIalcXCwqpgDhN7nHTPxMbfaKA7JofUsFIyTlN0rHfcixQe_x4H0HeXyL7VjaYGvL7-krBEOGagi7Bl5mOAc2y_qOi6BRlQFWhI/s920/67a91bad803e19870e24edf6edd3de4b.jpg"
+                },
+                {
+                    id: 8,
+                    slot: "Foto 8",
+                    nama: "Sekbid 8",
+                    bidang: "Sastra / Budaya",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisiLFDCT6PYuCnevqkjo06p-oYbMmJOsJhD9ivkMhLf8xv02pee9bhQnpFWvu3_PRkUsCPxupSwRT_DcIK9xS13a_kU8iOS0AZGX9y6EW_97oMqv4VC2KME3PP7qBJmfniusQ9tqHabexo0J_DaNf2xKRWCP4x43i44UDotYWiltaQydYGrkL2A_PO6BU/s736/4426ac4f6bdb399d3d4dc52a9e4b579a.jpg"
+                },
+                {
+                    id: 9,
+                    slot: "Foto 9",
+                    nama: "Sekbid 9",
+                    bidang: "Teknologi Informasi / TIK",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgdCJodmj96Cjty2IKydnZxApkBYKzqniEo4F3_bBYePNqsXSlKe8OvW02ZYNPhSk8opwK2g0MocYhTXbowkn82flUbN_MXwGwa_LrERdWeE0VcwQbwsclGJb16s4OjUamaJ048mgYl-SFtZuXUoDycUTvOGd2Z-f98ujBeCFAjJTeVMqSewBc3O9vKX6Q/s1200/75462b9d277c33ecf19ed7efea9a3fa4.jpg"
+                },
+                {
+                    id: 10,
+                    slot: "Foto 10",
+                    nama: "Sekbid 10",
+                    bidang: "Komunikasi dalam Bahasa Inggris",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhg22hCfcFOEKBorhvj906cEYxdWV5eZzIqQ9ez2JjtGYNBtx1AZbzjbl52CNR8kiWh4zWhIDKXfybupIAzTEeYRrrFhsEnNEp7IQGlmfVUQf8Z8Qj4zNamGJChWQ74BpK2yC1jhwit716iHIjPSDB_s2h-RiC4naQrhwIW0o5aGENCIgFpAV3_gBa47R4/s777/558953f025d9e4c63cd07c525e4e8476.jpg"
+                }
             ],
             komisi: [
-                { id: "A", slot: "Foto 11", nama: "Komisi A", bidang: "Legislasi / Anggaran Dasar", image_url: "URL_FOTO_11_DISINI" },
-                { id: "B", slot: "Foto 12", nama: "Komisi B", bidang: "Pengawasan Program Kerja", image_url: "URL_FOTO_12_DISINI" },
-                { id: "C", slot: "Foto 13", nama: "Komisi C", bidang: "Aspirasi & Advokasi Siswa", image_url: "URL_FOTO_13_DISINI" },
-                { id: "D", slot: "Foto 14", nama: "Komisi D", bidang: "Hubungan Masyarakat & Media", image_url: "URL_FOTO_14_DISINI" },
-                { id: "E", slot: "Foto 15", nama: "Komisi E", bidang: "Kedisiplinan & Ketertiban", image_url: "URL_FOTO_15_DISINI" },
-                { id: "EXTRA", slot: "Foto 16", nama: "Pengurus Inti / Umum", bidang: "Pimpinan / Pengurus Inti / Cadangan", image_url: "URL_FOTO_16_DISINI" }
+                {
+                    id: "A",
+                    slot: "Foto 11",
+                    nama: "Komisi A",
+                    bidang: "Legislasi / Anggaran Dasar",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEik1KK4mHaYwSa5Oh6v9pOL2DveyAiLAahpQbv5iZQh-BA0TLT3WWY8qP3U6eFxyhns8QuUTmk1g10cXZ3hWbZLW4XtNkHryco1grAhwgQB3jY5t7ogXOLib2rSHzA__dzkmtfgNpQ5YFxzYH_cwmAPjAV2XRiQR2t8cP5OOQTLgngRGkfgV5v66XAFh6A/s736/b54e707079a2be5276da653fcbc10dfb.jpg"
+                },
+                {
+                    id: "B",
+                    slot: "Foto 12",
+                    nama: "Komisi B",
+                    bidang: "Pengawasan Program Kerja",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjJTA08JJN1cxpHgGMwu3QFVr4q8GHHxYrOIQT2P-bDyzosvn6EyAzaY55VueqglFNOv1gYw7V413gauyDz383cn3zxh3LqLjJNg4r8A1deFEsrILTuD36MpLEi5Vu2XMZ07hu9He5t2ZpAk3XKqZR0gFrlKOHNp6I_Rticp-ElrCKmysqApeUqHrx0EB4/s736/e62bcd857d9a9299f8bc4627c6c2a523.jpg"
+                },
+                {
+                    id: "C",
+                    slot: "Foto 13",
+                    nama: "Komisi C",
+                    bidang: "Aspirasi & Advokasi Siswa",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgpIlL_8PCxFfPR53kZDlVx2o6vYF7N9LtckGlQgG12FnkqDjthqXq-ebIV0ZmLKCW10hCFGpuCjiNYaihWE0_xQLTiXNvDH5Om4rhrk7aKrDO84iUdCiSmXz-wIObnxthoz0RHw4qNZhqAg-sCF-jcLb27itmvpE0m0nllKHXUjDOqdj9-swsKyu0j_Zw/s736/efeb1ed3849cefe0c1d32dbba954bd39.jpg"
+                },
+                {
+                    id: "D",
+                    slot: "Foto 14",
+                    nama: "Komisi D",
+                    bidang: "Hubungan Masyarakat & Media",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhzxFUKC03w1c1X_OSqS6nIqZaLxEdy8binRTBDfpoSt18nx0cfTGBP0Fb5c7Pu6cyKJ2kBPZfdORbp3NNk5NRD3V4mBaVzB6sjpKx5Qqs3cgOZPq04TtSXSkG0qiAB_u2uwvr2dTr4YWhrYsr9ocGGqWxWV9nxsLfCCJRpGYMN_XbGdEnJ-U0rmyA4sBo/s736/f513ed0c30cef8e1630e924c83de16bd.jpg"
+                },
+                {
+                    id: "E",
+                    slot: "Foto 15",
+                    nama: "Komisi E",
+                    bidang: "Kedisiplinan & Ketertiban",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjO3efVyf4EEsJ0dHimCAiJH2mvXPBTawAdPady9LY7_7yfOBsgfsoKuLqxraYyjFKsFYJrdC99La4lEhm4tXePSXoOLp4Xr-H0mvWRwoIBlH_iZcqQZeDRu2D00HkBZKyfmRg446C6r1ebnjX2pqde9v-dCuHNFxuHEwzV4MDf0_xpYMZmIXP4q4hI0aM/s735/c2b7f195d79178014a08405536633c93.jpg"
+                },
+                {
+                    id: "EXTRA",
+                    slot: "Foto 16",
+                    nama: "Pengurus Inti / Umum",
+                    bidang: "Pimpinan / Pengurus Inti / Cadangan",
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiOkcy_2hic7AKbluARw3AuyeH2mPpfd1vYTEIvAfU7ryHPWBRUlV92c2thHQTQDCudv4KVUjO6c4vkFbuTD-iiIJBKnTUDX3V738wo25F39c-Sbe1ZPYoB-nwQrQZ_ikYRWr92ka6SPtxcSSjo7eV5ibBzqDOUPVDRa5HxiOJFH2PS4BW9E0VSYHLqsv4/s736/f489d18f4bbff8a6ed0efa2819ba556b.jpg"
+                }
             ]
         };
 
@@ -1721,8 +2022,15 @@
             const inputPass = document.getElementById('passwordInput').value.trim();
 
             try {
-                const roleDoc = await colRoles.doc(selectedRole.replace(/\//g, "-")).get();
-                const validPassword = roleDoc.exists ? roleDoc.data().password : defaultPasswords[selectedRole];
+                let validPassword = defaultPasswords[selectedRole];
+                try {
+                    const roleDoc = await colRoles.doc(selectedRole.replace(/\//g, "-")).get();
+                    if (roleDoc.exists && roleDoc.data().password) {
+                        validPassword = roleDoc.data().password;
+                    }
+                } catch (readErr) {
+                    console.warn("Menggunakan validasi default lokal:", readErr);
+                }
 
                 if (inputPass !== validPassword) {
                     alert("Password salah! Silakan periksa kembali.");
@@ -1731,10 +2039,14 @@
 
                 currentUserRole = selectedRole;
 
-                await colUsers.add({
-                    role: selectedRole,
-                    loginAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
+                try {
+                    await colUsers.add({
+                        role: selectedRole,
+                        loginAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch (logErr) {
+                    console.warn("Log sesi login tidak tercatat:", logErr);
+                }
 
                 document.getElementById('userBadgeRole').textContent = `Role: ${selectedRole}`;
                 document.getElementById('loginModal').style.display = 'none';
@@ -1747,7 +2059,7 @@
                 alert(`Berhasil login sebagai ${selectedRole}!`);
             } catch (error) {
                 console.error("Error saat login:", error);
-                alert("Gagal terhubung ke Firebase. Pastikan firebaseConfig dan Firestore sudah aktif.");
+                alert("Terjadi kendala saat memproses login. Silakan coba kembali.");
             }
         }
 
@@ -1790,20 +2102,20 @@
                 dataPresensi = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderPresensi();
                 updateStats();
-            });
+            }, err => console.warn("Listener attendance:", err));
 
             colTeams.orderBy("createdAt", "desc").onSnapshot(snapshot => {
                 dataProker = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderFolderGrid();
                 renderProker();
                 updateStats();
-            });
+            }, err => console.warn("Listener teams:", err));
 
             colKpi.orderBy("createdAt", "desc").onSnapshot(snapshot => {
                 dataKpi = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderKpi();
                 updateStats();
-            });
+            }, err => console.warn("Listener kpi:", err));
         }
 
         // =========================================================
@@ -1847,12 +2159,12 @@
             });
 
             container.innerHTML = entities.map(item => {
-                const prokerCount = dataProker.filter(p => p.team === item.fullLabel || p.team.startsWith(item.nama)).length;
+                const prokerCount = dataProker.filter(p => p.team === item.fullLabel || (p.team && p.team.startsWith(item.nama))).length;
                 const isSelected = selectedTeamFilter === item.fullLabel ? 'selected' : '';
                 const hasValidUrl = item.image_url && !item.image_url.startsWith("URL_FOTO_");
 
                 const mediaHtml = hasValidUrl
-                    ? `<img src="${item.image_url}" alt="${item.nama}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    ? `<img src="${item.image_url}" alt="${item.nama}" referrerpolicy="no-referrer" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                        <div class="folder-fallback" style="display:none;">
                            <i class="fa-solid fa-folder-open"></i>
                            <span>${item.slot}</span>
