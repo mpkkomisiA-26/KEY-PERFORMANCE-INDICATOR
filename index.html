@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem KPI & Monitoring OSIS/MPK - SMAN 14 Surabaya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Firebase App & Firestore SDK (Compat v9) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root {
+            --sman-blue: #0099e5;
+            --sman-blue-dark: #007bb5;
+            --sman-green: #7cb342;
+            --sman-red: #e31e24;
+            --bg-main: #f4f8fc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 20px rgba(0, 153, 229, 0.08);
+            --coquette-pink: #e5a4b4;
+            --coquette-pink-deep: #c97b8e;
+            --vintage-cream: #f8f4ec;
+            --vintage-gold: #9a7445;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* =========================================================
+           WELCOME PAGE (ENCHANTED GARDEN & MPK DOOR THEME)
+           ========================================================= */
+        .welcome-screen {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            background:
+                radial-gradient(ellipse at 50% 8%, rgba(255, 253, 240, 0.72) 0%, rgba(215, 228, 198, 0.25) 34%, transparent 65%),
+                radial-gradient(circle at 18% 55%, rgba(226, 152, 178, 0.32) 0%, transparent 28%),
+                radial-gradient(circle at 82% 62%, rgba(226, 152, 178, 0.24) 0%, transparent 26%),
+                radial-gradient(circle at 75% 74%, rgba(238, 210, 118, 0.25) 0%, transparent 18%),
+                linear-gradient(180deg, #5d7052 0%, #758964 38%, #6c8058 72%, #526344 100%);
+            user-select: none;
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+
+        .welcome-screen.fade-out {
+            opacity: 0;
+            transform: scale(1.03);
+            pointer-events: none;
+        }
+
+        /* Efek Tekstur Taman, Cahaya & Bunga Liar */
+        .garden-mist {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 12% 10%, rgba(36, 51, 31, 0.65) 0%, transparent 36%),
+                radial-gradient(circle at 88% 12%, rgba(36, 51, 31, 0.6) 0%, transparent 38%),
+                radial-gradient(circle at 50% 0%, rgba(255, 255, 245, 0.55) 0%, transparent 48%),
+                repeating-radial-gradient(circle at 22% 58%, rgba(244, 182, 200, 0.22) 0 4px, transparent 5px 24px),
+                repeating-radial-gradient(circle at 80% 60%, rgba(244, 182, 200, 0.18) 0 3px, transparent 4px 22px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .garden-sunbeam {
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 55%;
+            height: 75%;
+            background: linear-gradient(180deg, rgba(255, 252, 235, 0.42) 0%, rgba(255, 252, 235, 0) 100%);
+            clip-path: polygon(38% 0%, 62% 0%, 92% 100%, 8% 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Area Utama Tengah Welcome */
+        .welcome-stage {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            max-width: 780px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 1rem 0.5rem;
+        }
+
+        /* Tipografi Atas: "Welcome" & "to" */
+        .welcome-typography {
+            position: relative;
+            width: 100%;
+            max-width: 620px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0 0.75rem;
+            margin-bottom: -14px;
+            z-index: 5;
+        }
+
+        .word-welcome-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .word-welcome {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(3.3rem, 8vw, 5.4rem);
+            color: #ffffff;
+            font-weight: 400;
+            line-height: 1;
+            text-shadow: 0 4px 18px rgba(34, 48, 28, 0.45);
+            letter-spacing: 1px;
+        }
+
+        .ribbon-left-accent {
+            position: absolute;
+            left: -26px;
+            bottom: -24px;
+            width: 135px;
+            height: 75px;
+            pointer-events: none;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.18));
+        }
+
+        .word-to-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            margin-right: 0.5rem;
+        }
+
+        .word-to {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-weight: 700;
+            font-size: clamp(5.2rem, 13vw, 8.8rem);
+            color: #ffffff;
+            line-height: 0.78;
+            text-shadow: 0 6px 22px rgba(34, 48, 28, 0.35);
+        }
+
+        /* Kunci Atas dengan Pita Pink */
+        .top-key-ornament {
+            position: absolute;
+            top: 4px;
+            left: -82px;
+            width: 165px;
+            height: 62px;
+            pointer-events: none;
+            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.28));
+            animation: subtleSway 4.5s ease-in-out infinite;
+        }
+
+        /* =========================================================
+           PINTU KLASIK TENGAH (INTERAKTIF 3D)
+           ========================================================= */
+        .door-wrapper {
+            position: relative;
+            width: clamp(230px, 34vw, 295px);
+            height: clamp(355px, 52vh, 455px);
+            perspective: 1300px;
+            cursor: pointer;
+            z-index: 4;
+            transition: transform 0.3s ease;
+        }
+
+        .door-wrapper:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Kusen Pintu Putih Klasik */
+        .door-frame {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #fcfaf5 0%, #efe9dc 100%);
+            padding: 16px 18px 0 18px;
+            border-radius: 3px 3px 0 0;
+            box-shadow:
+                0 22px 45px rgba(24, 34, 20, 0.45),
+                inset 0 2px 4px rgba(255, 255, 255, 0.9);
+            border: 1px solid #dfd7c8;
+        }
+
+        /* Mahkota / Cornice Atas Kusen */
+        .door-frame::before {
+            content: "";
+            position: absolute;
+            top: -12px;
+            left: -10px;
+            right: -10px;
+            height: 14px;
+            background: linear-gradient(180deg, #ffffff 0%, #e7dfd0 100%);
+            border-radius: 3px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
+            border: 1px solid #d8cfc0;
+        }
+
+        /* Cahaya di Balik Pintu Saat Terbuka */
+        .door-portal-glow {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 45%, #ffffff 0%, #e0f2fe 55%, #bae6fd 100%);
+            box-shadow: inset 0 0 30px rgba(0, 153, 229, 0.35);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .portal-enter-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--sman-blue-dark);
+            letter-spacing: 0.5px;
+            text-align: center;
+            padding: 0.5rem;
+            opacity: 0.85;
+        }
+
+        /* Daun Pintu Utama */
+        .door-leaf {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(160deg, #faf7f0 0%, #efe9dc 60%, #e6decb 100%);
+            border: 1px solid #d6ccb9;
+            transform-origin: left center;
+            transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 18px 18px 16px;
+            box-shadow: inset 0 0 18px rgba(173, 158, 132, 0.22);
+        }
+
+        .door-wrapper.door-open .door-leaf {
+            transform: rotateY(-82deg);
+        }
+
+        /* Panel Ukiran Atas & Bawah Pintu */
+        .door-panel-top {
+            position: relative;
+            height: 52%;
+            border: 2px solid #d8cfbe;
+            background: linear-gradient(180deg, #f7f3ea 0%, #ede6d6 100%);
+            box-shadow:
+                inset 0 2px 6px rgba(155, 140, 114, 0.25),
+                0 1px 0 rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .door-panel-top::after {
+            content: "";
+            position: absolute;
+            inset: 8px;
+            border: 1px solid #dfd7c7;
+        }
+
+        .door-panel-bottom {
+            position: relative;
+            height: 38%;
+            border: 2px solid #d8cfbe;
+            background: linear-gradient(180deg, #f7f3ea 0%, #ede6d6 100%);
+            box-shadow:
+                inset 0 2px 6px rgba(155, 140, 114, 0.25),
+                0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .door-panel-bottom::after {
+            content: "";
+            position: absolute;
+            inset: 8px;
+            border: 1px solid #dfd7c7;
+        }
+
+        /* Plakat Ornate "MPK" Bermotif Bunga */
+        .mpk-plaque {
+            position: relative;
+            z-index: 3;
+            width: 88%;
+            padding: 0.75rem 0.5rem;
+            background:
+                radial-gradient(circle at 50% 18%, rgba(242, 168, 190, 0.42) 0%, transparent 34%),
+                radial-gradient(circle at 46% 84%, rgba(242, 168, 190, 0.42) 0%, transparent 36%),
+                radial-gradient(circle at 28% 24%, rgba(154, 185, 138, 0.35) 0%, transparent 25%),
+                radial-gradient(circle at 68% 80%, rgba(154, 185, 138, 0.35) 0%, transparent 25%),
+                linear-gradient(180deg, #fdfbf7 0%, #f3ece0 100%);
+            border: 1.5px solid #d8cbb8;
+            border-radius: 42% 42% 42% 42% / 28% 28% 28% 28%;
+            box-shadow:
+                0 6px 14px rgba(72, 58, 42, 0.22),
+                inset 0 0 0 3px rgba(255, 255, 255, 0.75);
+            text-align: center;
+        }
+
+        .mpk-plaque-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2.1rem, 4.5vw, 2.75rem);
+            color: #1f2421;
+            line-height: 1.05;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Gagang Pintu Kuningan Antik + Pita Pink */
+        .door-handle-assembly {
+            position: absolute;
+            left: 8px;
+            top: 53%;
+            transform: translateY(-50%);
+            width: 58px;
+            height: 76px;
+            z-index: 4;
+            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.25));
+            transition: transform 0.25s ease;
+        }
+
+        .door-wrapper:hover .door-handle-assembly {
+            transform: translateY(-50%) rotate(-6deg);
+        }
+
+        /* Kunci Besar Kanan Bawah */
+        .bottom-key-ornament {
+            position: absolute;
+            right: clamp(8px, 6vw, 75px);
+            bottom: 84px;
+            width: clamp(110px, 18vw, 155px);
+            height: clamp(110px, 18vw, 155px);
+            z-index: 6;
+            cursor: pointer;
+            filter: drop-shadow(0 8px 16px rgba(24, 34, 20, 0.35));
+            animation: floatKey 3.8s ease-in-out infinite;
+            transition: transform 0.3s ease;
+        }
+
+        .bottom-key-ornament:hover {
+            transform: scale(1.07) rotate(-4deg);
+        }
+
+        /* Tombol Petunjuk Klik Pintu */
+        .door-cta-pill {
+            margin-top: 14px;
+            background: rgba(255, 252, 247, 0.92);
+            color: #4a3b32;
+            border: 1.5px solid var(--coquette-pink);
+            padding: 0.55rem 1.35rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(32, 44, 26, 0.28);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.25s ease;
+            z-index: 6;
+        }
+
+        .door-cta-pill:hover {
+            background: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(32, 44, 26, 0.35);
+            border-color: var(--coquette-pink-deep);
+        }
+
+        .door-cta-pill i {
+            color: var(--coquette-pink-deep);
+        }
+
+        /* =========================================================
+           BANNER LENGKUNG BAWAH: "Action over Promises"
+           ========================================================= */
+        .welcome-bottom-banner {
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            height: 92px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .arch-bg-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .motto-text {
+            position: relative;
+            z-index: 2;
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2rem, 5vw, 3.1rem);
+            color: #1e2421;
+            font-weight: 400;
+            padding-top: 14px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .corner-drape-left,
+        .corner-drape-right {
+            position: absolute;
+            bottom: 0;
+            width: clamp(95px, 16vw, 150px);
+            height: 92px;
+            pointer-events: none;
+            z-index: 3;
+            filter: drop-shadow(0 -2px 6px rgba(0, 0, 0, 0.14));
+        }
+
+        .corner-drape-left { left: 0; }
+        .corner-drape-right { right: 0; transform: scaleX(-1); }
+
+        @keyframes floatKey {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-7px) rotate(2deg); }
+        }
+
+        @keyframes subtleSway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-2.5deg); }
+        }
+
+        /* =========================================================
+           MODAL LOGIN
+           ========================================================= */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.65);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(6px);
+            padding: 1rem;
+        }
+
+        .modal-card {
+            background: var(--card-bg);
+            padding: 2.25rem;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-top: 6px solid var(--sman-blue);
+            animation: fadeIn 0.35s ease-out;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-logo {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            margin-bottom: 0.75rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-color);
+        }
+
+        .modal-header p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .hint-text {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        .back-welcome-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            width: 100%;
+            margin-top: 0.9rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .back-welcome-link:hover {
+            color: var(--sman-blue);
+        }
+
+        /* =========================================================
+           APP CONTAINER & DASHBOARD STYLES
+           ========================================================= */
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, var(--sman-blue), var(--sman-blue-dark));
+            color: white;
+            padding: 0.85rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            background: white;
+            padding: 3px;
+            border-radius: 8px;
+        }
+
+        .nav-brand h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .badge-role {
+            font-size: 0.72rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-wa { background: #25d366 !important; }
+        .btn-logout { background: var(--sman-red) !important; }
+
+        .main-content {
+            max-width: 1240px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #ffffff, #f0f7fc);
+            border-left: 6px solid var(--sman-blue);
+            padding: 1.75rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .banner-text h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0.35rem;
+        }
+
+        .banner-text p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .banner-badge {
+            background: #e0f2fe;
+            color: var(--sman-blue-dark);
+            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            border-top: 4px solid var(--sman-blue);
+        }
+
+        .stat-card.green { border-top-color: var(--sman-green); }
+        .stat-card.orange { border-top-color: #f59e0b; }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: #e0f2fe;
+            color: var(--sman-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+        }
+
+        .stat-card.green .stat-icon { background: #ecfccb; color: var(--sman-green); }
+        .stat-card.orange .stat-icon { background: #fef3c7; color: #d97706; }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .stat-card h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-color);
+        }
+
+        .grid-2col, .dashboard-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 1.75rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .card-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .page-header {
+            margin-bottom: 1.75rem;
+        }
+
+        .page-header h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .page-header p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .folder-section {
+            margin-bottom: 2rem;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .pill-btn {
+            background: #f1f5f9;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pill-btn:hover {
+            background: #e0f2fe;
+            border-color: var(--sman-blue);
+        }
+
+        .pill-btn.active {
+            background: var(--sman-blue);
+            color: white;
+            border-color: var(--sman-blue);
+        }
+
+        .folder-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+            gap: 1rem;
+        }
+
+        .folder-card {
+            background: #f8fafc;
+            border: 1.5px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .folder-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--sman-blue);
+            box-shadow: 0 8px 18px rgba(0, 153, 229, 0.12);
+        }
+
+        .folder-card.selected {
+            border-color: var(--sman-blue);
+            background: #f0f9ff;
+            box-shadow: 0 0 0 3px rgba(0, 153, 229, 0.18);
+        }
+
+        .folder-thumb {
+            width: 100%;
+            height: 115px;
+            background: linear-gradient(135deg, #e0f2fe, #f1f5f9);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .folder-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .folder-fallback {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--sman-blue-dark);
+            gap: 0.3rem;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .folder-fallback i {
+            font-size: 2rem;
+            color: var(--sman-blue);
+        }
+
+        .folder-fallback span {
+            font-size: 0.7rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 0.15rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .folder-slot-tag {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(15, 23, 42, 0.72);
+            color: #fff;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .folder-count-tag {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--sman-green);
+            color: #fff;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .folder-info {
+            padding: 0.75rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .folder-info h4 {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0.2rem;
+        }
+
+        .folder-info p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            color: var(--text-color);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+            background: #fff;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--sman-blue);
+        }
+
+        .input-disabled {
+            background: #f1f5f9;
+            color: var(--text-muted);
+        }
+
+        .btn {
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            color: white;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn-full { width: 100%; margin-top: 0.5rem; }
+        .btn-primary { background: var(--sman-blue); }
+        .btn-success { background: var(--sman-green); }
+        .btn-warning { background: #f59e0b; }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
+
+        .data-table th, .data-table td {
+            padding: 0.85rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.88rem;
+        }
+
+        .data-table th {
+            background: #f8fafc;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .badge-status {
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-hadir { background: #dcfce7; color: #166534; }
+        .badge-izin { background: #fef9c3; color: #854d0e; }
+        .badge-pending { background: #fef3c7; color: #b45309; }
+        .badge-success { background: #dcfce7; color: #166534; }
+
+        .checkbox-group-inline {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-group-inline label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-group-inline input[type="checkbox"] {
+            width: auto;
+            accent-color: var(--sman-blue);
+            cursor: pointer;
+        }
+
+        .checkbox-group-inline input[type="checkbox"]:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
+
+        .checkbox-group-inline label:has(input:disabled) {
+            cursor: not-allowed;
+            color: var(--text-muted);
+        }
+
+        .lock-note {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            margin-top: 0.3rem;
+        }
+
+        .info-list {
+            padding-left: 1.2rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .info-list li {
+            margin-bottom: 0.6rem;
+        }
+
+        .badge-tech-list {
+            list-style: none;
+            margin-top: 0.75rem;
+        }
+
+        .badge-tech-list li {
+            background: #f1f5f9;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+            font-family: monospace;
+            color: var(--sman-blue-dark);
+        }
+
+        @media(max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+            .app-header { padding: 1rem; }
+            .grid-2col, .dashboard-grid-2 { grid-template-columns: 1fr; }
+            .folder-grid { grid-template-columns: repeat(2, 1fr); }
+            .top-key-ornament { left: -62px; width: 125px; }
+            .bottom-key-ornament { right: 6px; bottom: 78px; width: 95px; height: 95px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================================
+         0. WELCOME PAGE (ENCHANTED GARDEN & MPK DOOR)
+         ========================================================= -->
+    <div id="welcomePage" class="welcome-screen">
+        <div class="garden-mist"></div>
+        <div class="garden-sunbeam"></div>
+
+        <div class="welcome-stage">
+            <!-- Header Tipografi "Welcome" & "to" -->
+            <div class="welcome-typography">
+                <div class="word-welcome-wrap">
+                    <span class="word-welcome">Welcome</span>
+                    <!-- Pita Satin Pink Kiri -->
+                    <svg class="ribbon-left-accent" viewBox="0 0 160 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 10 C40 25, 65 40, 82 46" stroke="#e9a9b9" stroke-width="8" stroke-linecap="round"/>
+                        <path d="M82 46 C55 24, 38 36, 48 54 C56 66, 72 56, 82 46 Z" fill="#f2bcc9" stroke="#d18698" stroke-width="1.5"/>
+                        <path d="M82 46 C108 24, 126 36, 116 54 C108 66, 92 56, 82 46 Z" fill="#f2bcc9" stroke="#d18698" stroke-width="1.5"/>
+                        <path d="M80 48 C62 66, 36 74, 14 78" stroke="#e59eb0" stroke-width="7" stroke-linecap="round"/>
+                        <path d="M84 48 C104 64, 122 72, 142 74" stroke="#e59eb0" stroke-width="6" stroke-linecap="round"/>
+                        <circle cx="82" cy="46" r="6" fill="#d98a9d"/>
+                    </svg>
+                </div>
+
+                <div class="word-to-wrap">
+                    <!-- Kunci Atas dengan Pita Pink -->
+                    <svg class="top-key-ornament" viewBox="0 0 210 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Batang & Kepala Kunci Antik -->
+                        <circle cx="28" cy="36" r="16" stroke="#8c673a" stroke-width="5" fill="#b48b57" fill-opacity="0.25"/>
+                        <circle cx="28" cy="36" r="8" stroke="#6e4e28" stroke-width="2.5"/>
+                        <rect x="44" y="33" width="142" height="6" rx="3" fill="url(#goldGradTop)"/>
+                        <rect x="164" y="24" width="6" height="10" rx="1" fill="#7c5930"/>
+                        <rect x="174" y="22" width="7" height="12" rx="1" fill="#7c5930"/>
+                        <!-- Pita Pink di Kunci -->
+                        <path d="M84 36 C64 12, 46 22, 58 38 C66 48, 76 42, 84 36 Z" fill="#f3becb" stroke="#ce8396" stroke-width="1.5"/>
+                        <path d="M84 36 C104 12, 122 22, 110 38 C102 48, 92 42, 84 36 Z" fill="#f3becb" stroke="#ce8396" stroke-width="1.5"/>
+                        <path d="M82 38 C72 54, 62 64, 54 70" stroke="#e49bae" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M86 38 C98 54, 108 64, 118 68" stroke="#e49bae" stroke-width="6" stroke-linecap="round"/>
+                        <circle cx="84" cy="36" r="5.5" fill="#d48296"/>
+                        <defs>
+                            <linearGradient id="goldGradTop" x1="44" y1="33" x2="186" y2="39" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#a87e49"/>
+                                <stop offset="0.5" stop-color="#d4af7a"/>
+                                <stop offset="1" stop-color="#78562c"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="word-to">to</span>
+                </div>
+            </div>
+
+            <!-- Pintu Utama MPK (Klik untuk Membuka) -->
+            <div id="welcomeDoor" class="door-wrapper" onclick="openWelcomeDoor()" title="Klik pintu untuk masuk ke halaman login">
+                <div class="door-frame">
+                    <div class="door-portal-glow">
+                        <span class="portal-enter-text">Membuka Portal<br>OSIS &amp; MPK...</span>
+                    </div>
+
+                    <div class="door-leaf">
+                        <!-- Panel Atas + Plakat MPK -->
+                        <div class="door-panel-top">
+                            <div class="mpk-plaque">
+                                <div class="mpk-plaque-title">MPK</div>
+                            </div>
+                        </div>
+
+                        <!-- Gagang Pintu Kuningan + Pita Pink -->
+                        <div class="door-handle-assembly">
+                            <svg viewBox="0 0 70 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="14" y="10" width="10" height="66" rx="5" fill="#8d683b" stroke="#5e4321" stroke-width="1.5"/>
+                                <circle cx="19" cy="22" r="2.5" fill="#d6b382"/>
+                                <circle cx="19" cy="64" r="2.5" fill="#d6b382"/>
+                                <!-- Tuas Gagang -->
+                                <path d="M18 42 H54 C58 42, 60 45, 57 48 L48 51 H18 Z" fill="#b48a54" stroke="#684a25" stroke-width="1.5"/>
+                                <!-- Pita Pink Kecil di Gagang -->
+                                <path d="M22 44 C10 32, 4 40, 12 47 C16 50, 20 47, 22 44 Z" fill="#f3becb" stroke="#c97b8e" stroke-width="1.2"/>
+                                <path d="M22 44 C34 32, 40 40, 32 47 C28 50, 24 47, 22 44 Z" fill="#f3becb" stroke="#c97b8e" stroke-width="1.2"/>
+                                <path d="M21 46 L12 62" stroke="#e59eb0" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M23 46 L32 61" stroke="#e59eb0" stroke-width="4" stroke-linecap="round"/>
+                                <circle cx="22" cy="44" r="3.5" fill="#cf7f93"/>
+                            </svg>
+                        </div>
+
+                        <!-- Panel Bawah -->
+                        <div class="door-panel-bottom"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kunci Antik Kanan Bawah -->
+            <div class="bottom-key-ornament" onclick="openWelcomeDoor()" title="Gunakan kunci untuk membuka pintu">
+                <svg viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="rotate(-42 90 90)">
+                        <!-- Kepala Kunci Filigree -->
+                        <circle cx="132" cy="90" r="26" stroke="#8b6537" stroke-width="6" fill="#c59c67" fill-opacity="0.22"/>
+                        <circle cx="132" cy="90" r="14" stroke="#6c4c26" stroke-width="3"/>
+                        <circle cx="132" cy="70" r="5" fill="#9c7341"/>
+                        <circle cx="152" cy="90" r="5" fill="#9c7341"/>
+                        <circle cx="132" cy="110" r="5" fill="#9c7341"/>
+                        <!-- Batang & Gigi Kunci -->
+                        <rect x="22" y="86" width="86" height="8" rx="4" fill="#9e7542"/>
+                        <rect x="26" y="94" width="8" height="14" rx="1.5" fill="#7a572c"/>
+                        <rect x="38" y="94" width="7" height="11" rx="1.5" fill="#7a572c"/>
+                        <rect x="49" y="94" width="8" height="15" rx="1.5" fill="#7a572c"/>
+                    </g>
+                    <!-- Pita Satin Pink di Atas Kunci -->
+                    <path d="M126 42 C102 18, 84 30, 98 46 C108 56, 118 48, 126 42 Z" fill="#f3becb" stroke="#cc7e92" stroke-width="1.5"/>
+                    <path d="M126 42 C150 18, 168 30, 154 46 C144 56, 134 48, 126 42 Z" fill="#f3becb" stroke="#cc7e92" stroke-width="1.5"/>
+                    <path d="M124 44 C112 64, 98 76, 86 84" stroke="#e397ab" stroke-width="7" stroke-linecap="round"/>
+                    <path d="M128 44 C142 64, 156 76, 168 82" stroke="#e397ab" stroke-width="7" stroke-linecap="round"/>
+                    <circle cx="126" cy="42" r="6" fill="#d38195"/>
+                </svg>
+            </div>
+
+            <!-- Tombol Trigger Masuk -->
+            <button type="button" class="door-cta-pill" onclick="openWelcomeDoor()">
+                <i class="fa-solid fa-key"></i> Buka Pintu &amp; Masuk Login
+            </button>
+        </div>
+
+        <!-- Banner Lengkung Bawah: "Action over Promises" -->
+        <div class="welcome-bottom-banner">
+            <svg class="arch-bg-svg" viewBox="0 0 1440 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,110 L0,45 Q720,-20 1440,45 L1440,110 Z" fill="#fcfaf7"/>
+                <path d="M0,45 Q720,-20 1440,45" stroke="#d8cfc4" stroke-width="3" fill="none"/>
+            </svg>
+
+            <!-- Tirai & Pita Sudut Kiri -->
+            <svg class="corner-drape-left" viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 25 Q45 35 62 110 L0 110 Z" fill="#ecc0cb"/>
+                <path d="M0 42 Q32 52 42 110 L0 110 Z" fill="#e2a5b4"/>
+                <path d="M36 28 C16 10, 4 22, 16 34 C24 42, 32 34, 36 28 Z" fill="#f4c7d2" stroke="#c97b8e" stroke-width="1.5"/>
+                <path d="M36 28 C56 10, 68 22, 56 34 C48 42, 40 34, 36 28 Z" fill="#f4c7d2" stroke="#c97b8e" stroke-width="1.5"/>
+                <circle cx="36" cy="28" r="5" fill="#cf7f93"/>
+            </svg>
+
+            <div class="motto-text">Action over Promises</div>
+
+            <!-- Tirai & Pita Sudut Kanan -->
+            <svg class="corner-drape-right" viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 25 Q45 35 62 110 L0 110 Z" fill="#ecc0cb"/>
+                <path d="M0 42 Q32 52 42 110 L0 110 Z" fill="#e2a5b4"/>
+                <path d="M36 28 C16 10, 4 22, 16 34 C24 42, 32 34, 36 28 Z" fill="#f4c7d2" stroke="#c97b8e" stroke-width="1.5"/>
+                <path d="M36 28 C56 10, 68 22, 56 34 C48 42, 40 34, 36 28 Z" fill="#f4c7d2" stroke="#c97b8e" stroke-width="1.5"/>
+                <circle cx="36" cy="28" r="5" fill="#cf7f93"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         1. MODAL LOGIN BERDASARKAN ROLE
+         ========================================================= -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <img src="logo-sman14.png" alt="Logo SMAN 14" onerror="this.src='https://via.placeholder.com/60?text=14'" class="modal-logo">
+                <h2>Login Sistem KPI OSIS/MPK</h2>
+                <p>SMA Negeri 14 Surabaya • FROM OSKA FOR US</p>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-user-shield"></i> Pilih Role Akses</label>
+                    <select id="roleSelect" required onchange="updateRoleHint()">
+                        <option value="BPH">User BPH</option>
+                        <option value="Komisi A">User Komisi A</option>
+                        <option value="Ketua Sekbid/Komisi">User Ketua Sekbid/Komisi</option>
+                        <option value="Anggota">User Anggota</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-key"></i> Password Akses</label>
+                    <input type="password" id="passwordInput" placeholder="Masukkan password sesuai role..." required>
+                    <small id="passwordHint" class="hint-text">Masukkan password yang telah diberikan oleh admin.</small>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full"><i class="fa-solid fa-right-to-bracket"></i> Masuk Dashboard</button>
+                <button type="button" class="back-welcome-link" onclick="backToWelcome()">
+                    <i class="fa-solid fa-arrow-left"></i> Kembali ke Halaman Utama
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         2. MAIN APP WRAPPER
+         ========================================================= -->
+    <div id="appContainer" class="app-container" style="display: none;">
+        <header class="app-header">
+            <div class="nav-brand">
+                <img src="logo-sman14.png" alt="Logo SMAN 14" onerror="this.src='https://via.placeholder.com/40?text=14'" class="brand-logo">
+                <div>
+                    <h2>OSIS &amp; MPK SMAN 14</h2>
+                    <span id="userBadgeRole" class="badge-role">Role: Pengurus</span>
+                </div>
+            </div>
+            <div class="nav-menu">
+                <button type="button" class="nav-btn active" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-pie"></i> Ringkasan</button>
+                <button type="button" class="nav-btn" onclick="switchTab('presensi')"><i class="fa-solid fa-clipboard-user"></i> Performa Individu</button>
+                <button type="button" class="nav-btn" onclick="switchTab('proker')"><i class="fa-solid fa-folder-tree"></i> Performa Tim &amp; Proker</button>
+                <button type="button" class="nav-btn" onclick="switchTab('kpi')"><i class="fa-solid fa-star-half-stroke"></i> Evaluasi KPI</button>
+                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="nav-btn btn-wa"><i class="fa-brands fa-whatsapp"></i> Hubungi Admin</a>
+                <button type="button" class="nav-btn btn-logout" onclick="logout()"><i class="fa-solid fa-power-off"></i></button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- TAB 1: RINGKASAN DASHBOARD -->
+            <section id="tab-dashboard" class="tab-pane active">
+                <div class="welcome-banner">
+                    <div class="banner-text">
+                        <h1>Selamat Datang di Portal KPI &amp; Monitoring OSIS/MPK</h1>
+                        <p>SMA Negeri 14 Surabaya • Membangun kedisiplinan, transparansi program kerja, dan evaluasi berbasis data secara real-time.</p>
+                    </div>
+                    <div class="banner-badge">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Sistem Terintegrasi Firebase</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card blue">
+                        <div class="stat-icon"><i class="fa-solid fa-users-line"></i></div>
+                        <div>
+                            <span class="stat-label">Total Kehadiran Presensi</span>
+                            <h2 id="statPresensi">0</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-icon"><i class="fa-solid fa-list-check"></i></div>
+                        <div>
+                            <span class="stat-label">Proker Terlaksana</span>
+                            <h2 id="statProkerSelesai">0 / 0</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+                        <div>
+                            <span class="stat-label">Rata-Rata Skor KPI</span>
+                            <h2 id="statKpiAvg">0.0 / 4.0</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2col">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-bullhorn"></i> Pengumuman &amp; Alur Kerja Utama</h3>
+                        </div>
+                        <ul class="info-list">
+                            <li><strong>Performa Individu:</strong> Wajib melampirkan foto GPS Map Camera atau surat izin resmi (Sakit/Acara) yang diunggah ke Google Drive.</li>
+                            <li><strong>Direktori 16 Folder Tim:</strong> Mencakup Sekbid 1–10, Komisi A–E, dan Pengurus Inti / Umum pada tab Performa Tim &amp; Proker.</li>
+                            <li><strong>Sistem Checkbox Proker:</strong> Centang 1 (Di-ACC) dan Centang 2 (Proker Tuntas Dieksekusi) khusus diverifikasi oleh BPH &amp; Komisi A.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-database"></i> Status Sinkronisasi Database</h3>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Aplikasi terhubung dengan <strong>Google Firestore (NoSQL)</strong> pada koleksi:</p>
+                        <ul class="badge-tech-list">
+                            <li><code>roles</code> (Hak akses &amp; password)</li>
+                            <li><code>users</code> (Data akun &amp; tim)</li>
+                            <li><code>teams</code> (16 Folder tim &amp; proker)</li>
+                            <li><code>attendance</code> (Presensi &amp; bukti gdrive)</li>
+                            <li><code>kpi_evaluations</code> (Skor penilaian 1–4)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: PERFORMA INDIVIDU (PRESENSI) -->
+            <section id="tab-presensi" class="tab-pane">
+                <div class="page-header">
+                    <h2><i class="fa-solid fa-clipboard-user"></i> Performa Individu (Kedisiplinan &amp; Daftar Hadir)</h2>
+                    <p>Catat kehadiran rapat, event, atau izin dengan melampirkan tautan Google Drive bukti foto GPS Map Camera / surat izin.</p>
+                </div>
+
+                <div class="dashboard-grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Form Input Presensi &amp; Bukti Kehadiran</h3>
+                        </div>
+                        <form id="formPresensi" onsubmit="submitPresensi(event)">
+                            <div class="form-group">
+                                <label>Nama Lengkap Pengurus</label>
+                                <input type="text" id="presensiNama" placeholder="Contoh: Alya Putri" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Kategori Kehadiran</label>
+                                    <select id="presensiKategori" required>
+                                        <option value="Hadir">Hadir (Wajib Foto GPS Map Camera)</option>
+                                        <option value="Izin Sakit Seharian">Izin Sakit Seharian (Screenshot Chat Orang Tua)</option>
+                                        <option value="Izin Sakit 1/2 Hari">Izin Sakit 1/2 Hari (Surat BK / Wali Kelas)</option>
+                                        <option value="Izin Sakit Akhir">Izin Sakit di Akhir Waktu</option>
+                                        <option value="Izin Acara Lain">Izin Ada Acara Lain (Foto Situasi Lokasi)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal / Waktu Rapat/Event</label>
+                                    <input type="date" id="presensiTanggal" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Link Google Drive (Bukti Foto / Surat Izin)</label>
+                                <input type="url" id="presensiGdrive" placeholder="https://drive.google.com/file/d/..." required>
+                                <small class="hint-text">Pastikan link Google Drive sudah diatur agar dapat diakses (Anyone with the link).</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Catatan / Keterangan Tambahan</label>
+                                <input type="text" id="presensiCatatan" placeholder="Contoh: Rapat Pleno Koordinasi Program Kerja">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full"><i class="fa-solid fa-cloud-arrow-up"></i> Kirim Presensi &amp; Bukti</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Log Kehadiran &amp; Bukti Terkirim</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nama &amp; Tanggal</th>
+                                        <th>Kategori</th>
+                                        <th>Bukti GDrive</th>
+                                        <th>Status Validasi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelPresensiBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: PERFORMA TIM & PROKER (16 FOLDER ASET) -->
+            <section id="tab-proker" class="tab-pane">
+                <div class="page-header">
+                    <h2><i class="fa-solid fa-folder-tree"></i> Performa Tim &amp; Program Kerja (16 Folder Sektor &amp; Komisi)</h2>
+                    <p>Pilih folder Sekbid 1–10, Komisi A–E, atau Pengurus Inti untuk memfilter dan memantau program kerja masing-masing tim.</p>
+                </div>
+
+                <div class="card folder-section">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-folder-open"></i> Direktori Folder Tim (16 Slot Aset)</h3>
+                        <div class="filter-pills">
+                            <button type="button" class="pill-btn active" id="pill-all" onclick="setFolderCategory('all')">Semua (16)</button>
+                            <button type="button" class="pill-btn" id="pill-sekbid" onclick="setFolderCategory('sekbid')">Sekbid 1–10</button>
+                            <button type="button" class="pill-btn" id="pill-komisi" onclick="setFolderCategory('komisi')">Komisi A–E &amp; Inti</button>
+                        </div>
+                    </div>
+                    <div id="folderGridContainer" class="folder-grid"></div>
+                </div>
+
+                <div class="dashboard-grid-2">
+                    <div class="card" id="cardFormProker">
+                        <div class="card-header">
+                            <h3>Ajukan / Tambah Program Kerja Tim</h3>
+                        </div>
+                        <form id="formProker" onsubmit="submitProker(event)">
+                            <div class="form-group">
+                                <label>Nama Tim / Sekbid / Komisi</label>
+                                <select id="prokerTeam" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Judul Program Kerja</label>
+                                <input type="text" id="prokerTitle" placeholder="Contoh: Pesantren Kilat Ramadhan" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Deadline Pelaksanaan</label>
+                                    <input type="date" id="prokerDeadline" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Status Awal</label>
+                                    <input type="text" value="Menunggu Review Komisi A" disabled class="input-disabled">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-full"><i class="fa-solid fa-circle-plus"></i> Ajukan Proker Baru</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 id="prokerTableHeading">Daftar Proker &amp; Sistem Checkbox Ganda</h3>
+                            <button type="button" id="btnResetFolderFilter" class="pill-btn" style="display: none;" onclick="resetFolderFilter()">
+                                <i class="fa-solid fa-rotate-left"></i> Tampilkan Semua Tim
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Proker &amp; Tim</th>
+                                        <th>Deadline</th>
+                                        <th>Review &amp; Approval</th>
+                                        <th>Checkbox Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelProkerBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: EVALUASI & REKAP KPI -->
+            <section id="tab-kpi" class="tab-pane">
+                <div class="page-header">
+                    <h2><i class="fa-solid fa-star-half-stroke"></i> Rekap &amp; Evaluasi KPI (Skala 1–4)</h2>
+                    <p>Penilaian akhir kinerja berdasarkan 4 aspek utama: Capaian Target, Kelengkapan Bukti, Dampak, dan Tindak Lanjut.</p>
+                </div>
+
+                <div class="dashboard-grid-2">
+                    <div class="card" id="cardFormKpi">
+                        <div class="card-header">
+                            <h3>Form Penilaian KPI Pengurus / Tim</h3>
+                        </div>
+                        <form id="formKpi" onsubmit="submitKpi(event)">
+                            <div class="form-group">
+                                <label>Nama Pengurus / Tim Dinilai</label>
+                                <input type="text" id="kpiTarget" list="kpiTargetList" placeholder="Pilih Sekbid/Komisi atau ketik nama pengurus..." required>
+                                <datalist id="kpiTargetList"></datalist>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>1. Capaian Target (1–4)</label>
+                                    <input type="number" id="score1" min="1" max="4" value="4" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>2. Kelengkapan Bukti (1–4)</label>
+                                    <input type="number" id="score2" min="1" max="4" value="3" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>3. Dampak Kegiatan (1–4)</label>
+                                    <input type="number" id="score3" min="1" max="4" value="4" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>4. Tindak Lanjut (1–4)</label>
+                                    <input type="number" id="score4" min="1" max="4" value="3" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Periode Penilaian</label>
+                                <input type="text" id="kpiPeriod" value="Bulan November 2026" required>
+                            </div>
+                            <button type="submit" class="btn btn-warning btn-full"><i class="fa-solid fa-calculator"></i> Hitung &amp; Simpan Penilaian KPI</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Rekap Nilai Akhir KPI</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Target / Tim</th>
+                                        <th>Periode</th>
+                                        <th>Detail Skor</th>
+                                        <th>Nilai Akhir (Rata2)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelKpiBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // =========================================================
+        // 0. TRANSISI WELCOME PAGE -> LOGIN MODAL
+        // =========================================================
+        let isDoorOpening = false;
+
+        function openWelcomeDoor() {
+            if (isDoorOpening) return;
+            isDoorOpening = true;
+
+            const doorEl = document.getElementById('welcomeDoor');
+            const welcomeEl = document.getElementById('welcomePage');
+            const loginModal = document.getElementById('loginModal');
+
+            // Animasi pintu terbuka 3D
+            if (doorEl) doorEl.classList.add('door-open');
+
+            // Transisi halus ke modal login setelah pintu terbuka
+            setTimeout(() => {
+                if (welcomeEl) welcomeEl.classList.add('fade-out');
+            }, 650);
+
+            setTimeout(() => {
+                if (welcomeEl) welcomeEl.style.display = 'none';
+                if (loginModal) loginModal.style.display = 'flex';
+                isDoorOpening = false;
+            }, 1150);
+        }
+
+        function backToWelcome() {
+            const doorEl = document.getElementById('welcomeDoor');
+            const welcomeEl = document.getElementById('welcomePage');
+            const loginModal = document.getElementById('loginModal');
+
+            if (loginModal) loginModal.style.display = 'none';
+            if (doorEl) doorEl.classList.remove('door-open');
+            if (welcomeEl) {
+                welcomeEl.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    welcomeEl.classList.remove('fade-out');
+                });
+            }
+        }
+
+        // =========================================================
+        // 1. PEMETAAN 16 SOURCE FOTO FOLDER (SEKBID 1-10 & KOMISI A-E + INTI)
+        // =========================================================
+        const organisasi_folder_assets = {
+            sekbid: [
+                { id: 1, slot: "Foto 1", nama: "Sekbid 1", bidang: "Kesiswaan / Keagamaan", image_url: "URL_FOTO_1_DISINI" },
+                { id: 2, slot: "Foto 2", nama: "Sekbid 2", bidang: "Bela Negara / PBB", image_url: "URL_FOTO_2_DISINI" },
+                { id: 3, slot: "Foto 3", nama: "Sekbid 3", bidang: "Pendahuluan Pancasila / Wawasan Kebangsaan", image_url: "URL_FOTO_3_DISINI" },
+                { id: 4, slot: "Foto 4", nama: "Sekbid 4", bidang: "Prestasi Akademik / Seni / Olahraga", image_url: "URL_FOTO_4_DISINI" },
+                { id: 5, slot: "Foto 5", nama: "Sekbid 5", bidang: "Demokrasi / HAM / Politik", image_url: "URL_FOTO_5_DISINI" },
+                { id: 6, slot: "Foto 6", nama: "Sekbid 6", bidang: "Kreativitas / Keterampilan / Kewirausahaan", image_url: "URL_FOTO_6_DISINI" },
+                { id: 7, slot: "Foto 7", nama: "Sekbid 7", bidang: "Kualitas Jasmani / Kesehatan / Gizi", image_url: "URL_FOTO_7_DISINI" },
+                { id: 8, slot: "Foto 8", nama: "Sekbid 8", bidang: "Sastra / Budaya", image_url: "URL_FOTO_8_DISINI" },
+                { id: 9, slot: "Foto 9", nama: "Sekbid 9", bidang: "Teknologi Informasi / TIK", image_url: "URL_FOTO_9_DISINI" },
+                { id: 10, slot: "Foto 10", nama: "Sekbid 10", bidang: "Komunikasi dalam Bahasa Inggris", image_url: "URL_FOTO_10_DISINI" }
+            ],
+            komisi: [
+                { id: "A", slot: "Foto 11", nama: "Komisi A", bidang: "Legislasi / Anggaran Dasar", image_url: "URL_FOTO_11_DISINI" },
+                { id: "B", slot: "Foto 12", nama: "Komisi B", bidang: "Pengawasan Program Kerja", image_url: "URL_FOTO_12_DISINI" },
+                { id: "C", slot: "Foto 13", nama: "Komisi C", bidang: "Aspirasi & Advokasi Siswa", image_url: "URL_FOTO_13_DISINI" },
+                { id: "D", slot: "Foto 14", nama: "Komisi D", bidang: "Hubungan Masyarakat & Media", image_url: "URL_FOTO_14_DISINI" },
+                { id: "E", slot: "Foto 15", nama: "Komisi E", bidang: "Kedisiplinan & Ketertiban", image_url: "URL_FOTO_15_DISINI" },
+                { id: "EXTRA", slot: "Foto 16", nama: "Pengurus Inti / Umum", bidang: "Pimpinan / Pengurus Inti / Cadangan", image_url: "URL_FOTO_16_DISINI" }
+            ]
+        };
+
+        function getAllFolderEntities() {
+            const sekbidList = organisasi_folder_assets.sekbid.map(item => ({
+                ...item,
+                group: "sekbid",
+                fullLabel: `${item.nama} (${item.bidang})`
+            }));
+            const komisiList = organisasi_folder_assets.komisi.map(item => ({
+                ...item,
+                group: "komisi",
+                fullLabel: `${item.nama} (${item.bidang})`
+            }));
+            return [...sekbidList, ...komisiList];
+        }
+
+        // =========================================================
+        // 2. KONFIGURASI & INISIALISASI FIREBASE FIRESTORE
+        // =========================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAXZrnCz_kOAtP-5OtSPBDLBiRw5QWkpUE",
+            authDomain: "website-program-kpi.firebaseapp.com",
+            projectId: "website-program-kpi",
+            storageBucket: "website-program-kpi.firebasestorage.app",
+            messagingSenderId: "31917394405",
+            appId: "1:31917394405:web:c5132e56fbc0af521d070c"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const colRoles = db.collection("roles");
+        const colUsers = db.collection("users");
+        const colTeams = db.collection("teams");
+        const colAttendance = db.collection("attendance");
+        const colKpi = db.collection("kpi_evaluations");
+
+        // =========================================================
+        // 3. STATE GLOBAL & INISIALISASI DROPDOWN
+        // =========================================================
+        const defaultPasswords = {
+            "BPH": "BPHakim141",
+            "Komisi A": "Perencanaandal142",
+            "Ketua Sekbid/Komisi": "Ketuantusias143",
+            "Anggota": "anggotabah144"
+        };
+
+        let currentUserRole = "";
+        let dataPresensi = [];
+        let dataProker = [];
+        let dataKpi = [];
+        let activeFolderCategory = "all";
+        let selectedTeamFilter = "ALL";
+
+        function populateTeamSelects() {
+            const entities = getAllFolderEntities();
+            const prokerSelect = document.getElementById('prokerTeam');
+            const kpiDatalist = document.getElementById('kpiTargetList');
+
+            if (prokerSelect) {
+                prokerSelect.innerHTML = entities
+                    .map(e => `<option value="${e.fullLabel}">${e.fullLabel}</option>`)
+                    .join('');
+            }
+
+            if (kpiDatalist) {
+                kpiDatalist.innerHTML = entities
+                    .map(e => `<option value="${e.fullLabel}">`)
+                    .join('');
+            }
+        }
+
+        // =========================================================
+        // 4. SISTEM LOGIN, LOGOUT & HAK AKSES ROLE
+        // =========================================================
+        function updateRoleHint() {
+            const role = document.getElementById('roleSelect').value;
+            const hint = document.getElementById('passwordHint');
+            hint.textContent = `Masukkan password untuk role ${role}.`;
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const selectedRole = document.getElementById('roleSelect').value;
+            const inputPass = document.getElementById('passwordInput').value.trim();
+
+            try {
+                const roleDoc = await colRoles.doc(selectedRole.replace(/\//g, "-")).get();
+                const validPassword = roleDoc.exists ? roleDoc.data().password : defaultPasswords[selectedRole];
+
+                if (inputPass !== validPassword) {
+                    alert("Password salah! Silakan periksa kembali.");
+                    return;
+                }
+
+                currentUserRole = selectedRole;
+
+                await colUsers.add({
+                    role: selectedRole,
+                    loginAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                document.getElementById('userBadgeRole').textContent = `Role: ${selectedRole}`;
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'flex';
+
+                populateTeamSelects();
+                applyRolePermissions();
+                renderFolderGrid();
+                startRealtimeListeners();
+                alert(`Berhasil login sebagai ${selectedRole}!`);
+            } catch (error) {
+                console.error("Error saat login:", error);
+                alert("Gagal terhubung ke Firebase. Pastikan firebaseConfig dan Firestore sudah aktif.");
+            }
+        }
+
+        function applyRolePermissions() {
+            const cardFormKpi = document.getElementById('cardFormKpi');
+            if (cardFormKpi) {
+                cardFormKpi.style.display = (currentUserRole === "BPH" || currentUserRole === "Komisi A") ? "block" : "none";
+            }
+
+            const cardFormProker = document.getElementById('cardFormProker');
+            if (cardFormProker) {
+                cardFormProker.style.display = (currentUserRole === "Anggota") ? "none" : "block";
+            }
+        }
+
+        function logout() {
+            if (confirm("Yakin ingin keluar dari sesi ini?")) {
+                location.reload();
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                if (!el.classList.contains('btn-wa') && !el.classList.contains('btn-logout')) {
+                    el.classList.remove('active');
+                }
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            const activeBtn = document.querySelector(`.nav-btn[onclick*="switchTab('${tabId}')"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        // =========================================================
+        // 5. REAL-TIME LISTENERS FIRESTORE (AUTO-SYNC)
+        // =========================================================
+        function startRealtimeListeners() {
+            colAttendance.orderBy("createdAt", "desc").onSnapshot(snapshot => {
+                dataPresensi = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderPresensi();
+                updateStats();
+            });
+
+            colTeams.orderBy("createdAt", "desc").onSnapshot(snapshot => {
+                dataProker = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderFolderGrid();
+                renderProker();
+                updateStats();
+            });
+
+            colKpi.orderBy("createdAt", "desc").onSnapshot(snapshot => {
+                dataKpi = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderKpi();
+                updateStats();
+            });
+        }
+
+        // =========================================================
+        // 6. DIREKTORI 16 FOLDER TIM & FILTER PROKER
+        // =========================================================
+        function setFolderCategory(category) {
+            activeFolderCategory = category;
+            document.querySelectorAll('.filter-pills .pill-btn').forEach(btn => btn.classList.remove('active'));
+            const activePill = document.getElementById(`pill-${category}`);
+            if (activePill) activePill.classList.add('active');
+            renderFolderGrid();
+        }
+
+        function toggleFolderSelection(fullLabel) {
+            if (selectedTeamFilter === fullLabel) {
+                selectedTeamFilter = "ALL";
+            } else {
+                selectedTeamFilter = fullLabel;
+                const prokerSelect = document.getElementById('prokerTeam');
+                if (prokerSelect) {
+                    prokerSelect.value = fullLabel;
+                }
+            }
+            renderFolderGrid();
+            renderProker();
+        }
+
+        function resetFolderFilter() {
+            selectedTeamFilter = "ALL";
+            renderFolderGrid();
+            renderProker();
+        }
+
+        function renderFolderGrid() {
+            const container = document.getElementById('folderGridContainer');
+            if (!container) return;
+
+            const entities = getAllFolderEntities().filter(item => {
+                if (activeFolderCategory === "all") return true;
+                return item.group === activeFolderCategory;
+            });
+
+            container.innerHTML = entities.map(item => {
+                const prokerCount = dataProker.filter(p => p.team === item.fullLabel || p.team.startsWith(item.nama)).length;
+                const isSelected = selectedTeamFilter === item.fullLabel ? 'selected' : '';
+                const hasValidUrl = item.image_url && !item.image_url.startsWith("URL_FOTO_");
+
+                const mediaHtml = hasValidUrl
+                    ? `<img src="${item.image_url}" alt="${item.nama}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                       <div class="folder-fallback" style="display:none;">
+                           <i class="fa-solid fa-folder-open"></i>
+                           <span>${item.slot}</span>
+                       </div>`
+                    : `<div class="folder-fallback">
+                           <i class="fa-solid fa-folder-open"></i>
+                           <span>${item.slot}</span>
+                       </div>`;
+
+                return `
+                    <div class="folder-card ${isSelected}" onclick="toggleFolderSelection('${item.fullLabel.replace(/'/g, "\\'")}')">
+                        <div class="folder-thumb">
+                            <span class="folder-slot-tag">${item.slot}</span>
+                            <span class="folder-count-tag">${prokerCount} Proker</span>
+                            ${mediaHtml}
+                        </div>
+                        <div class="folder-info">
+                            <h4>${item.nama}</h4>
+                            <p>${item.bidang}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // =========================================================
+        // 7. CRUD PERFORMA INDIVIDU (COLLECTION: attendance)
+        // =========================================================
+        async function submitPresensi(event) {
+            event.preventDefault();
+            const payload = {
+                nama: document.getElementById('presensiNama').value.trim(),
+                kategori: document.getElementById('presensiKategori').value,
+                tanggal: document.getElementById('presensiTanggal').value,
+                gdrive: document.getElementById('presensiGdrive').value.trim(),
+                catatan: document.getElementById('presensiCatatan').value.trim() || "-",
+                submittedByRole: currentUserRole,
+                status: "Terverifikasi",
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                await colAttendance.add(payload);
+                document.getElementById('formPresensi').reset();
+                alert("Presensi dan bukti GDrive berhasil disimpan ke Firebase!");
+            } catch (error) {
+                console.error("Gagal menyimpan presensi:", error);
+                alert("Terjadi kesalahan saat mengirim presensi.");
+            }
+        }
+
+        function renderPresensi() {
+            const tbody = document.getElementById('tabelPresensiBody');
+            tbody.innerHTML = '';
+
+            if (dataPresensi.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">Belum ada presensi tercatat.</td></tr>`;
+                return;
+            }
+
+            dataPresensi.forEach(item => {
+                const badgeClass = item.kategori === 'Hadir' ? 'badge-hadir' : 'badge-izin';
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${item.nama}</strong><br><small>${item.tanggal}</small></td>
+                        <td><span class="badge-status ${badgeClass}">${item.kategori}</span></td>
+                        <td><a href="${item.gdrive}" target="_blank" rel="noopener noreferrer" style="color:var(--sman-blue);">Buka GDrive <i class="fa-solid fa-external-link-alt"></i></a></td>
+                        <td><span class="badge-status badge-success">${item.status || 'Terverifikasi'}</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // =========================================================
+        // 8. CRUD PERFORMA TIM & PROKER (COLLECTION: teams)
+        // =========================================================
+        async function submitProker(event) {
+            event.preventDefault();
+            const payload = {
+                team: document.getElementById('prokerTeam').value,
+                title: document.getElementById('prokerTitle').value.trim(),
+                deadline: document.getElementById('prokerDeadline').value,
+                approvedKomisiA: currentUserRole === 'Komisi A' || currentUserRole === 'BPH',
+                approvedBph: currentUserRole === 'BPH',
+                check1: false,
+                check2: false,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                await colTeams.add(payload);
+                document.getElementById('formProker').reset();
+                if (selectedTeamFilter !== "ALL") {
+                    document.getElementById('prokerTeam').value = selectedTeamFilter;
+                }
+                alert("Program kerja berhasil diajukan ke Firestore!");
+            } catch (error) {
+                console.error("Gagal mengajukan proker:", error);
+                alert("Terjadi kesalahan saat mengajukan program kerja.");
+            }
+        }
+
+        async function toggleCheck(docId, field) {
+            if (currentUserRole !== 'BPH' && currentUserRole !== 'Komisi A') {
+                alert("Akses ditolak! Pengecekan tugas hanya dapat dilakukan oleh BPH dan Komisi A.");
+                renderProker();
+                return;
+            }
+
+            const target = dataProker.find(item => item.id === docId);
+            if (!target) return;
+
+            const nextValue = !target[field];
+            const updateData = { [field]: nextValue };
+
+            if (field === 'check1') {
+                updateData.approvedBph = nextValue;
+            }
+
+            try {
+                await colTeams.doc(docId).update(updateData);
+            } catch (error) {
+                console.error("Gagal memperbarui status checkbox:", error);
+                alert("Gagal memperbarui status proker.");
+            }
+        }
+
+        function renderProker() {
+            const tbody = document.getElementById('tabelProkerBody');
+            const heading = document.getElementById('prokerTableHeading');
+            const resetBtn = document.getElementById('btnResetFolderFilter');
+            tbody.innerHTML = '';
+
+            const filteredProker = selectedTeamFilter === "ALL"
+                ? dataProker
+                : dataProker.filter(item => item.team === selectedTeamFilter);
+
+            if (heading) {
+                heading.textContent = selectedTeamFilter === "ALL"
+                    ? "Daftar Proker & Sistem Checkbox Ganda"
+                    : `Proker: ${selectedTeamFilter}`;
+            }
+
+            if (resetBtn) {
+                resetBtn.style.display = selectedTeamFilter === "ALL" ? "none" : "inline-block";
+            }
+
+            if (filteredProker.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">Belum ada program kerja pada folder ini.</td></tr>`;
+                return;
+            }
+
+            const canCheckTask = (currentUserRole === 'BPH' || currentUserRole === 'Komisi A');
+            const disabledAttr = canCheckTask ? '' : 'disabled';
+            const lockNote = canCheckTask
+                ? ''
+                : `<span class="lock-note"><i class="fa-solid fa-lock"></i> Hanya BPH &amp; Komisi A</span>`;
+
+            filteredProker.forEach(item => {
+                const approvalText = item.approvedBph
+                    ? '<span class="badge-status badge-success">ACC BPH &amp; Pembina</span>'
+                    : '<span class="badge-status badge-pending">Review Komisi A / BPH</span>';
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${item.title}</strong><br><small>${item.team}</small></td>
+                        <td>${item.deadline}</td>
+                        <td>${approvalText}</td>
+                        <td>
+                            <div class="checkbox-group-inline">
+                                <label><input type="checkbox" ${item.check1 ? 'checked' : ''} ${disabledAttr} onchange="toggleCheck('${item.id}', 'check1')"> Centang 1 (Di-ACC)</label>
+                                <label><input type="checkbox" ${item.check2 ? 'checked' : ''} ${disabledAttr} onchange="toggleCheck('${item.id}', 'check2')"> Centang 2 (Selesai)</label>
+                            </div>
+                            ${lockNote}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // =========================================================
+        // 9. CRUD EVALUASI & REKAP KPI (COLLECTION: kpi_evaluations)
+        // =========================================================
+        async function submitKpi(event) {
+            event.preventDefault();
+            const s1 = parseFloat(document.getElementById('score1').value);
+            const s2 = parseFloat(document.getElementById('score2').value);
+            const s3 = parseFloat(document.getElementById('score3').value);
+            const s4 = parseFloat(document.getElementById('score4').value);
+            const finalScore = parseFloat(((s1 + s2 + s3 + s4) / 4).toFixed(1));
+
+            const payload = {
+                target: document.getElementById('kpiTarget').value.trim(),
+                period: document.getElementById('kpiPeriod').value.trim(),
+                scores: [s1, s2, s3, s4],
+                finalScore: finalScore,
+                evaluatedBy: currentUserRole,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                await colKpi.add(payload);
+                document.getElementById('formKpi').reset();
+                alert("Penilaian KPI berhasil disimpan ke Firebase!");
+            } catch (error) {
+                console.error("Gagal menyimpan KPI:", error);
+                alert("Terjadi kesalahan saat menyimpan penilaian KPI.");
+            }
+        }
+
+        function renderKpi() {
+            const tbody = document.getElementById('tabelKpiBody');
+            tbody.innerHTML = '';
+
+            if (dataKpi.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">Belum ada data evaluasi KPI.</td></tr>`;
+                return;
+            }
+
+            dataKpi.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${item.target}</strong></td>
+                        <td>${item.period}</td>
+                        <td><small>Target: ${item.scores[0]} | Bukti: ${item.scores[1]} | Dampak: ${item.scores[2]} | TindakLanjut: ${item.scores[3]}</small></td>
+                        <td><strong>${Number(item.finalScore).toFixed(1)} / 4.0</strong></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // =========================================================
+        // 10. UPDATE RINGKASAN STATISTIK DASHBOARD
+        // =========================================================
+        function updateStats() {
+            document.getElementById('statPresensi').textContent = dataPresensi.length;
+
+            const totalProker = dataProker.length;
+            const selesaiProker = dataProker.filter(p => p.check2).length;
+            document.getElementById('statProkerSelesai').textContent = `${selesaiProker} / ${totalProker}`;
+
+            if (dataKpi.length > 0) {
+                const sumKpi = dataKpi.reduce((acc, curr) => acc + parseFloat(curr.finalScore), 0);
+                const avgKpi = (sumKpi / dataKpi.length).toFixed(1);
+                document.getElementById('statKpiAvg').textContent = `${avgKpi} / 4.0`;
+            } else {
+                document.getElementById('statKpiAvg').textContent = `0.0 / 4.0`;
+            }
+        }
+    </script>
+</body>
+</html>
