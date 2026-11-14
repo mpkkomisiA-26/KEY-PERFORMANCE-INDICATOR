@@ -1578,7 +1578,7 @@
                             <div>
                                 <span class="locked-chip" id="folderCategoryBadge"><i class="fas fa-folder"></i> Folder Aktif</span>
                                 <h2 id="selectedFolderTitle" style="font-size:1.25rem; font-weight:800; margin-top:0.35rem;">Nama Folder</h2>
-                                <p id="selectedFolderDesc" style="font-size:0.84rem; color:var(--text-muted);">Deskripsi folder</p>
+                                <p id="selectedFolderDesc" style="display:none;"></p>
                             </div>
                         </div>
                         <div style="display:flex; gap:0.55rem; flex-wrap:wrap; align-items:center;">
@@ -2375,7 +2375,6 @@
                             <span class="folder-count-badge">${allowed ? count + " Proker" : "Terkunci"}</span>
                         </div>
                         <div class="folder-title">${f.title}</div>
-                        <div class="folder-sub">${f.desc}</div>
                         <div class="folder-footer-link" style="${allowed ? "" : "color:#b91c1c;"}">
                             <span>${allowed ? "Buka Folder" : "Khusus " + f.title + " / BPH / Komisi A"}</span>
                             <i class="fas ${allowed ? "fa-arrow-right" : "fa-lock"}"></i>
@@ -2397,7 +2396,6 @@
                             <span class="folder-count-badge">${allowed ? count + " Proker" : "Terkunci"}</span>
                         </div>
                         <div class="folder-title">${f.title}</div>
-                        <div class="folder-sub">${f.desc}</div>
                         <div class="folder-footer-link" style="${allowed ? "" : "color:#b91c1c;"}">
                             <span>${allowed ? "Buka Folder" : "Khusus " + f.title + " / BPH / Komisi A"}</span>
                             <i class="fas ${allowed ? "fa-arrow-right" : "fa-lock"}"></i>
