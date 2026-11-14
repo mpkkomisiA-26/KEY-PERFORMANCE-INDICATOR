@@ -3,106 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem KPI & Monitoring OSIS/MPK - SMAN 14 Surabaya</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Firebase App & Firestore SDK (Compat v9) -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
+    <title>Portal KPI &amp; Monitoring OSIS/MPK - SMAN 14 Surabaya</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <style>
         :root {
-            --sman-blue: #0099e5;
-            --sman-blue-dark: #007bb5;
-            --sman-green: #7cb342;
-            --sman-red: #e31e24;
-            --bg-main: #f4f8fc;
+            --sage-main: #728c69;
+            --sage-dark: #546b4d;
+            --sage-light: #e4ece1;
+            --sage-soft: #f2f6f0;
+            --soft-pink: #f2c4d0;
+            --soft-pink-light: #fdf2f5;
+            --soft-pink-border: #ecc3ce;
+            --soft-pink-deep: #cf7d92;
+            --bg-main: #f7f9f6;
             --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --shadow: 0 4px 20px rgba(0, 153, 229, 0.08);
-            --coquette-pink: #e5a4b4;
-            --coquette-pink-deep: #c97b8e;
-            --tag-olive: #98a649;
-            --tag-olive-dark: #7d8b35;
-            --tag-olive-light: #adb962;
+            --text-color: #243022;
+            --text-muted: #5f6e5c;
+            --border-color: #dce4d8;
+            --shadow: 0 8px 24px rgba(68, 88, 62, 0.08);
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background-color: var(--bg-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-main);
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.5;
+            overflow-x: hidden;
         }
 
         /* =========================================================
-           0. WELCOME PAGE (ENCHANTED GARDEN & MPK DOOR THEME)
+           0. WELCOME PAGE (ENCHANTED GARDEN & MPK DOOR)
            ========================================================= */
         .welcome-screen {
-            position: relative;
-            width: 100%;
-            min-height: 100dvh;
-            overflow: hidden;
+            position: fixed;
+            inset: 0;
+            z-index: 1500;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             background:
-                radial-gradient(ellipse at 50% 8%, rgba(255, 253, 240, 0.72) 0%, rgba(215, 228, 198, 0.25) 34%, transparent 65%),
-                radial-gradient(circle at 18% 55%, rgba(226, 152, 178, 0.32) 0%, transparent 28%),
-                radial-gradient(circle at 82% 62%, rgba(226, 152, 178, 0.24) 0%, transparent 26%),
-                radial-gradient(circle at 75% 74%, rgba(238, 210, 118, 0.25) 0%, transparent 18%),
-                linear-gradient(180deg, #5d7052 0%, #758964 38%, #6c8058 72%, #526344 100%);
-            user-select: none;
-            transition: opacity 0.65s ease, transform 0.65s ease;
+                radial-gradient(circle at 50% 25%, rgba(255, 252, 240, 0.9) 0%, rgba(226, 236, 220, 0.85) 45%, rgba(154, 179, 144, 0.95) 100%);
+            overflow: hidden;
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
         .welcome-screen.fade-out {
             opacity: 0;
-            transform: scale(1.03);
             pointer-events: none;
+            transform: scale(1.03);
         }
 
         .garden-mist {
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(circle at 12% 10%, rgba(36, 51, 31, 0.65) 0%, transparent 36%),
-                radial-gradient(circle at 88% 12%, rgba(36, 51, 31, 0.6) 0%, transparent 38%),
-                radial-gradient(circle at 50% 0%, rgba(255, 255, 245, 0.55) 0%, transparent 48%),
-                repeating-radial-gradient(circle at 22% 58%, rgba(244, 182, 200, 0.22) 0 4px, transparent 5px 24px),
-                repeating-radial-gradient(circle at 80% 60%, rgba(244, 182, 200, 0.18) 0 3px, transparent 4px 22px);
+                radial-gradient(circle at 18% 22%, rgba(242, 196, 208, 0.42) 0%, transparent 38%),
+                radial-gradient(circle at 82% 30%, rgba(114, 140, 105, 0.28) 0%, transparent 42%);
             pointer-events: none;
-            z-index: 1;
         }
 
         .garden-sunbeam {
             position: absolute;
-            top: -10%;
+            top: -15%;
             left: 50%;
             transform: translateX(-50%);
-            width: 55%;
-            height: 75%;
-            background: linear-gradient(180deg, rgba(255, 252, 235, 0.42) 0%, rgba(255, 252, 235, 0) 100%);
-            clip-path: polygon(38% 0%, 62% 0%, 92% 100%, 8% 100%);
+            width: 680px;
+            height: 680px;
+            background: radial-gradient(circle, rgba(255, 250, 230, 0.72) 0%, transparent 68%);
             pointer-events: none;
-            z-index: 1;
         }
 
         .welcome-stage {
             position: relative;
-            z-index: 3;
-            width: 100%;
-            max-width: 780px;
+            z-index: 2;
             flex: 1;
+            width: 100%;
+            max-width: 720px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -111,287 +99,217 @@
         }
 
         .welcome-typography {
+            text-align: center;
+            margin-bottom: 0.65rem;
             position: relative;
-            width: 100%;
-            max-width: 620px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            padding: 0 0.75rem;
-            margin-bottom: -14px;
-            z-index: 5;
         }
 
         .word-welcome-wrap {
             position: relative;
-            display: inline-flex;
-            align-items: center;
+            display: inline-block;
         }
 
         .word-welcome {
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(3rem, 8vw, 5.4rem);
-            color: #ffffff;
-            font-weight: 400;
-            line-height: 1;
-            text-shadow: 0 4px 18px rgba(34, 48, 28, 0.45);
-            letter-spacing: 1px;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.4rem, 6vw, 3.6rem);
+            font-weight: 800;
+            color: #465b3f;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.85);
+            display: block;
+            line-height: 1.05;
         }
 
         .ribbon-left-accent {
             position: absolute;
-            left: -26px;
-            bottom: -24px;
-            width: 135px;
-            height: 75px;
+            left: -72px;
+            top: -14px;
+            width: 95px;
+            height: 55px;
             pointer-events: none;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.18));
         }
 
         .word-to-wrap {
             position: relative;
             display: inline-flex;
             align-items: center;
-            margin-right: 0.5rem;
+            justify-content: center;
+            margin-top: -0.15rem;
         }
 
         .word-to {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Playfair Display', serif;
             font-style: italic;
+            font-size: clamp(1.5rem, 3.5vw, 2.1rem);
             font-weight: 700;
-            font-size: clamp(4.6rem, 13vw, 8.8rem);
-            color: #ffffff;
-            line-height: 0.78;
-            text-shadow: 0 6px 22px rgba(34, 48, 28, 0.35);
+            color: #9d4f63;
+            background: rgba(255, 253, 250, 0.78);
+            padding: 0 0.75rem;
+            border-radius: 999px;
+            border: 1px solid rgba(207, 125, 146, 0.45);
         }
 
         .top-key-ornament {
             position: absolute;
-            top: 4px;
-            left: -82px;
-            width: 165px;
-            height: 62px;
+            left: -135px;
+            width: 145px;
+            height: 52px;
             pointer-events: none;
-            filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.28));
-            animation: subtleSway 4.5s ease-in-out infinite;
         }
 
         .door-wrapper {
             position: relative;
-            width: clamp(210px, 34vw, 295px);
-            height: clamp(315px, 48dvh, 455px);
-            perspective: 1300px;
+            width: 230px;
+            height: 325px;
             cursor: pointer;
-            z-index: 4;
-            transition: transform 0.3s ease;
+            perspective: 1100px;
+            margin: 0.35rem auto 0.85rem;
+            transition: transform 0.25s ease;
         }
 
         .door-wrapper:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
         }
 
         .door-frame {
-            position: relative;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, #fcfaf5 0%, #efe9dc 100%);
-            padding: 16px 18px 0 18px;
-            border-radius: 3px 3px 0 0;
-            box-shadow:
-                0 22px 45px rgba(24, 34, 20, 0.45),
-                inset 0 2px 4px rgba(255, 255, 255, 0.9);
-            border: 1px solid #dfd7c8;
-        }
-
-        .door-frame::before {
-            content: "";
-            position: absolute;
-            top: -12px;
-            left: -10px;
-            right: -10px;
-            height: 14px;
-            background: linear-gradient(180deg, #ffffff 0%, #e7dfd0 100%);
-            border-radius: 3px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
-            border: 1px solid #d8cfc0;
+            background: linear-gradient(180deg, #e8dfd3 0%, #d2c5b4 100%);
+            border: 6px solid #8c6d46;
+            border-bottom: none;
+            border-radius: 120px 120px 6px 6px;
+            padding: 10px 10px 0 10px;
+            box-shadow: 0 18px 36px rgba(54, 70, 49, 0.26), inset 0 2px 8px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
         }
 
         .door-portal-glow {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 45%, #ffffff 0%, #e0f2fe 55%, #bae6fd 100%);
-            box-shadow: inset 0 0 30px rgba(0, 153, 229, 0.35);
-            overflow: hidden;
+            position: absolute;
+            inset: 10px 10px 0 10px;
+            border-radius: 110px 110px 0 0;
+            background: radial-gradient(circle at 50% 45%, #fffef7 0%, #fde8ee 55%, #dfeee0 100%);
             display: flex;
             align-items: center;
             justify-content: center;
+            text-align: center;
+            padding: 1rem;
         }
 
         .portal-enter-text {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--sman-blue-dark);
-            letter-spacing: 0.5px;
-            text-align: center;
-            padding: 0.5rem;
-            opacity: 0.85;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--sage-dark);
+            line-height: 1.4;
         }
 
         .door-leaf {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(160deg, #faf7f0 0%, #efe9dc 60%, #e6decb 100%);
-            border: 1px solid #d6ccb9;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(165deg, #8aa380 0%, #6c8563 55%, #556b4d 100%);
+            border: 2px solid #485c41;
+            border-bottom: none;
+            border-radius: 110px 110px 0 0;
             transform-origin: left center;
-            transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 18px 18px 16px;
-            box-shadow: inset 0 0 18px rgba(173, 158, 132, 0.22);
+            padding: 1.4rem 1.1rem 1rem;
+            box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.18);
         }
 
         .door-wrapper.door-open .door-leaf {
-            transform: rotateY(-82deg);
+            transform: rotateY(-108deg);
         }
 
         .door-panel-top {
-            position: relative;
-            height: 52%;
-            border: 2px solid #d8cfbe;
-            background: linear-gradient(180deg, #f7f3ea 0%, #ede6d6 100%);
-            box-shadow:
-                inset 0 2px 6px rgba(155, 140, 114, 0.25),
-                0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(242, 196, 208, 0.65);
+            border-radius: 90px 90px 12px 12px;
+            height: 44%;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .door-panel-top::after {
-            content: "";
-            position: absolute;
-            inset: 8px;
-            border: 1px solid #dfd7c7;
-        }
-
-        .door-panel-bottom {
-            position: relative;
-            height: 38%;
-            border: 2px solid #d8cfbe;
-            background: linear-gradient(180deg, #f7f3ea 0%, #ede6d6 100%);
-            box-shadow:
-                inset 0 2px 6px rgba(155, 140, 114, 0.25),
-                0 1px 0 rgba(255, 255, 255, 0.8);
-        }
-
-        .door-panel-bottom::after {
-            content: "";
-            position: absolute;
-            inset: 8px;
-            border: 1px solid #dfd7c7;
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .mpk-plaque {
-            position: relative;
-            z-index: 3;
-            width: 88%;
-            padding: 0.7rem 0.5rem;
-            background:
-                radial-gradient(circle at 50% 18%, rgba(242, 168, 190, 0.42) 0%, transparent 34%),
-                radial-gradient(circle at 46% 84%, rgba(242, 168, 190, 0.42) 0%, transparent 36%),
-                radial-gradient(circle at 28% 24%, rgba(154, 185, 138, 0.35) 0%, transparent 25%),
-                radial-gradient(circle at 68% 80%, rgba(154, 185, 138, 0.35) 0%, transparent 25%),
-                linear-gradient(180deg, #fdfbf7 0%, #f3ece0 100%);
-            border: 1.5px solid #d8cbb8;
-            border-radius: 42% 42% 42% 42% / 28% 28% 28% 28%;
-            box-shadow:
-                0 6px 14px rgba(72, 58, 42, 0.22),
-                inset 0 0 0 3px rgba(255, 255, 255, 0.75);
-            text-align: center;
+            background: linear-gradient(180deg, #fff9fb 0%, #f5d3dc 100%);
+            border: 2px solid #9f7948;
+            border-radius: 12px;
+            padding: 0.35rem 1.1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
         }
 
         .mpk-plaque-title {
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(2rem, 4.5vw, 2.75rem);
-            color: #1f2421;
-            line-height: 1.05;
-            letter-spacing: 1px;
-            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #4a2330;
+            letter-spacing: 1.5px;
         }
 
         .door-handle-assembly {
             position: absolute;
-            left: 8px;
-            top: 53%;
+            right: 8px;
+            top: 48%;
             transform: translateY(-50%);
-            width: 58px;
-            height: 76px;
-            z-index: 4;
-            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.25));
-            transition: transform 0.25s ease;
+            width: 44px;
+            height: 58px;
         }
 
-        .door-wrapper:hover .door-handle-assembly {
-            transform: translateY(-50%) rotate(-6deg);
+        .door-panel-bottom {
+            border: 2px solid rgba(242, 196, 208, 0.55);
+            border-radius: 12px;
+            height: 38%;
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .bottom-key-ornament {
             position: absolute;
-            right: clamp(8px, 6vw, 75px);
-            bottom: 84px;
-            width: clamp(95px, 18vw, 155px);
-            height: clamp(95px, 18vw, 155px);
-            z-index: 6;
+            right: 18px;
+            bottom: 68px;
+            width: 112px;
+            height: 112px;
             cursor: pointer;
-            filter: drop-shadow(0 8px 16px rgba(24, 34, 20, 0.35));
-            animation: floatKey 3.8s ease-in-out infinite;
-            transition: transform 0.3s ease;
+            transition: transform 0.25s ease;
+            filter: drop-shadow(0 6px 12px rgba(68, 52, 30, 0.2));
         }
 
         .bottom-key-ornament:hover {
-            transform: scale(1.07) rotate(-4deg);
+            transform: rotate(-10deg) scale(1.06);
         }
 
         .door-cta-pill {
-            margin-top: 12px;
-            background: rgba(255, 252, 247, 0.92);
-            color: #4a3b32;
-            border: 1.5px solid var(--coquette-pink);
-            padding: 0.55rem 1.35rem;
+            background: linear-gradient(135deg, #546b4d 0%, #728c69 100%);
+            color: #ffffff;
+            border: 2px solid #f2c4d0;
+            padding: 0.65rem 1.35rem;
             border-radius: 999px;
-            font-size: 0.85rem;
-            font-weight: 700;
+            font-size: 0.88rem;
+            font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(32, 44, 26, 0.28);
+            box-shadow: 0 8px 20px rgba(62, 82, 56, 0.28);
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            transition: all 0.25s ease;
-            z-index: 6;
+            transition: transform 0.2s, filter 0.2s;
         }
 
         .door-cta-pill:hover {
-            background: #ffffff;
             transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(32, 44, 26, 0.35);
-            border-color: var(--coquette-pink-deep);
-        }
-
-        .door-cta-pill i {
-            color: var(--coquette-pink-deep);
+            filter: brightness(1.05);
         }
 
         .welcome-bottom-banner {
             position: relative;
-            z-index: 5;
+            z-index: 2;
             width: 100%;
-            height: 86px;
+            height: 82px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 0.4rem;
         }
 
         .arch-bg-svg {
@@ -399,74 +317,52 @@
             inset: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
+        }
+
+        .corner-drape-left {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 130px;
+            height: 90px;
+        }
+
+        .corner-drape-right {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 130px;
+            height: 90px;
+            transform: scaleX(-1);
         }
 
         .motto-text {
             position: relative;
             z-index: 2;
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(1.9rem, 5vw, 3.1rem);
-            color: #1e2421;
-            font-weight: 400;
-            padding-top: 14px;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
-
-        .corner-drape-left,
-        .corner-drape-right {
-            position: absolute;
-            bottom: 0;
-            width: clamp(90px, 16vw, 150px);
-            height: 86px;
-            pointer-events: none;
-            z-index: 3;
-            filter: drop-shadow(0 -2px 6px rgba(0, 0, 0, 0.14));
-        }
-
-        .corner-drape-left { left: 0; }
-        .corner-drape-right { right: 0; transform: scaleX(-1); }
-
-        @keyframes floatKey {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-7px) rotate(2deg); }
-        }
-
-        @keyframes subtleSway {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(-2.5deg); }
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1rem, 2.6vw, 1.3rem);
+            font-weight: 700;
+            color: #546b4d;
+            margin-top: 14px;
         }
 
         /* =========================================================
-           1. HALAMAN LOGIN: BACKGROUND VINTAGE FLORAL CANVAS
-              & CENTER BOX OLIVE HANGTAG DENGAN TALI EMAS
+           1. HALAMAN LOGIN: HIJAU SAGE & SOFT PINK GIFT TAG
            ========================================================= */
         .login-page-overlay {
             position: fixed;
             inset: 0;
-            width: 100%;
-            min-height: 100dvh;
-            z-index: 1000;
+            z-index: 1400;
             display: none;
-            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            padding: 3.5rem 1rem 2rem;
             overflow-y: auto;
-            overflow-x: hidden;
-            padding: clamp(2.8rem, 7vh, 4.2rem) 1rem 2.25rem;
-            background-color: #d7cfb1;
-            background-image:
-                radial-gradient(ellipse at 50% 15%, rgba(253, 250, 238, 0.72) 0%, transparent 45%),
-                radial-gradient(circle at 86% 64%, rgba(196, 104, 112, 0.44) 0%, rgba(212, 138, 140, 0.18) 26%, transparent 48%),
-                radial-gradient(circle at 12% 38%, rgba(192, 114, 112, 0.40) 0%, rgba(216, 156, 150, 0.16) 24%, transparent 45%),
-                radial-gradient(circle at 42% 58%, rgba(86, 102, 58, 0.44) 0%, rgba(114, 128, 78, 0.2) 25%, transparent 46%),
-                radial-gradient(circle at 14% 8%, rgba(110, 84, 54, 0.42) 0%, transparent 32%),
-                radial-gradient(circle at 18% 88%, rgba(252, 246, 234, 0.75) 0%, rgba(235, 214, 198, 0.3) 28%, transparent 50%),
-                repeating-linear-gradient(0deg, rgba(115, 104, 78, 0.06) 0px, rgba(115, 104, 78, 0.06) 1px, transparent 1px, transparent 4px),
-                repeating-linear-gradient(90deg, rgba(115, 104, 78, 0.06) 0px, rgba(115, 104, 78, 0.06) 1px, transparent 1px, transparent 4px),
-                linear-gradient(165deg, #dfd7b9 0%, #cfc69f 48%, #d8cfa9 100%);
-            background-size: cover;
-            background-position: center;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(242, 196, 208, 0.42) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(114, 140, 105, 0.35) 0%, transparent 50%),
+                #f4f7f2;
         }
 
         .vintage-canvas-flora {
@@ -476,110 +372,79 @@
             height: 100%;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.78;
         }
 
         .login-tag-wrapper {
             position: relative;
             z-index: 2;
-            width: min(92vw, 430px);
+            width: min(94vw, 430px);
             margin: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            filter: drop-shadow(0 18px 34px rgba(56, 52, 34, 0.35));
-            animation: tagDropIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+            animation: tagDropIn 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         @keyframes tagDropIn {
-            from { opacity: 0; transform: translateY(14px) scale(0.97); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            0% { opacity: 0; transform: translateY(-22px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .tag-crown-svg {
+            display: block;
             width: 100%;
             height: auto;
-            display: block;
-            overflow: visible;
-            position: relative;
-            z-index: 3;
-            pointer-events: none;
+            margin-bottom: -2px;
+            filter: drop-shadow(0 8px 14px rgba(68, 88, 62, 0.14));
         }
 
         .tag-body-card {
-            position: relative;
-            width: 100%;
-            margin-top: -2px;
-            padding: 1.85rem clamp(1.35rem, 5vw, 2.15rem) 1.75rem;
-            background-color: #ffffff;
-            background-image:
-                radial-gradient(circle at 50% 0, transparent 6px, #ffffff 6.5px),
-                linear-gradient(90deg, #98a649 0%, #98a649 100%);
-            border-left: 7px solid #ffffff;
-            border-right: 7px solid #ffffff;
-            border-bottom: 8px solid #ffffff;
-            border-radius: 0 0 10px 10px;
-            box-shadow: inset 0 0 0 2px #82903a;
+            background: #ffffff;
+            border: 1.5px solid #c3d1bd;
+            border-top: none;
+            border-radius: 0 0 24px 24px;
+            padding: 0 7px 7px;
+            box-shadow: 0 18px 36px rgba(68, 88, 62, 0.18);
         }
 
         .tag-body-inner {
-            position: relative;
-            background:
-                radial-gradient(circle at 25% 20%, rgba(190, 204, 114, 0.32) 0%, transparent 45%),
-                radial-gradient(circle at 78% 65%, rgba(118, 132, 48, 0.28) 0%, transparent 50%),
-                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 2px, transparent 2px, transparent 6px),
-                linear-gradient(180deg, #99a74a 0%, #8f9e41 55%, #86953a 100%);
-            border: 1.5px solid #c5d182;
-            border-radius: 4px;
-            padding: 1.5rem clamp(1rem, 4vw, 1.5rem) 1.35rem;
-        }
-
-        .tag-body-card::before {
-            content: "";
-            position: absolute;
-            inset: -6px;
-            border: 2px dotted rgba(121, 145, 168, 0.65);
+            background: linear-gradient(180deg, #6c8663 0%, #5a7252 100%);
+            border: 1.5px solid #5d7555;
             border-top: none;
-            border-radius: 0 0 10px 10px;
-            pointer-events: none;
+            border-radius: 0 0 18px 18px;
+            padding: 1.35rem 1.35rem 1.45rem;
+            color: #ffffff;
         }
 
         .tag-login-header {
             text-align: center;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.15rem;
         }
 
         .tag-logo-badge {
-            width: 58px;
-            height: 58px;
+            width: 56px;
+            height: 56px;
             object-fit: contain;
-            background: rgba(255, 253, 245, 0.94);
-            padding: 5px;
-            border-radius: 50%;
-            border: 2px solid #d9c084;
-            box-shadow: 0 4px 12px rgba(45, 52, 20, 0.22);
-            margin-bottom: 0.6rem;
+            background: #ffffff;
+            padding: 4px;
+            border-radius: 14px;
+            border: 2px solid #f2c4d0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+            margin-bottom: 0.5rem;
         }
 
         .tag-login-header h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(1.45rem, 5vw, 1.75rem);
-            font-weight: 700;
-            color: #fffdf5;
-            line-height: 1.15;
-            text-shadow: 0 2px 6px rgba(42, 48, 18, 0.35);
+            font-size: 1.18rem;
+            font-weight: 800;
+            color: #ffffff;
         }
 
         .tag-login-header p {
             font-size: 0.78rem;
-            color: #f3f6df;
-            font-weight: 600;
+            color: #fce4ec;
             letter-spacing: 0.3px;
             margin-top: 0.2rem;
         }
 
         .tag-form-group {
-            margin-bottom: 0.95rem;
+            margin-bottom: 0.9rem;
         }
 
         .tag-form-group label {
@@ -587,19 +452,19 @@
             font-size: 0.82rem;
             font-weight: 700;
             margin-bottom: 0.35rem;
-            color: #fffdf5;
-            text-shadow: 0 1px 2px rgba(38, 44, 16, 0.28);
+            color: #fffdf9;
+            text-shadow: 0 1px 2px rgba(30, 42, 26, 0.28);
         }
 
         .tag-form-group input,
         .tag-form-group select {
             width: 100%;
             padding: 0.68rem 0.85rem;
-            border: 1.5px solid #d5c18a;
+            border: 1.5px solid #f2c4d0;
             border-radius: 10px;
             font-size: 0.9rem;
-            background: rgba(255, 253, 247, 0.96);
-            color: #262e18;
+            background: rgba(255, 253, 250, 0.97);
+            color: #243022;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
             transition: border-color 0.2s, box-shadow 0.2s;
         }
@@ -607,13 +472,13 @@
         .tag-form-group input:focus,
         .tag-form-group select:focus {
             outline: none;
-            border-color: #f4d88c;
-            box-shadow: 0 0 0 3px rgba(244, 216, 140, 0.35);
+            border-color: #f7d6df;
+            box-shadow: 0 0 0 3px rgba(242, 196, 208, 0.45);
         }
 
         .tag-hint-text {
             font-size: 0.75rem;
-            color: #eef3d2;
+            color: #f9e4ea;
             margin-top: 0.3rem;
             display: block;
         }
@@ -622,14 +487,14 @@
             width: 100%;
             margin-top: 0.35rem;
             padding: 0.78rem 1rem;
-            border: 1.5px solid #f0d794;
+            border: 1.5px solid #ffffff;
             border-radius: 10px;
             font-size: 0.94rem;
             font-weight: 800;
             cursor: pointer;
-            color: #3a2b14;
-            background: linear-gradient(180deg, #f8e6b4 0%, #dfc077 100%);
-            box-shadow: 0 5px 14px rgba(48, 54, 20, 0.28);
+            color: #4a2330;
+            background: linear-gradient(180deg, #fce3ea 0%, #f2c4d0 100%);
+            box-shadow: 0 5px 14px rgba(42, 56, 38, 0.28);
             transition: transform 0.2s, filter 0.2s;
             display: inline-flex;
             align-items: center;
@@ -638,7 +503,7 @@
         }
 
         .btn-tag-login:hover {
-            filter: brightness(1.04);
+            filter: brightness(1.03);
             transform: translateY(-1px);
         }
 
@@ -648,12 +513,12 @@
             justify-content: center;
             gap: 0.4rem;
             width: 100%;
-            margin-top: 0.85rem;
+            margin-top: 0.8rem;
             background: rgba(255, 253, 245, 0.16);
-            border: 1px solid rgba(255, 253, 245, 0.32);
+            border: 1px solid rgba(255, 253, 245, 0.34);
             border-radius: 8px;
-            padding: 0.45rem 0.75rem;
-            color: #fffdf5;
+            padding: 0.48rem 0.75rem;
+            color: #fffdf9;
             font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
@@ -665,98 +530,142 @@
         }
 
         /* =========================================================
-           2. MAIN APP WRAPPER & DASHBOARD STYLES
+           2. MAIN APP WRAPPER & DASHBOARD (HIJAU SAGE & SOFT PINK)
            ========================================================= */
         .app-container {
             min-height: 100vh;
+            width: 100%;
             display: flex;
             flex-direction: column;
+            background:
+                radial-gradient(circle at 95% 8%, rgba(242, 196, 208, 0.24) 0%, transparent 32%),
+                radial-gradient(circle at 5% 88%, rgba(114, 140, 105, 0.14) 0%, transparent 36%),
+                var(--bg-main);
         }
 
         .app-header {
-            background: linear-gradient(135deg, var(--sman-blue), var(--sman-blue-dark));
+            background: linear-gradient(135deg, var(--sage-main) 0%, var(--sage-dark) 100%);
+            border-bottom: 3px solid var(--soft-pink);
             color: white;
-            padding: 0.85rem 2rem;
+            padding: 0.85rem 1.75rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 16px rgba(86, 110, 78, 0.18);
             position: sticky;
             top: 0;
             z-index: 100;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.85rem;
         }
 
         .nav-brand {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.8rem;
+            min-width: 0;
         }
 
         .brand-logo {
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
             object-fit: contain;
-            background: white;
+            background: #ffffff;
             padding: 3px;
-            border-radius: 8px;
+            border-radius: 12px;
+            border: 2px solid var(--soft-pink);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .nav-brand h2 {
-            font-size: 1.1rem;
+            font-size: 1.08rem;
             font-weight: 800;
+            line-height: 1.25;
         }
 
         .badge-role {
+            display: inline-block;
             font-size: 0.72rem;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.15rem 0.5rem;
-            border-radius: 10px;
-            font-weight: 600;
+            background: rgba(242, 196, 208, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #fff8fa;
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            font-weight: 700;
+            margin-top: 2px;
         }
 
         .nav-menu {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.45rem;
             align-items: center;
             flex-wrap: wrap;
         }
 
         .nav-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
+            background: rgba(255, 255, 255, 0.13);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             color: white;
             padding: 0.5rem 0.85rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            border-radius: 10px;
+            font-size: 0.83rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
+            justify-content: center;
+            gap: 0.4rem;
+            white-space: nowrap;
         }
 
-        .nav-btn:hover, .nav-btn.active {
-            background: rgba(255, 255, 255, 0.25);
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.24);
         }
 
-        .btn-wa { background: #25d366 !important; }
-        .btn-logout { background: var(--sman-red) !important; }
+        .nav-btn.active {
+            background: var(--soft-pink);
+            color: #4a2330;
+            border-color: #ffffff;
+            font-weight: 800;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .btn-maintenance {
+            background: rgba(253, 242, 245, 0.22) !important;
+            border: 1px dashed var(--soft-pink) !important;
+            color: #fff6f8 !important;
+        }
+
+        .maintenance-pill {
+            background: #f59e0b;
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 0.1rem 0.42rem;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-logout {
+            background: #c95b73 !important;
+            border-color: rgba(255, 255, 255, 0.25) !important;
+        }
 
         .main-content {
             max-width: 1240px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
+            margin: 1.75rem auto;
+            padding: 0 1.25rem;
             width: 100%;
             flex: 1;
         }
 
         .tab-pane {
             display: none;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.28s ease;
         }
 
         .tab-pane.active {
@@ -769,21 +678,24 @@
         }
 
         .welcome-banner {
-            background: linear-gradient(135deg, #ffffff, #f0f7fc);
-            border-left: 6px solid var(--sman-blue);
-            padding: 1.75rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--soft-pink-light) 55%, var(--sage-soft) 100%);
+            border-left: 6px solid var(--sage-main);
+            border-top: 1px solid var(--soft-pink-border);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem;
             border-radius: 16px;
             box-shadow: var(--shadow);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.75rem;
             gap: 1rem;
             flex-wrap: wrap;
         }
 
         .banner-text h1 {
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             font-weight: 800;
             color: var(--text-color);
             margin-bottom: 0.35rem;
@@ -795,145 +707,164 @@
         }
 
         .banner-badge {
-            background: #e0f2fe;
-            color: var(--sman-blue-dark);
-            padding: 0.6rem 1rem;
+            background: var(--soft-pink);
+            color: #4a2330;
+            border: 1px solid var(--soft-pink-deep);
+            padding: 0.55rem 0.95rem;
             border-radius: 12px;
             font-weight: 700;
-            font-size: 0.85rem;
-            display: flex;
+            font-size: 0.83rem;
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.75rem;
         }
 
         .stat-card {
             background: var(--card-bg);
-            padding: 1.5rem;
+            padding: 1.35rem;
             border-radius: 16px;
             box-shadow: var(--shadow);
             display: flex;
             align-items: center;
-            gap: 1.25rem;
-            border-top: 4px solid var(--sman-blue);
+            gap: 1.15rem;
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--sage-main);
         }
 
-        .stat-card.green { border-top-color: var(--sman-green); }
-        .stat-card.orange { border-top-color: #f59e0b; }
+        .stat-card.pink { border-top-color: var(--soft-pink-deep); }
+        .stat-card.sage-pink { border-top-color: #8ca382; }
 
         .stat-icon {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
             border-radius: 12px;
-            background: #e0f2fe;
-            color: var(--sman-blue);
+            background: var(--sage-light);
+            color: var(--sage-dark);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.35rem;
+            font-size: 1.3rem;
         }
 
-        .stat-card.green .stat-icon { background: #ecfccb; color: var(--sman-green); }
-        .stat-card.orange .stat-icon { background: #fef3c7; color: #d97706; }
+        .stat-card.pink .stat-icon {
+            background: var(--soft-pink-light);
+            color: var(--soft-pink-deep);
+        }
+
+        .stat-card.sage-pink .stat-icon {
+            background: linear-gradient(135deg, var(--sage-light), var(--soft-pink-light));
+            color: var(--sage-dark);
+        }
 
         .stat-label {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
         }
 
         .stat-card h2 {
-            font-size: 1.75rem;
+            font-size: 1.65rem;
             font-weight: 800;
             color: var(--text-color);
         }
 
         .grid-2col, .dashboard-grid-2 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+            gap: 1.35rem;
+            margin-bottom: 1.75rem;
+            align-items: start;
         }
 
         .card {
             background: var(--card-bg);
-            padding: 1.75rem;
+            padding: 1.5rem;
             border-radius: 16px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
+            min-width: 0;
         }
 
         .card-header {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.15rem;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 0.75rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 0.75rem;
+            gap: 0.65rem;
         }
 
         .card-header h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
+            font-size: 1.05rem;
+            font-weight: 800;
             color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .card-header h3 i {
+            color: var(--sage-main);
         }
 
         .page-header {
-            margin-bottom: 1.75rem;
+            margin-bottom: 1.45rem;
         }
 
         .page-header h2 {
-            font-size: 1.35rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: var(--text-color);
             margin-bottom: 0.25rem;
         }
 
         .page-header p {
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: var(--text-muted);
         }
 
         .folder-section {
-            margin-bottom: 2rem;
+            margin-bottom: 1.75rem;
         }
 
         .filter-pills {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.45rem;
             flex-wrap: wrap;
         }
 
         .pill-btn {
-            background: #f1f5f9;
+            background: var(--sage-soft);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 0.35rem 0.85rem;
+            padding: 0.38rem 0.85rem;
             border-radius: 999px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.78rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .pill-btn:hover {
-            background: #e0f2fe;
-            border-color: var(--sman-blue);
+            background: var(--soft-pink-light);
+            border-color: var(--soft-pink-deep);
         }
 
         .pill-btn.active {
-            background: var(--sman-blue);
+            background: var(--sage-main);
             color: white;
-            border-color: var(--sman-blue);
+            border-color: var(--sage-main);
         }
 
         .folder-grid {
@@ -943,7 +874,7 @@
         }
 
         .folder-card {
-            background: #f8fafc;
+            background: #ffffff;
             border: 1.5px solid var(--border-color);
             border-radius: 14px;
             overflow: hidden;
@@ -951,24 +882,31 @@
             transition: all 0.22s ease;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .folder-card:hover {
             transform: translateY(-3px);
-            border-color: var(--sman-blue);
-            box-shadow: 0 8px 18px rgba(0, 153, 229, 0.12);
+            border-color: var(--soft-pink-deep);
+            box-shadow: 0 8px 20px rgba(207, 125, 146, 0.18);
         }
 
-        .folder-card.selected {
-            border-color: var(--sman-blue);
-            background: #f0f9ff;
-            box-shadow: 0 0 0 3px rgba(0, 153, 229, 0.18);
+        .folder-card.folder-locked {
+            opacity: 0.72;
+            background: #f6f7f5;
+            border-style: dashed;
+        }
+
+        .folder-card.folder-locked:hover {
+            transform: none;
+            border-color: #cbd5c7;
+            box-shadow: none;
         }
 
         .folder-thumb {
             width: 100%;
-            height: 115px;
-            background: linear-gradient(135deg, #e0f2fe, #f1f5f9);
+            height: 118px;
+            background: linear-gradient(135deg, var(--sage-light), var(--soft-pink-light));
             position: relative;
             display: flex;
             align-items: center;
@@ -988,7 +926,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--sman-blue-dark);
+            color: var(--sage-dark);
             gap: 0.3rem;
             padding: 0.5rem;
             text-align: center;
@@ -996,13 +934,13 @@
 
         .folder-fallback i {
             font-size: 2rem;
-            color: var(--sman-blue);
+            color: var(--sage-main);
         }
 
         .folder-fallback span {
             font-size: 0.7rem;
             font-weight: 700;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             padding: 0.15rem 0.5rem;
             border-radius: 6px;
         }
@@ -1011,11 +949,11 @@
             position: absolute;
             top: 8px;
             left: 8px;
-            background: rgba(15, 23, 42, 0.72);
+            background: rgba(54, 70, 49, 0.82);
             color: #fff;
-            font-size: 0.68rem;
+            font-size: 0.66rem;
             font-weight: 700;
-            padding: 0.15rem 0.5rem;
+            padding: 0.15rem 0.48rem;
             border-radius: 6px;
             z-index: 2;
         }
@@ -1024,76 +962,194 @@
             position: absolute;
             top: 8px;
             right: 8px;
-            background: var(--sman-green);
-            color: #fff;
-            font-size: 0.68rem;
-            font-weight: 700;
-            padding: 0.15rem 0.5rem;
+            background: var(--soft-pink);
+            color: #4a2330;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            font-size: 0.66rem;
+            font-weight: 800;
+            padding: 0.15rem 0.48rem;
             border-radius: 6px;
             z-index: 2;
         }
 
+        .folder-access-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.16rem 0.5rem;
+            border-radius: 6px;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .folder-access-badge.open {
+            background: rgba(114, 140, 105, 0.92);
+            color: #ffffff;
+        }
+
+        .folder-access-badge.locked {
+            background: rgba(71, 85, 105, 0.88);
+            color: #f8fafc;
+        }
+
         .folder-info {
-            padding: 0.75rem;
-            flex: 1;
+            padding: 0.72rem 0.75rem;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, #fcfaf9 100%);
         }
 
         .folder-info h4 {
-            font-size: 0.92rem;
+            font-size: 0.94rem;
             font-weight: 800;
             color: var(--text-color);
-            margin-bottom: 0.2rem;
+            margin: 0;
         }
 
-        .folder-info p {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            line-height: 1.35;
+        /* =========================================================
+           HALAMAN PENGAJUAN PROKER SAAT FOLDER DIKLIK (TOP VIEW)
+           ========================================================= */
+        .folder-detail-topbar {
+            background: linear-gradient(135deg, var(--sage-main) 0%, var(--sage-dark) 62%, #9a6c7b 100%);
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.35rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+            border: 1.5px solid var(--soft-pink);
+        }
+
+        .folder-detail-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .folder-detail-thumb {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid var(--soft-pink);
+            background: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .folder-detail-meta h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 0.1rem;
+        }
+
+        .folder-detail-meta p {
+            font-size: 0.82rem;
+            color: #fce7ed;
+        }
+
+        .btn-back-folders {
+            background: var(--soft-pink);
+            color: #4a2330;
+            border: 1.5px solid #ffffff;
+            padding: 0.58rem 1.05rem;
+            border-radius: 10px;
+            font-size: 0.84rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            transition: transform 0.2s, filter 0.2s;
+        }
+
+        .btn-back-folders:hover {
+            filter: brightness(1.04);
+            transform: translateY(-1px);
+        }
+
+        .locked-target-wrap {
+            position: relative;
+        }
+
+        .locked-target-input {
+            background: var(--sage-soft) !important;
+            border: 1.5px solid var(--sage-main) !important;
+            color: var(--sage-dark) !important;
+            font-weight: 800 !important;
+            padding-right: 6.2rem !important;
+            cursor: not-allowed;
+        }
+
+        .locked-chip {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--soft-pink);
+            color: #4a2330;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.2rem 0.55rem;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            pointer-events: none;
         }
 
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 0.95rem;
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: 0.9rem;
         }
 
         label {
             display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.84rem;
+            font-weight: 700;
             margin-bottom: 0.35rem;
             color: var(--text-color);
         }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
+            max-width: 100%;
             padding: 0.65rem 0.85rem;
             border: 1.5px solid var(--border-color);
             border-radius: 10px;
             font-size: 0.9rem;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
             background: #fff;
+            color: var(--text-color);
         }
 
-        input:focus, select:focus {
+        textarea {
+            resize: vertical;
+            min-height: 78px;
+        }
+
+        input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: var(--sman-blue);
-        }
-
-        .input-disabled {
-            background: #f1f5f9;
-            color: var(--text-muted);
+            border-color: var(--sage-main);
+            box-shadow: 0 0 0 3px rgba(114, 140, 105, 0.18);
         }
 
         .hint-text {
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             color: var(--text-muted);
             margin-top: 0.25rem;
             display: block;
@@ -1103,84 +1159,111 @@
             padding: 0.75rem 1rem;
             border: none;
             border-radius: 10px;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 700;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, transform 0.15s;
             color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
         }
 
-        .btn:hover { opacity: 0.9; }
-        .btn-full { width: 100%; margin-top: 0.5rem; }
-        .btn-primary { background: var(--sman-blue); }
-        .btn-success { background: var(--sman-green); }
-        .btn-warning { background: #f59e0b; }
+        .btn:hover { opacity: 0.93; transform: translateY(-1px); }
+        .btn-full { width: 100%; margin-top: 0.4rem; }
+        .btn-primary { background: linear-gradient(135deg, var(--sage-main), var(--sage-dark)); }
+        .btn-success { background: linear-gradient(135deg, var(--sage-main), #5d7a54); }
+        .btn-pink {
+            background: linear-gradient(135deg, #df8ea3, var(--soft-pink-deep));
+            color: #ffffff;
+        }
 
         .table-responsive {
+            width: 100%;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 0.5rem;
+            margin-top: 0.35rem;
         }
 
         .data-table th, .data-table td {
-            padding: 0.85rem;
+            padding: 0.8rem 0.75rem;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
+            vertical-align: top;
         }
 
         .data-table th {
-            background: #f8fafc;
-            font-weight: 700;
-            color: var(--text-muted);
+            background: linear-gradient(90deg, var(--sage-soft), var(--soft-pink-light));
+            font-weight: 800;
+            color: var(--sage-dark);
+            white-space: nowrap;
         }
 
         .badge-status {
             padding: 0.25rem 0.6rem;
             border-radius: 6px;
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             font-weight: 700;
             display: inline-block;
         }
 
-        .badge-hadir { background: #dcfce7; color: #166534; }
-        .badge-izin { background: #fef9c3; color: #854d0e; }
-        .badge-pending { background: #fef3c7; color: #b45309; }
-        .badge-success { background: #dcfce7; color: #166534; }
+        .badge-hadir { background: var(--sage-light); color: var(--sage-dark); }
+        .badge-izin { background: var(--soft-pink-light); color: #8c3b50; border: 1px solid var(--soft-pink-border); }
+        .badge-pending { background: #fdf2f5; color: #9d445b; border: 1px solid var(--soft-pink-border); }
+        .badge-partial { background: #fef9c3; color: #854d0e; }
+        .badge-success { background: var(--sage-light); color: var(--sage-dark); border: 1px solid #b9ccb2; }
 
-        .checkbox-group-inline {
+        .checkbox-group-stack {
             display: flex;
-            gap: 0.75rem;
-            align-items: center;
+            flex-direction: column;
+            gap: 0.45rem;
             font-size: 0.8rem;
-            font-weight: 600;
-            flex-wrap: wrap;
+            font-weight: 700;
         }
 
-        .checkbox-group-inline label {
+        .checkbox-group-stack label {
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
+            gap: 0.4rem;
             margin-bottom: 0;
             cursor: pointer;
+            background: var(--sage-soft);
+            padding: 0.3rem 0.55rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
         }
 
-        .checkbox-group-inline input[type="checkbox"] {
-            width: auto;
-            accent-color: var(--sman-blue);
+        .checkbox-group-stack label.acc-pink {
+            background: var(--soft-pink-light);
+            border-color: var(--soft-pink-border);
+        }
+
+        .checkbox-group-stack input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--sage-dark);
             cursor: pointer;
+            flex-shrink: 0;
         }
 
-        .checkbox-group-inline input[type="checkbox"]:disabled {
+        .checkbox-group-stack label.acc-pink input[type="checkbox"] {
+            accent-color: var(--soft-pink-deep);
+        }
+
+        .checkbox-group-stack input[type="checkbox"]:disabled {
             cursor: not-allowed;
             opacity: 0.55;
         }
 
-        .checkbox-group-inline label:has(input:disabled) {
+        .checkbox-group-stack label:has(input:disabled) {
             cursor: not-allowed;
             color: var(--text-muted);
         }
@@ -1188,18 +1271,18 @@
         .lock-note {
             display: block;
             color: var(--text-muted);
-            font-size: 0.72rem;
+            font-size: 0.71rem;
             margin-top: 0.3rem;
         }
 
         .info-list {
             padding-left: 1.2rem;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: var(--text-muted);
         }
 
         .info-list li {
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.55rem;
         }
 
         .badge-tech-list {
@@ -1208,30 +1291,353 @@
         }
 
         .badge-tech-list li {
-            background: #f1f5f9;
-            padding: 0.35rem 0.65rem;
+            background: var(--sage-soft);
+            border-left: 3px solid var(--soft-pink-deep);
+            padding: 0.38rem 0.65rem;
             border-radius: 6px;
             margin-bottom: 0.4rem;
-            font-size: 0.85rem;
+            font-size: 0.83rem;
             font-family: monospace;
-            color: var(--sman-blue-dark);
+            color: var(--sage-dark);
         }
 
-        @media(max-width: 768px) {
-            .form-row { grid-template-columns: 1fr; }
-            .app-header { padding: 1rem; }
-            .grid-2col, .dashboard-grid-2 { grid-template-columns: 1fr; }
-            .folder-grid { grid-template-columns: repeat(2, 1fr); }
+        /* =========================================================
+           ANIMASI BERHASIL ALA GOPAY (SUCCESS POPUP + RIPPLE + CHECK)
+           ========================================================= */
+        .gopay-success-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(24, 34, 24, 0.52);
+            backdrop-filter: blur(4px);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .gopay-success-backdrop.show {
+            display: flex;
+            animation: gopayBackdropFade 0.22s ease forwards;
+        }
+
+        @keyframes gopayBackdropFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .gopay-success-card {
+            position: relative;
+            width: min(92vw, 370px);
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 2rem 1.5rem 1.65rem;
+            text-align: center;
+            box-shadow: 0 24px 50px rgba(0, 0, 0, 0.24);
+            border: 2px solid #e2f5e6;
+            overflow: hidden;
+            animation: gopayCardSpring 0.48s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes gopayCardSpring {
+            0% { opacity: 0; transform: scale(0.72) translateY(24px); }
+            70% { opacity: 1; transform: scale(1.03) translateY(-2px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .gopay-top-ribbon {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #00aa13 0%, #728c69 55%, #f2c4d0 100%);
+        }
+
+        .gopay-icon-stage {
+            position: relative;
+            width: 104px;
+            height: 104px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gopay-ripple-ring {
+            position: absolute;
+            inset: 8px;
+            border-radius: 50%;
+            background: rgba(0, 170, 19, 0.22);
+            animation: gopayRippleWave 1.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .gopay-ripple-ring.ring-2 {
+            background: rgba(114, 140, 105, 0.2);
+            animation-delay: 0.16s;
+        }
+
+        @keyframes gopayRippleWave {
+            0% { transform: scale(0.65); opacity: 0.95; }
+            100% { transform: scale(1.65); opacity: 0; }
+        }
+
+        .gopay-circle-badge {
+            position: relative;
+            z-index: 2;
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #00c417 0%, #009c11 100%);
+            box-shadow: 0 10px 24px rgba(0, 170, 19, 0.38), inset 0 2px 4px rgba(255, 255, 255, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: gopayBadgePop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes gopayBadgePop {
+            0% { transform: scale(0.3); }
+            100% { transform: scale(1); }
+        }
+
+        .gopay-check-svg {
+            width: 42px;
+            height: 42px;
+        }
+
+        .gopay-check-path {
+            stroke: #ffffff;
+            stroke-width: 5.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            stroke-dasharray: 56;
+            stroke-dashoffset: 56;
+            animation: gopayDrawCheck 0.42s cubic-bezier(0.65, 0, 0.45, 1) 0.18s forwards;
+        }
+
+        @keyframes gopayDrawCheck {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .gopay-confetti-dot {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            z-index: 1;
+            opacity: 0;
+            animation: gopayConfettiBurst 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+        }
+
+        .gopay-confetti-dot.d1 { background: #00aa13; --tx: -46px; --ty: -34px; }
+        .gopay-confetti-dot.d2 { background: #f2c4d0; --tx: 48px; --ty: -32px; width: 9px; height: 9px; }
+        .gopay-confetti-dot.d3 { background: #fbbf24; --tx: -52px; --ty: 24px; }
+        .gopay-confetti-dot.d4 { background: #728c69; --tx: 50px; --ty: 26px; }
+        .gopay-confetti-dot.d5 { background: #cf7d92; --tx: 0px; --ty: -54px; }
+        .gopay-confetti-dot.d6 { background: #34d399; --tx: 0px; --ty: 52px; }
+
+        @keyframes gopayConfettiBurst {
+            0% { opacity: 1; transform: translate(0, 0) scale(0.4); }
+            80% { opacity: 1; }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(1.1); }
+        }
+
+        .gopay-success-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #16301b;
+            margin-bottom: 0.3rem;
+        }
+
+        .gopay-success-subtitle {
+            font-size: 0.86rem;
+            color: #5a6b5d;
+            margin-bottom: 0.95rem;
+            line-height: 1.45;
+        }
+
+        .gopay-summary-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.4rem 0.85rem;
+            border-radius: 999px;
+            margin-bottom: 1.15rem;
+            max-width: 100%;
+        }
+
+        .gopay-summary-pill span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .btn-gopay-done {
+            width: 100%;
+            padding: 0.72rem 1rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00aa13 0%, #008f10 100%);
+            color: #ffffff;
+            font-size: 0.92rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(0, 170, 19, 0.28);
+            transition: transform 0.15s, filter 0.15s;
+        }
+
+        .btn-gopay-done:hover {
+            filter: brightness(1.05);
+            transform: translateY(-1px);
+        }
+
+        /* =========================================================
+           MODAL MAINTENANCE HUBUNGI ADMIN
+           ========================================================= */
+        .maintenance-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(36, 48, 34, 0.55);
+            backdrop-filter: blur(3px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .maintenance-modal-card {
+            background: #ffffff;
+            border: 2px solid var(--soft-pink);
+            border-top: 6px solid var(--sage-main);
+            border-radius: 18px;
+            max-width: 390px;
+            width: 100%;
+            padding: 1.65rem 1.4rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
+            animation: tagDropIn 0.25s ease;
+        }
+
+        .maintenance-icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sage-light), var(--soft-pink-light));
+            color: var(--soft-pink-deep);
+            border: 2px solid var(--soft-pink);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.55rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .maintenance-modal-card h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0.4rem;
+        }
+
+        .maintenance-modal-card p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+        }
+
+        /* =========================================================
+           RESPONSIVE HP (MOBILE) AGAR TIDAK RUSAK DI SEMUA MENU
+           ========================================================= */
+        @media (max-width: 768px) {
+            .app-header {
+                padding: 0.85rem 1rem;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.75rem;
+            }
+
+            .nav-brand {
+                justify-content: space-between;
+            }
+
+            .nav-menu {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.45rem;
+                width: 100%;
+            }
+
+            .nav-btn {
+                width: 100%;
+                padding: 0.55rem 0.65rem;
+                font-size: 0.78rem;
+                white-space: normal;
+                text-align: center;
+                line-height: 1.25;
+            }
+
+            .main-content {
+                margin: 1.15rem auto;
+                padding: 0 0.85rem;
+            }
+
+            .welcome-banner {
+                padding: 1.15rem;
+            }
+
+            .banner-text h1 {
+                font-size: 1.15rem;
+            }
+
+            .grid-2col,
+            .dashboard-grid-2,
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .card {
+                padding: 1.15rem;
+            }
+
+            .folder-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .folder-detail-topbar {
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn-back-folders {
+                width: 100%;
+                justify-content: center;
+            }
+
             .top-key-ornament { left: -62px; width: 125px; }
             .bottom-key-ornament { right: 6px; bottom: 78px; width: 90px; height: 90px; }
         }
 
-        @media(max-width: 420px) {
+        @media (max-width: 420px) {
             .welcome-stage { padding: 0.75rem 0.75rem 0.25rem; }
             .door-wrapper { width: 205px; height: 295px; }
             .login-page-overlay { padding: 3.1rem 0.75rem 1.75rem; }
             .tag-body-card { padding: 1.5rem 0.85rem 1.25rem; }
             .tag-body-inner { padding: 1.35rem 0.85rem 1.15rem; }
+            .folder-thumb { height: 100px; }
+            .folder-info { padding: 0.6rem; }
+            .folder-info h4 { font-size: 0.86rem; }
+            .data-table th, .data-table td { padding: 0.65rem 0.55rem; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -1367,26 +1773,23 @@
     </div>
 
     <!-- =========================================================
-         1. HALAMAN LOGIN: BACKGROUND VINTAGE FLORAL CANVAS
-            & CENTER BOX GIFT TAG HIJAU OLIVE DENGAN TALI EMAS
+         1. HALAMAN LOGIN: HIJAU SAGE & SOFT PINK GIFT TAG
          ========================================================= -->
     <div id="loginModal" class="login-page-overlay">
         <svg class="vintage-canvas-flora" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M85 320 C110 420, 75 510, 125 605" stroke="#7d4a36" stroke-width="2.2" stroke-linecap="round" opacity="0.65"/>
-            <ellipse cx="127" cy="614" rx="8" ry="15" transform="rotate(-18 127 614)" fill="#5c4932" opacity="0.7"/>
-            <circle cx="1220" cy="520" r="140" fill="url(#roseWatercolor)" opacity="0.55"/>
-            <circle cx="190" cy="280" r="120" fill="url(#roseWatercolor)" opacity="0.45"/>
-            <circle cx="240" cy="780" r="150" fill="url(#creamPetal)" opacity="0.7"/>
+            <circle cx="1220" cy="520" r="160" fill="url(#roseWatercolor)" opacity="0.6"/>
+            <circle cx="190" cy="280" r="140" fill="url(#roseWatercolor)" opacity="0.5"/>
+            <circle cx="240" cy="780" r="170" fill="url(#sagePetal)" opacity="0.65"/>
             <defs>
                 <radialGradient id="roseWatercolor">
-                    <stop offset="0%" stop-color="#c46972"/>
-                    <stop offset="65%" stop-color="#dca2a2" stop-opacity="0.4"/>
-                    <stop offset="100%" stop-color="#dca2a2" stop-opacity="0"/>
+                    <stop offset="0%" stop-color="#e598ab"/>
+                    <stop offset="65%" stop-color="#f2c4d0" stop-opacity="0.45"/>
+                    <stop offset="100%" stop-color="#f2c4d0" stop-opacity="0"/>
                 </radialGradient>
-                <radialGradient id="creamPetal">
-                    <stop offset="0%" stop-color="#fdf9ee"/>
-                    <stop offset="70%" stop-color="#f3e6d4" stop-opacity="0.45"/>
-                    <stop offset="100%" stop-color="#f3e6d4" stop-opacity="0"/>
+                <radialGradient id="sagePetal">
+                    <stop offset="0%" stop-color="#8ba682"/>
+                    <stop offset="70%" stop-color="#c3d4bc" stop-opacity="0.45"/>
+                    <stop offset="100%" stop-color="#c3d4bc" stop-opacity="0"/>
                 </radialGradient>
             </defs>
         </svg>
@@ -1394,46 +1797,46 @@
         <div class="login-tag-wrapper">
             <svg class="tag-crown-svg" viewBox="0 0 430 142" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0 142 L0 112 C28 102, 46 86, 52 64 C78 24, 142 6, 215 6 C288 6, 352 24, 378 64 C384 86, 402 102, 430 112 L430 142 Z"
-                      fill="#ffffff" stroke="#b6c292" stroke-width="1.5"/>
+                      fill="#ffffff" stroke="#c3d1bd" stroke-width="1.5"/>
 
                 <path d="M58 64 C84 26, 146 10, 215 10 C284 10, 346 26, 372 64"
-                      stroke="#87a2bc" stroke-width="2" stroke-dasharray="5 6" fill="none"/>
-                <circle cx="72" cy="52" r="3.5" fill="#9e1b24"/>
-                <circle cx="285" cy="18" r="3.5" fill="#9e1b24"/>
-                <circle cx="386" cy="95" r="3.2" fill="#9e1b24"/>
+                      stroke="#df8ea3" stroke-width="2" stroke-dasharray="5 6" fill="none"/>
+                <circle cx="72" cy="52" r="3.5" fill="#cf7d92"/>
+                <circle cx="285" cy="18" r="3.5" fill="#cf7d92"/>
+                <circle cx="386" cy="95" r="3.2" fill="#cf7d92"/>
 
                 <path d="M7 142 L7 117 C34 107, 52 91, 58 69 C83 31, 145 14, 215 14 C285 14, 347 31, 372 69 C378 91, 396 107, 423 117 L423 142 Z"
-                      fill="url(#oliveTagCrownGrad)" stroke="#7c8b35" stroke-width="1.5"/>
+                      fill="url(#sageTagCrownGrad)" stroke="#5d7555" stroke-width="1.5"/>
 
-                <line x1="48" y1="96" x2="382" y2="96" stroke="#7d8c37" stroke-width="1.2" opacity="0.55"/>
-                <line x1="48" y1="98" x2="382" y2="98" stroke="#c3cf7d" stroke-width="1" opacity="0.5"/>
+                <line x1="48" y1="96" x2="382" y2="96" stroke="#536b4b" stroke-width="1.2" opacity="0.55"/>
+                <line x1="48" y1="98" x2="382" y2="98" stroke="#f2c4d0" stroke-width="1" opacity="0.6"/>
 
                 <polygon points="205,40 227,40 242,54 242,74 227,88 205,88 190,74 190,54"
-                         fill="#e3c888" stroke="#9b793e" stroke-width="2"/>
-                <circle cx="216" cy="64" r="13" fill="#f7f3e8" stroke="#9b793e" stroke-width="1.8"/>
+                         fill="#f2c4d0" stroke="#cf7d92" stroke-width="2"/>
+                <circle cx="216" cy="64" r="13" fill="#fffaf9" stroke="#cf7d92" stroke-width="1.8"/>
 
                 <path d="M210 61 C150 42, 72 18, 66 -12 C62 -32, 92 -38, 132 -26 C158 -18, 174 -4, 184 12"
-                      stroke="#5b3e19" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+                      stroke="#8b4d5d" stroke-width="6.5" stroke-linecap="round" fill="none"/>
                 <path d="M210 61 C150 42, 72 18, 66 -12 C62 -32, 92 -38, 132 -26 C158 -18, 174 -4, 184 12"
-                      stroke="#b98c4a" stroke-width="3.2" stroke-dasharray="4 3" stroke-linecap="round" fill="none"/>
+                      stroke="#f2c4d0" stroke-width="3.2" stroke-dasharray="4 3" stroke-linecap="round" fill="none"/>
 
-                <ellipse cx="212" cy="60" rx="8" ry="6" transform="rotate(-25 212 60)" fill="#c99e5b" stroke="#5b3e19" stroke-width="2"/>
+                <ellipse cx="212" cy="60" rx="8" ry="6" transform="rotate(-25 212 60)" fill="#e8a2b4" stroke="#8b4d5d" stroke-width="2"/>
 
                 <path d="M215 62 C232 76, 232 108, 214 142 C207 154, 202 162, 198 168"
-                      stroke="#5b3e19" stroke-width="6" stroke-linecap="round" fill="none"/>
+                      stroke="#8b4d5d" stroke-width="6" stroke-linecap="round" fill="none"/>
                 <path d="M215 62 C232 76, 232 108, 214 142 C207 154, 202 162, 198 168"
-                      stroke="#c39652" stroke-width="2.8" stroke-dasharray="4 3" stroke-linecap="round" fill="none"/>
+                      stroke="#f2c4d0" stroke-width="2.8" stroke-dasharray="4 3" stroke-linecap="round" fill="none"/>
 
                 <path d="M213 65 C218 96, 226 124, 246 148"
-                      stroke="#5b3e19" stroke-width="5.8" stroke-linecap="round" fill="none"/>
+                      stroke="#8b4d5d" stroke-width="5.8" stroke-linecap="round" fill="none"/>
                 <path d="M213 65 C218 96, 226 124, 246 148"
-                      stroke="#c39652" stroke-width="2.6" stroke-dasharray="4 3" stroke-linecap="round" fill="none"/>
+                      stroke="#f2c4d0" stroke-width="2.6" stroke-dasharray="4 3" stroke-linecap="round" fill="none"/>
 
                 <defs>
-                    <linearGradient id="oliveTagCrownGrad" x1="215" y1="14" x2="215" y2="142" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stop-color="#a5b358"/>
-                        <stop offset="65%" stop-color="#99a74a"/>
-                        <stop offset="100%" stop-color="#96a447"/>
+                    <linearGradient id="sageTagCrownGrad" x1="215" y1="14" x2="215" y2="142" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#859f7c"/>
+                        <stop offset="65%" stop-color="#76906d"/>
+                        <stop offset="100%" stop-color="#6c8663"/>
                     </linearGradient>
                 </defs>
             </svg>
@@ -1441,7 +1844,12 @@
             <div class="tag-body-card">
                 <div class="tag-body-inner">
                     <div class="tag-login-header">
-                        <img src="logo-sman14.png" alt="Logo SMAN 14" onerror="this.src='https://via.placeholder.com/60?text=14'" class="tag-logo-badge">
+                        <img
+                            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi7wz6fkTrqqfTGFUHLi3DwAiFlHQCL2nVbGau8UvNZiSFBi4QFIqAdz5r7OSClprzxyxB3ZAUDQPCW0ejyRwfYnCK9GM4gUQb22wT7Bu2YUEAQUy6sHyKa1BCohyphenhyphene6yNj-IEAInGC1uljAbjGZ0_wvLcSmwRbysHvvN7Tl9BTruUULH0KbGv8tubYviBY/s320/LOGO_SMAN_14_SURABAYA.jpg"
+                            alt="Logo SMAN 14 Surabaya"
+                            referrerpolicy="no-referrer"
+                            onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 60 60%22><circle cx=%2230%22 cy=%2230%22 r=%2228%22 fill=%22%23728c69%22/><text x=%2230%22 y=%2236%22 font-size=%2218%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>14</text></svg>';"
+                            class="tag-logo-badge">
                         <h2>Login Sistem KPI OSIS/MPK</h2>
                         <p>SMA Negeri 14 Surabaya • FROM OSKA FOR US</p>
                     </div>
@@ -1455,6 +1863,12 @@
                                 <option value="Ketua Sekbid/Komisi">User Ketua Sekbid/Komisi</option>
                                 <option value="Anggota">User Anggota</option>
                             </select>
+                        </div>
+
+                        <div class="tag-form-group" id="loginUnitGroup" style="display: none;">
+                            <label><i class="fa-solid fa-folder-closed"></i> Pilih Sekbid / Komisi Asal</label>
+                            <select id="loginUnitSelect"></select>
+                            <small class="tag-hint-text">Hanya folder unit asal yang dapat dibuka (BPH &amp; Komisi A bebas membuka semua folder).</small>
                         </div>
 
                         <div class="tag-form-group">
@@ -1477,12 +1891,17 @@
     </div>
 
     <!-- =========================================================
-         2. MAIN APP WRAPPER
+         2. MAIN APP WRAPPER (HIJAU SAGE & SOFT PINK)
          ========================================================= -->
     <div id="appContainer" class="app-container" style="display: none;">
         <header class="app-header">
             <div class="nav-brand">
-                <img src="logo-sman14.png" alt="Logo SMAN 14" onerror="this.src='https://via.placeholder.com/40?text=14'" class="brand-logo">
+                <img
+                    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi7wz6fkTrqqfTGFUHLi3DwAiFlHQCL2nVbGau8UvNZiSFBi4QFIqAdz5r7OSClprzxyxB3ZAUDQPCW0ejyRwfYnCK9GM4gUQb22wT7Bu2YUEAQUy6sHyKa1BCohyphenhyphene6yNj-IEAInGC1uljAbjGZ0_wvLcSmwRbysHvvN7Tl9BTruUULH0KbGv8tubYviBY/s320/LOGO_SMAN_14_SURABAYA.jpg"
+                    alt="Logo SMAN 14 Surabaya"
+                    referrerpolicy="no-referrer"
+                    onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 60 60%22><rect width=%2260%22 height=%2260%22 rx=%2210%22 fill=%22%23728c69%22/><text x=%2230%22 y=%2236%22 font-size=%2218%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>14</text></svg>';"
+                    class="brand-logo">
                 <div>
                     <h2>OSIS &amp; MPK SMAN 14</h2>
                     <span id="userBadgeRole" class="badge-role">Role: Pengurus</span>
@@ -1493,8 +1912,10 @@
                 <button type="button" class="nav-btn" onclick="switchTab('presensi')"><i class="fa-solid fa-clipboard-user"></i> Performa Individu</button>
                 <button type="button" class="nav-btn" onclick="switchTab('proker')"><i class="fa-solid fa-folder-tree"></i> Performa Tim &amp; Proker</button>
                 <button type="button" class="nav-btn" onclick="switchTab('kpi')"><i class="fa-solid fa-star-half-stroke"></i> Evaluasi KPI</button>
-                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="nav-btn btn-wa"><i class="fa-brands fa-whatsapp"></i> Hubungi Admin</a>
-                <button type="button" class="nav-btn btn-logout" onclick="logout()"><i class="fa-solid fa-power-off"></i></button>
+                <button type="button" class="nav-btn btn-maintenance" onclick="showAdminMaintenance()">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> Hubungi Admin <span class="maintenance-pill">Maintenance</span>
+                </button>
+                <button type="button" class="nav-btn btn-logout" onclick="logout()"><i class="fa-solid fa-power-off"></i> Keluar</button>
             </div>
         </header>
 
@@ -1508,26 +1929,26 @@
                     </div>
                     <div class="banner-badge">
                         <i class="fa-solid fa-shield-halved"></i>
-                        <span>Sistem Terintegrasi Firebase</span>
+                        <span>Sinkronisasi Otomatis Aktif</span>
                     </div>
                 </div>
 
                 <div class="stats-grid">
-                    <div class="stat-card blue">
+                    <div class="stat-card">
                         <div class="stat-icon"><i class="fa-solid fa-users-line"></i></div>
                         <div>
                             <span class="stat-label">Total Kehadiran Presensi</span>
                             <h2 id="statPresensi">0</h2>
                         </div>
                     </div>
-                    <div class="stat-card green">
+                    <div class="stat-card pink">
                         <div class="stat-icon"><i class="fa-solid fa-list-check"></i></div>
                         <div>
-                            <span class="stat-label">Proker Terlaksana</span>
+                            <span class="stat-label">Proker ACC Komisi A &amp; BPH</span>
                             <h2 id="statProkerSelesai">0 / 0</h2>
                         </div>
                     </div>
-                    <div class="stat-card orange">
+                    <div class="stat-card sage-pink">
                         <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
                         <div>
                             <span class="stat-label">Rata-Rata Skor KPI</span>
@@ -1543,20 +1964,20 @@
                         </div>
                         <ul class="info-list">
                             <li><strong>Performa Individu:</strong> Wajib melampirkan foto GPS Map Camera atau surat izin resmi (Sakit/Acara) yang diunggah ke Google Drive.</li>
-                            <li><strong>Direktori 16 Folder Tim:</strong> Mencakup Sekbid 1–10, Komisi A–E, dan Pengurus Inti / Umum pada tab Performa Tim &amp; Proker.</li>
-                            <li><strong>Sistem Checkbox Proker:</strong> Centang 1 (Di-ACC) dan Centang 2 (Proker Tuntas Dieksekusi) khusus diverifikasi oleh BPH &amp; Komisi A.</li>
+                            <li><strong>Hak Akses 16 Folder Tim:</strong> BPH dan Komisi A memiliki hak akses khusus untuk membuka seluruh 16 folder Sekbid &amp; Komisi dan melakukan verifikasi ACC.</li>
+                            <li><strong>Checklist Persetujuan Ganda:</strong> Setiap program kerja diverifikasi melalui checklist <strong>ACC dari Komisi A</strong> dan <strong>ACC dari BPH</strong>.</li>
                         </ul>
                     </div>
                     <div class="card">
                         <div class="card-header">
-                            <h3><i class="fa-solid fa-database"></i> Status Sinkronisasi Database</h3>
+                            <h3><i class="fa-solid fa-database"></i> Status Penyimpanan &amp; Sinkronisasi</h3>
                         </div>
-                        <p style="color: var(--text-muted); font-size: 0.9rem;">Aplikasi terhubung dengan <strong>Google Firestore (NoSQL)</strong> pada koleksi:</p>
+                        <p style="color: var(--text-muted); font-size: 0.88rem;">Aplikasi tersinkronisasi dengan <strong>Google Firestore</strong> dan <strong>Local Storage Persistence</strong> agar data tetap aman meski halaman di-refresh:</p>
                         <ul class="badge-tech-list">
                             <li><code>roles</code> (Hak akses &amp; password)</li>
-                            <li><code>users</code> (Data akun &amp; tim)</li>
-                            <li><code>teams</code> (16 Folder tim &amp; proker)</li>
-                            <li><code>attendance</code> (Presensi &amp; bukti gdrive)</li>
+                            <li><code>users</code> (Sesi login tersimpan)</li>
+                            <li><code>teams</code> (16 Folder tim &amp; ACC ganda)</li>
+                            <li><code>attendance</code> (Presensi &amp; bukti GDrive)</li>
                             <li><code>kpi_evaluations</code> (Skor penilaian 1–4)</li>
                         </ul>
                     </div>
@@ -1592,7 +2013,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Tanggal / Waktu Rapat/Event</label>
+                                    <label>Tanggal Rapat / Event</label>
                                     <input type="date" id="presensiTanggal" required>
                                 </div>
                             </div>
@@ -1630,72 +2051,97 @@
                 </div>
             </section>
 
-            <!-- TAB 3: PERFORMA TIM & PROKER (16 FOLDER ASET) -->
+            <!-- TAB 3: PERFORMA TIM & PROKER (16 FOLDER -> HALAMAN PENGAJUAN PROKER DI ATAS) -->
             <section id="tab-proker" class="tab-pane">
-                <div class="page-header">
-                    <h2><i class="fa-solid fa-folder-tree"></i> Performa Tim &amp; Program Kerja (16 Folder Sektor &amp; Komisi)</h2>
-                    <p>Pilih folder Sekbid 1–10, Komisi A–E, atau Pengurus Inti untuk memfilter dan memantau program kerja masing-masing tim.</p>
-                </div>
-
-                <div class="card folder-section">
-                    <div class="card-header">
-                        <h3><i class="fa-solid fa-folder-open"></i> Direktori Folder Tim (16 Slot Aset)</h3>
-                        <div class="filter-pills">
-                            <button type="button" class="pill-btn active" id="pill-all" onclick="setFolderCategory('all')">Semua (16)</button>
-                            <button type="button" class="pill-btn" id="pill-sekbid" onclick="setFolderCategory('sekbid')">Sekbid 1–10</button>
-                            <button type="button" class="pill-btn" id="pill-komisi" onclick="setFolderCategory('komisi')">Komisi A–E &amp; Inti</button>
-                        </div>
-                    </div>
-                    <div id="folderGridContainer" class="folder-grid"></div>
-                </div>
-
-                <div class="dashboard-grid-2">
-                    <div class="card" id="cardFormProker">
-                        <div class="card-header">
-                            <h3>Ajukan / Tambah Program Kerja Tim</h3>
-                        </div>
-                        <form id="formProker" onsubmit="submitProker(event)">
-                            <div class="form-group">
-                                <label>Nama Tim / Sekbid / Komisi</label>
-                                <select id="prokerTeam" required></select>
-                            </div>
-                            <div class="form-group">
-                                <label>Judul Program Kerja</label>
-                                <input type="text" id="prokerTitle" placeholder="Contoh: Pesantren Kilat Ramadhan" required>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Deadline Pelaksanaan</label>
-                                    <input type="date" id="prokerDeadline" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Status Awal</label>
-                                    <input type="text" value="Menunggu Review Komisi A" disabled class="input-disabled">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-success btn-full"><i class="fa-solid fa-circle-plus"></i> Ajukan Proker Baru</button>
-                        </form>
+                <!-- VIEW A: DIREKTORI 16 FOLDER TIM -->
+                <div id="folderDirectoryView">
+                    <div class="page-header">
+                        <h2><i class="fa-solid fa-folder-tree"></i> Performa Tim &amp; Program Kerja (16 Folder Sektor &amp; Komisi)</h2>
+                        <p id="folderAccessSubtitle">Klik salah satu folder di bawah ini untuk membuka halaman pengajuan program kerja baru dan riwayat pengajuannya.</p>
                     </div>
 
-                    <div class="card">
+                    <div class="card folder-section">
                         <div class="card-header">
-                            <h3 id="prokerTableHeading">Daftar Proker &amp; Sistem Checkbox Ganda</h3>
-                            <button type="button" id="btnResetFolderFilter" class="pill-btn" style="display: none;" onclick="resetFolderFilter()">
-                                <i class="fa-solid fa-rotate-left"></i> Tampilkan Semua Tim
-                            </button>
+                            <h3><i class="fa-solid fa-folder-open"></i> Direktori Folder Tim (16 Slot)</h3>
+                            <div class="filter-pills">
+                                <button type="button" class="pill-btn active" id="pill-all" onclick="setFolderCategory('all')">Semua (16)</button>
+                                <button type="button" class="pill-btn" id="pill-sekbid" onclick="setFolderCategory('sekbid')">Sekbid 1–10</button>
+                                <button type="button" class="pill-btn" id="pill-komisi" onclick="setFolderCategory('komisi')">Komisi A–E &amp; Inti</button>
+                            </div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Proker &amp; Tim</th>
-                                        <th>Deadline</th>
-                                        <th>Review &amp; Approval</th>
-                                        <th>Checkbox Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tabelProkerBody"></tbody>
-                            </table>
+                        <div id="folderGridContainer" class="folder-grid"></div>
+                    </div>
+                </div>
+
+                <!-- VIEW B: HALAMAN PENGAJUAN PROKER BARU & RIWAYAT (MUNCUL DI ATAS SAAT FOLDER DIPENCET) -->
+                <div id="folderDetailPageView" style="display: none;">
+                    <div class="folder-detail-topbar">
+                        <div class="folder-detail-meta">
+                            <img id="detailFolderThumb" src="" alt="Folder" class="folder-detail-thumb">
+                            <div>
+                                <h3 id="detailFolderTitle">Pengajuan Program Kerja</h3>
+                                <p id="detailFolderDesc">Portal Pengajuan &amp; Riwayat Program Kerja</p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-back-folders" onclick="closeFolderDetailView()">
+                            <i class="fa-solid fa-arrow-left"></i> Kembali ke Direktori Folder
+                        </button>
+                    </div>
+
+                    <div class="dashboard-grid-2">
+                        <!-- FORM PENGAJUAN PROGRAM KERJA BARU -->
+                        <div class="card" id="cardFormProker">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-file-circle-plus"></i> Ajukan Program Kerja Baru</h3>
+                            </div>
+                            <form id="formProker" onsubmit="submitProker(event)">
+                                <div class="form-group">
+                                    <label>Nama Program Kerja</label>
+                                    <input type="text" id="prokerTitle" placeholder="Contoh: Pesantren Kilat Ramadhan" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Deskripsi Ringkas</label>
+                                    <textarea id="prokerDescription" placeholder="Tuliskan tujuan, sasaran, dan garis besar pelaksanaan program kerja..." required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Target Sekbid / Komisi (Terkunci Sesuai Folder)</label>
+                                    <div class="locked-target-wrap">
+                                        <input type="text" id="prokerTargetLocked" class="locked-target-input" readonly required>
+                                        <span class="locked-chip"><i class="fa-solid fa-lock"></i> Terkunci</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Tanggal &amp; Waktu Pelaksanaan</label>
+                                    <input type="datetime-local" id="prokerDateTime" required>
+                                </div>
+
+                                <button type="submit" class="btn btn-success btn-full">
+                                    <i class="fa-solid fa-paper-plane"></i> Ajukan Program Kerja
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- RIWAYAT PENGAJUAN PROGRAM -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 id="prokerTableHeading"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pengajuan Program</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Proker &amp; Tim</th>
+                                            <th>Tanggal &amp; Waktu</th>
+                                            <th>Review &amp; Approval</th>
+                                            <th>Checkbox ACC</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelProkerBody"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1711,13 +2157,12 @@
                 <div class="dashboard-grid-2">
                     <div class="card" id="cardFormKpi">
                         <div class="card-header">
-                            <h3>Form Penilaian KPI Pengurus / Tim</h3>
+                            <h3>Form Penilaian KPI Tim</h3>
                         </div>
                         <form id="formKpi" onsubmit="submitKpi(event)">
                             <div class="form-group">
-                                <label>Nama Pengurus / Tim Dinilai</label>
-                                <input type="text" id="kpiTarget" list="kpiTargetList" placeholder="Pilih Sekbid/Komisi atau ketik nama pengurus..." required>
-                                <datalist id="kpiTargetList"></datalist>
+                                <label>Target Sekbid / Komisi Dinilai</label>
+                                <select id="kpiTarget" required></select>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
@@ -1743,7 +2188,7 @@
                                 <label>Periode Penilaian</label>
                                 <input type="text" id="kpiPeriod" value="Bulan November 2026" required>
                             </div>
-                            <button type="submit" class="btn btn-warning btn-full"><i class="fa-solid fa-calculator"></i> Hitung &amp; Simpan Penilaian KPI</button>
+                            <button type="submit" class="btn btn-pink btn-full"><i class="fa-solid fa-calculator"></i> Hitung &amp; Simpan Penilaian KPI</button>
                         </form>
                     </div>
 
@@ -1755,7 +2200,7 @@
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th>Target / Tim</th>
+                                        <th>Target Tim</th>
                                         <th>Periode</th>
                                         <th>Detail Skor</th>
                                         <th>Nilai Akhir (Rata2)</th>
@@ -1768,6 +2213,49 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- MODAL ANIMASI BERHASIL ALA GOPAY -->
+    <div id="gopaySuccessModal" class="gopay-success-backdrop" onclick="closeGopaySuccess()">
+        <div class="gopay-success-card" onclick="event.stopPropagation()">
+            <div class="gopay-top-ribbon"></div>
+            <div id="gopayAnimStage" class="gopay-icon-stage">
+                <span class="gopay-ripple-ring"></span>
+                <span class="gopay-ripple-ring ring-2"></span>
+                <span class="gopay-confetti-dot d1"></span>
+                <span class="gopay-confetti-dot d2"></span>
+                <span class="gopay-confetti-dot d3"></span>
+                <span class="gopay-confetti-dot d4"></span>
+                <span class="gopay-confetti-dot d5"></span>
+                <span class="gopay-confetti-dot d6"></span>
+                <div class="gopay-circle-badge">
+                    <svg class="gopay-check-svg" viewBox="0 0 52 52">
+                        <path class="gopay-check-path" d="M14 27 L22 35 L38 17" />
+                    </svg>
+                </div>
+            </div>
+            <h3 id="gopaySuccessTitle" class="gopay-success-title">Berhasil Tersimpan!</h3>
+            <p id="gopaySuccessSubtitle" class="gopay-success-subtitle">Data berhasil dicatat ke dalam sistem monitoring OSIS/MPK.</p>
+            <div class="gopay-summary-pill">
+                <i class="fa-solid fa-circle-check"></i>
+                <span id="gopaySuccessBadge">Tersinkronisasi</span>
+            </div>
+            <button type="button" class="btn-gopay-done" onclick="closeGopaySuccess()">Selesai</button>
+        </div>
+    </div>
+
+    <!-- MODAL MAINTENANCE HUBUNGI ADMIN -->
+    <div id="maintenanceModal" class="maintenance-modal-backdrop" onclick="closeAdminMaintenance(event)">
+        <div class="maintenance-modal-card" onclick="event.stopPropagation()">
+            <div class="maintenance-icon-circle">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+            </div>
+            <h3>Fitur Sedang Maintenance</h3>
+            <p>Layanan <strong>Hubungi Admin</strong> saat ini sedang dalam tahap pemeliharaan sistem (<em>Maintenance</em>). Silakan coba kembali beberapa saat lagi.</p>
+            <button type="button" class="btn btn-primary btn-full" onclick="closeAdminMaintenance()">
+                <i class="fa-solid fa-check"></i> Mengerti
+            </button>
+        </div>
     </div>
 
     <script>
@@ -1816,7 +2304,51 @@
         }
 
         // =========================================================
-        // 1. PEMETAAN 16 SOURCE FOTO BLOGGER (SEKBID 1-10 & KOMISI A-E + INTI)
+        // 0B. ANIMASI BERHASIL ALA GOPAY
+        // =========================================================
+        let gopayAutoCloseTimer = null;
+
+        function showGopaySuccess(title, subtitle, badgeText) {
+            const modal = document.getElementById('gopaySuccessModal');
+            const stage = document.getElementById('gopayAnimStage');
+            const titleEl = document.getElementById('gopaySuccessTitle');
+            const subtitleEl = document.getElementById('gopaySuccessSubtitle');
+            const badgeEl = document.getElementById('gopaySuccessBadge');
+
+            if (!modal || !stage) return;
+
+            if (gopayAutoCloseTimer) {
+                clearTimeout(gopayAutoCloseTimer);
+                gopayAutoCloseTimer = null;
+            }
+
+            titleEl.textContent = title || "Berhasil Tersimpan!";
+            subtitleEl.textContent = subtitle || "Data Anda telah tercatat dengan aman.";
+            badgeEl.textContent = badgeText || "Tersinkronisasi";
+
+            modal.classList.remove('show');
+            const clonedStage = stage.cloneNode(true);
+            stage.parentNode.replaceChild(clonedStage, stage);
+            void modal.offsetWidth;
+
+            modal.classList.add('show');
+
+            gopayAutoCloseTimer = setTimeout(() => {
+                closeGopaySuccess();
+            }, 2400);
+        }
+
+        function closeGopaySuccess() {
+            const modal = document.getElementById('gopaySuccessModal');
+            if (modal) modal.classList.remove('show');
+            if (gopayAutoCloseTimer) {
+                clearTimeout(gopayAutoCloseTimer);
+                gopayAutoCloseTimer = null;
+            }
+        }
+
+        // =========================================================
+        // 1. PEMETAAN 16 SOURCE FOTO BLOGGER (SEKBID 4 & KOMISI A DITUKAR)
         // =========================================================
         const organisasi_folder_assets = {
             sekbid: [
@@ -1824,70 +2356,60 @@
                     id: 1,
                     slot: "Foto 1",
                     nama: "Sekbid 1",
-                    bidang: "Kesiswaan / Keagamaan",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiljygeTGvn-DBtFW7AB2GdhVMFhKXFptr6CHpMCzSxwtIdLfwA6T-DijwoqoDDcJZodkRy9Y5g7WfDacT7aWaMZe44y4DBww5tBXg34mWLNH_Equ9XHFUNCB1KAZJ86EqLRGPKVCGvgI8ohhukp3E5DXaY84EDskCM-3TRr7XaWxw9tDwKTWNcCUBawgk/s736/0aaf5b6988ce226f8896624cccfa5052.jpg"
                 },
                 {
                     id: 2,
                     slot: "Foto 2",
                     nama: "Sekbid 2",
-                    bidang: "Bela Negara / PBB",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjUF5y3m10qdPQBH3EvctBcLMUGzuaKWso6XuDj_G2Eeb5igq-6iD_DmpgaiMuf1t1w-2G2L4ooMIfQDWhYgKZixtHXd_Tfsv3EsNsO4MhazYnUhzCqZvDE_e0t2Zrl60gaFrCXLukjMtC3YC0srAbzKpQPcVflF7MelK96RBGBhGGCt0rA_ugwknn_o34/s512/1fadc436ba51a7ea30ab92db2f51cf8c.jpg"
                 },
                 {
                     id: 3,
                     slot: "Foto 3",
                     nama: "Sekbid 3",
-                    bidang: "Pendahuluan Pancasila / Wawasan Kebangsaan",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj-A3LWvO1M7tS-ISfh8VoKLVW19JQfZa6Jtvf5jdYt2bNP1-2ZRMrU_e5Za2jr4O_Mv4LbEGLhn_zDoP0nkuhx90SbLiZxOMoqzyxhG_ieNeZr1atM4H7ZR7geiw-5NcEsiK8suMVa2GvKclKjti4ftOLgCDYDgeNg6j_kwMcsiEbbz-gj6fPHyOgpM70/s736/2ff9b5cf1163c1e2c98823e01577523d.jpg"
                 },
                 {
                     id: 4,
                     slot: "Foto 4",
                     nama: "Sekbid 4",
-                    bidang: "Prestasi Akademik / Seni / Olahraga",
-                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhse5s-6oNUARqD6lJZXyV-v68gYQXOZY5pNmgVuJFK-mKaHYGd0-iJfJDtcjNuDASRaRGYhpeTMjtPwSfik75j84d1KQQWhseXyjydZ3BVH4BxHBgQrdyDe-7Md4pRrWZhsVH_zwm6fUD7idVIfdW3yyArUBuKYTU5JKtEDLe1kB7Ec3YzWUK25ymnpg4/s512/6a4494d3753cc12cd1eb36ccd0028dad.jpg"
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEik1KK4mHaYwSa5Oh6v9pOL2DveyAiLAahpQbv5iZQh-BA0TLT3WWY8qP3U6eFxyhns8QuUTmk1g10cXZ3hWbZLW4XtNkHryco1grAhwgQB3jY5t7ogXOLib2rSHzA__dzkmtfgNpQ5YFxzYH_cwmAPjAV2XRiQR2t8cP5OOQTLgngRGkfgV5v66XAFh6A/s736/b54e707079a2be5276da653fcbc10dfb.jpg"
                 },
                 {
                     id: 5,
                     slot: "Foto 5",
                     nama: "Sekbid 5",
-                    bidang: "Demokrasi / HAM / Politik",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLDSH1DFSJcxyUXzxoqQuW-TpPVZRD0qmCeNQ5q883fxqGOZS7nka33-J-xXzTm0cZgYOGvefBdI_ICiPBs-Ek_E10Y9JO53yYzwj610di90UCc5lJOweDVmYephM13o7VbaIJeFeOakaYM0Jd9UP5vY7oMEa5FJkKudjp0DLy6komg7Uq7njjlWhJU2s/s736/6c09b86524d4501bc7431e0029952809.jpg"
                 },
                 {
                     id: 6,
                     slot: "Foto 6",
                     nama: "Sekbid 6",
-                    bidang: "Kreativitas / Keterampilan / Kewirausahaan",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjMomEt8Hq8WGaPPvfs0wEP1tX9xrfJzHVYFNTYkRjKG4AdXbLEA1xc7N6UpgQAyZaw_JXEvLlvylGShDcE_U19u995rdy2EJxFRhuVwk2eUJ_Zga8A1V5Vb72WLZZtHsOkoYXOJOOa49RDQYADbjk4YTt8gYgYWNZTkKe5_5GJym3blj4NqIDmby56fyQ/s736/046fe1add77ceca8aa7d740f8d360666.jpg"
                 },
                 {
                     id: 7,
                     slot: "Foto 7",
                     nama: "Sekbid 7",
-                    bidang: "Kualitas Jasmani / Kesehatan / Gizi",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjZBU_f1i8CySs9oKaH8XKFaLNzvObn3JspeW-OqidlAR-uXbaGI4LzL3tGVIQerNppzvLltaAKEE1fQS-afE4DC-fZLIalcXCwqpgDhN7nHTPxMbfaKA7JofUsFIyTlN0rHfcixQe_x4H0HeXyL7VjaYGvL7-krBEOGagi7Bl5mOAc2y_qOi6BRlQFWhI/s920/67a91bad803e19870e24edf6edd3de4b.jpg"
                 },
                 {
                     id: 8,
                     slot: "Foto 8",
                     nama: "Sekbid 8",
-                    bidang: "Sastra / Budaya",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisiLFDCT6PYuCnevqkjo06p-oYbMmJOsJhD9ivkMhLf8xv02pee9bhQnpFWvu3_PRkUsCPxupSwRT_DcIK9xS13a_kU8iOS0AZGX9y6EW_97oMqv4VC2KME3PP7qBJmfniusQ9tqHabexo0J_DaNf2xKRWCP4x43i44UDotYWiltaQydYGrkL2A_PO6BU/s736/4426ac4f6bdb399d3d4dc52a9e4b579a.jpg"
                 },
                 {
                     id: 9,
                     slot: "Foto 9",
                     nama: "Sekbid 9",
-                    bidang: "Teknologi Informasi / TIK",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgdCJodmj96Cjty2IKydnZxApkBYKzqniEo4F3_bBYePNqsXSlKe8OvW02ZYNPhSk8opwK2g0MocYhTXbowkn82flUbN_MXwGwa_LrERdWeE0VcwQbwsclGJb16s4OjUamaJ048mgYl-SFtZuXUoDycUTvOGd2Z-f98ujBeCFAjJTeVMqSewBc3O9vKX6Q/s1200/75462b9d277c33ecf19ed7efea9a3fa4.jpg"
                 },
                 {
                     id: 10,
                     slot: "Foto 10",
                     nama: "Sekbid 10",
-                    bidang: "Komunikasi dalam Bahasa Inggris",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhg22hCfcFOEKBorhvj906cEYxdWV5eZzIqQ9ez2JjtGYNBtx1AZbzjbl52CNR8kiWh4zWhIDKXfybupIAzTEeYRrrFhsEnNEp7IQGlmfVUQf8Z8Qj4zNamGJChWQ74BpK2yC1jhwit716iHIjPSDB_s2h-RiC4naQrhwIW0o5aGENCIgFpAV3_gBa47R4/s777/558953f025d9e4c63cd07c525e4e8476.jpg"
                 }
             ],
@@ -1896,42 +2418,36 @@
                     id: "A",
                     slot: "Foto 11",
                     nama: "Komisi A",
-                    bidang: "Legislasi / Anggaran Dasar",
-                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEik1KK4mHaYwSa5Oh6v9pOL2DveyAiLAahpQbv5iZQh-BA0TLT3WWY8qP3U6eFxyhns8QuUTmk1g10cXZ3hWbZLW4XtNkHryco1grAhwgQB3jY5t7ogXOLib2rSHzA__dzkmtfgNpQ5YFxzYH_cwmAPjAV2XRiQR2t8cP5OOQTLgngRGkfgV5v66XAFh6A/s736/b54e707079a2be5276da653fcbc10dfb.jpg"
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhse5s-6oNUARqD6lJZXyV-v68gYQXOZY5pNmgVuJFK-mKaHYGd0-iJfJDtcjNuDASRaRGYhpeTMjtPwSfik75j84d1KQQWhseXyjydZ3BVH4BxHBgQrdyDe-7Md4pRrWZhsVH_zwm6fUD7idVIfdW3yyArUBuKYTU5JKtEDLe1kB7Ec3YzWUK25ymnpg4/s512/6a4494d3753cc12cd1eb36ccd0028dad.jpg"
                 },
                 {
                     id: "B",
                     slot: "Foto 12",
                     nama: "Komisi B",
-                    bidang: "Pengawasan Program Kerja",
-                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjJTA08JJN1cxpHgGMwu3QFVr4q8GHHxYrOIQT2P-bDyzosvn6EyAzaY55VueqglFNOv1gYw7V413gauyDz383cn3zxh3LqLjJNg4r8A1deFEsrILTuD36MpLEi5Vu2XMZ07hu9He5t2ZpAk3XKqZR0gFrlKOHNp6I_Rticp-ElrCKmysqApeUqHrx0EB4/s736/e62bcd857d9a9299f8bc4627c6c2a523.jpg"
+                    image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjJTA08JJN1cxpHgGMwu3QFVr4q8GHHxYrOIQT2P-bDyzosvn6EyAzaY5VueqglFNOv1gYw7V413gauyDz383cn3zxh3LqLjJNg4r8A1deFEsrILTuD36MpLEi5Vu2XMZ07hu9He5t2ZpAk3XKqZR0gFrlKOHNp6I_Rticp-ElrCKmysqApeUqHrx0EB4/s736/e62bcd857d9a9299f8bc4627c6c2a523.jpg"
                 },
                 {
                     id: "C",
                     slot: "Foto 13",
                     nama: "Komisi C",
-                    bidang: "Aspirasi & Advokasi Siswa",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgpIlL_8PCxFfPR53kZDlVx2o6vYF7N9LtckGlQgG12FnkqDjthqXq-ebIV0ZmLKCW10hCFGpuCjiNYaihWE0_xQLTiXNvDH5Om4rhrk7aKrDO84iUdCiSmXz-wIObnxthoz0RHw4qNZhqAg-sCF-jcLb27itmvpE0m0nllKHXUjDOqdj9-swsKyu0j_Zw/s736/efeb1ed3849cefe0c1d32dbba954bd39.jpg"
                 },
                 {
                     id: "D",
                     slot: "Foto 14",
                     nama: "Komisi D",
-                    bidang: "Hubungan Masyarakat & Media",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhzxFUKC03w1c1X_OSqS6nIqZaLxEdy8binRTBDfpoSt18nx0cfTGBP0Fb5c7Pu6cyKJ2kBPZfdORbp3NNk5NRD3V4mBaVzB6sjpKx5Qqs3cgOZPq04TtSXSkG0qiAB_u2uwvr2dTr4YWhrYsr9ocGGqWxWV9nxsLfCCJRpGYMN_XbGdEnJ-U0rmyA4sBo/s736/f513ed0c30cef8e1630e924c83de16bd.jpg"
                 },
                 {
                     id: "E",
                     slot: "Foto 15",
                     nama: "Komisi E",
-                    bidang: "Kedisiplinan & Ketertiban",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjO3efVyf4EEsJ0dHimCAiJH2mvXPBTawAdPady9LY7_7yfOBsgfsoKuLqxraYyjFKsFYJrdC99La4lEhm4tXePSXoOLp4Xr-H0mvWRwoIBlH_iZcqQZeDRu2D00HkBZKyfmRg446C6r1ebnjX2pqde9v-dCuHNFxuHEwzV4MDf0_xpYMZmIXP4q4hI0aM/s735/c2b7f195d79178014a08405536633c93.jpg"
                 },
                 {
                     id: "EXTRA",
                     slot: "Foto 16",
                     nama: "Pengurus Inti / Umum",
-                    bidang: "Pimpinan / Pengurus Inti / Cadangan",
                     image_url: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiOkcy_2hic7AKbluARw3AuyeH2mPpfd1vYTEIvAfU7ryHPWBRUlV92c2thHQTQDCudv4KVUjO6c4vkFbuTD-iiIJBKnTUDX3V738wo25F39c-Sbe1ZPYoB-nwQrQZ_ikYRWr92ka6SPtxcSSjo7eV5ibBzqDOUPVDRa5HxiOJFH2PS4BW9E0VSYHLqsv4/s736/f489d18f4bbff8a6ed0efa2819ba556b.jpg"
                 }
             ]
@@ -1940,19 +2456,17 @@
         function getAllFolderEntities() {
             const sekbidList = organisasi_folder_assets.sekbid.map(item => ({
                 ...item,
-                group: "sekbid",
-                fullLabel: `${item.nama} (${item.bidang})`
+                group: "sekbid"
             }));
             const komisiList = organisasi_folder_assets.komisi.map(item => ({
                 ...item,
-                group: "komisi",
-                fullLabel: `${item.nama} (${item.bidang})`
+                group: "komisi"
             }));
             return [...sekbidList, ...komisiList];
         }
 
         // =========================================================
-        // 2. KONFIGURASI & INISIALISASI FIREBASE FIRESTORE
+        // 2. KONFIGURASI FIREBASE + OFFLINE PERSISTENCE
         // =========================================================
         const firebaseConfig = {
             apiKey: "AIzaSyAXZrnCz_kOAtP-5OtSPBDLBiRw5QWkpUE",
@@ -1966,6 +2480,10 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        db.enablePersistence({ synchronizeTabs: true }).catch(err => {
+            console.warn("Firestore persistence info:", err.code);
+        });
+
         const colRoles = db.collection("roles");
         const colUsers = db.collection("users");
         const colTeams = db.collection("teams");
@@ -1973,8 +2491,17 @@
         const colKpi = db.collection("kpi_evaluations");
 
         // =========================================================
-        // 3. STATE GLOBAL & INISIALISASI DROPDOWN
+        // 3. STATE GLOBAL & PENYIMPANAN LOCALSTORAGE (ANTI-HILANG SAAT REFRESH)
         // =========================================================
+        const STORAGE_KEYS = {
+            ROLE: "kpi_sman14_role",
+            UNIT: "kpi_sman14_unit",
+            TAB: "kpi_sman14_active_tab",
+            PRESENSI: "kpi_sman14_data_presensi",
+            PROKER: "kpi_sman14_data_proker",
+            KPI: "kpi_sman14_data_kpi"
+        };
+
         const defaultPasswords = {
             "BPH": "BPHakim141",
             "Komisi A": "Perencanaandal142",
@@ -1983,42 +2510,100 @@
         };
 
         let currentUserRole = "";
-        let dataPresensi = [];
-        let dataProker = [];
-        let dataKpi = [];
+        let currentUserUnit = "";
+        let dataPresensi = loadLocalArray(STORAGE_KEYS.PRESENSI);
+        let dataProker = loadLocalArray(STORAGE_KEYS.PROKER);
+        let dataKpi = loadLocalArray(STORAGE_KEYS.KPI);
         let activeFolderCategory = "all";
-        let selectedTeamFilter = "ALL";
+        let openedFolderEntity = null;
 
-        function populateTeamSelects() {
-            const entities = getAllFolderEntities();
-            const prokerSelect = document.getElementById('prokerTeam');
-            const kpiDatalist = document.getElementById('kpiTargetList');
-
-            if (prokerSelect) {
-                prokerSelect.innerHTML = entities
-                    .map(e => `<option value="${e.fullLabel}">${e.fullLabel}</option>`)
-                    .join('');
-            }
-
-            if (kpiDatalist) {
-                kpiDatalist.innerHTML = entities
-                    .map(e => `<option value="${e.fullLabel}">`)
-                    .join('');
+        function loadLocalArray(key) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
             }
         }
 
+        function saveLocalArray(key, arr) {
+            try {
+                localStorage.setItem(key, JSON.stringify(arr));
+            } catch (e) {
+                console.warn("Gagal menyimpan cache lokal:", e);
+            }
+        }
+
+        function hasFullFolderAccess() {
+            return currentUserRole === "BPH" || currentUserRole === "Komisi A";
+        }
+
+        function canOpenSpecificFolder(folderNama) {
+            if (hasFullFolderAccess()) return true;
+            return currentUserUnit === folderNama;
+        }
+
+        function populateUnitDropdowns() {
+            const entities = getAllFolderEntities();
+            const kpiSelect = document.getElementById('kpiTarget');
+            const loginUnitSelect = document.getElementById('loginUnitSelect');
+
+            const optionsHtml = entities
+                .map(e => `<option value="${e.nama}">${e.nama}</option>`)
+                .join('');
+
+            if (kpiSelect) kpiSelect.innerHTML = optionsHtml;
+            if (loginUnitSelect) loginUnitSelect.innerHTML = optionsHtml;
+        }
+
         // =========================================================
-        // 4. SISTEM LOGIN, LOGOUT & HAK AKSES ROLE
+        // 4. SISTEM LOGIN, RESTORE SESSION SAAT REFRESH & LOGOUT
         // =========================================================
         function updateRoleHint() {
             const role = document.getElementById('roleSelect').value;
             const hint = document.getElementById('passwordHint');
+            const unitGroup = document.getElementById('loginUnitGroup');
+
             hint.textContent = `Masukkan password untuk role ${role}.`;
+            if (unitGroup) {
+                unitGroup.style.display = (role === "BPH" || role === "Komisi A") ? "none" : "block";
+            }
+        }
+
+        function enterDashboardSession(role, unit, activeTab = "dashboard") {
+            currentUserRole = role;
+            currentUserUnit = unit || "";
+
+            localStorage.setItem(STORAGE_KEYS.ROLE, currentUserRole);
+            localStorage.setItem(STORAGE_KEYS.UNIT, currentUserUnit);
+
+            const badgeLabel = hasFullFolderAccess()
+                ? `Role: ${currentUserRole} (Akses Semua Folder)`
+                : `Role: ${currentUserRole} • ${currentUserUnit}`;
+            document.getElementById('userBadgeRole').textContent = badgeLabel;
+
+            document.getElementById('welcomePage').style.display = 'none';
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'flex';
+
+            populateUnitDropdowns();
+            applyRolePermissions();
+            renderFolderGrid();
+            renderPresensi();
+            renderProker();
+            renderKpi();
+            updateStats();
+            startRealtimeListeners();
+
+            if (activeTab && activeTab !== "dashboard") {
+                switchTab(activeTab);
+            }
         }
 
         async function handleLogin(event) {
             event.preventDefault();
             const selectedRole = document.getElementById('roleSelect').value;
+            const selectedUnit = document.getElementById('loginUnitSelect').value;
             const inputPass = document.getElementById('passwordInput').value.trim();
 
             try {
@@ -2037,26 +2622,17 @@
                     return;
                 }
 
-                currentUserRole = selectedRole;
-
                 try {
                     await colUsers.add({
                         role: selectedRole,
+                        unit: (selectedRole === "BPH" || selectedRole === "Komisi A") ? "Semua Unit" : selectedUnit,
                         loginAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 } catch (logErr) {
                     console.warn("Log sesi login tidak tercatat:", logErr);
                 }
 
-                document.getElementById('userBadgeRole').textContent = `Role: ${selectedRole}`;
-                document.getElementById('loginModal').style.display = 'none';
-                document.getElementById('appContainer').style.display = 'flex';
-
-                populateTeamSelects();
-                applyRolePermissions();
-                renderFolderGrid();
-                startRealtimeListeners();
-                alert(`Berhasil login sebagai ${selectedRole}!`);
+                enterDashboardSession(selectedRole, selectedUnit, "dashboard");
             } catch (error) {
                 console.error("Error saat login:", error);
                 alert("Terjadi kendala saat memproses login. Silakan coba kembali.");
@@ -2073,10 +2649,20 @@
             if (cardFormProker) {
                 cardFormProker.style.display = (currentUserRole === "Anggota") ? "none" : "block";
             }
+
+            const subtitle = document.getElementById('folderAccessSubtitle');
+            if (subtitle) {
+                subtitle.textContent = hasFullFolderAccess()
+                    ? `Hak Akses Khusus (${currentUserRole}): Anda dapat membuka seluruh 16 folder Sekbid & Komisi serta memberikan ACC.`
+                    : `Anda dapat membuka folder ${currentUserUnit} untuk melihat & mengajukan program kerja. Folder lain terkunci khusus BPH & Komisi A.`;
+            }
         }
 
         function logout() {
             if (confirm("Yakin ingin keluar dari sesi ini?")) {
+                localStorage.removeItem(STORAGE_KEYS.ROLE);
+                localStorage.removeItem(STORAGE_KEYS.UNIT);
+                localStorage.removeItem(STORAGE_KEYS.TAB);
                 location.reload();
             }
         }
@@ -2084,42 +2670,59 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => {
-                if (!el.classList.contains('btn-wa') && !el.classList.contains('btn-logout')) {
+                if (!el.classList.contains('btn-maintenance') && !el.classList.contains('btn-logout')) {
                     el.classList.remove('active');
                 }
             });
 
-            document.getElementById(`tab-${tabId}`).classList.add('active');
+            const targetPane = document.getElementById(`tab-${tabId}`);
+            if (targetPane) targetPane.classList.add('active');
+
             const activeBtn = document.querySelector(`.nav-btn[onclick*="switchTab('${tabId}')"]`);
             if (activeBtn) activeBtn.classList.add('active');
+
+            localStorage.setItem(STORAGE_KEYS.TAB, tabId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // =========================================================
-        // 5. REAL-TIME LISTENERS FIRESTORE (AUTO-SYNC)
+        // 5. REAL-TIME LISTENERS FIRESTORE + CACHE LOKAL
         // =========================================================
         function startRealtimeListeners() {
             colAttendance.orderBy("createdAt", "desc").onSnapshot(snapshot => {
-                dataPresensi = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const remote = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (remote.length > 0) {
+                    dataPresensi = remote;
+                    saveLocalArray(STORAGE_KEYS.PRESENSI, dataPresensi);
+                }
                 renderPresensi();
                 updateStats();
             }, err => console.warn("Listener attendance:", err));
 
             colTeams.orderBy("createdAt", "desc").onSnapshot(snapshot => {
-                dataProker = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const remote = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (remote.length > 0) {
+                    dataProker = remote;
+                    saveLocalArray(STORAGE_KEYS.PROKER, dataProker);
+                }
                 renderFolderGrid();
                 renderProker();
                 updateStats();
             }, err => console.warn("Listener teams:", err));
 
             colKpi.orderBy("createdAt", "desc").onSnapshot(snapshot => {
-                dataKpi = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const remote = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (remote.length > 0) {
+                    dataKpi = remote;
+                    saveLocalArray(STORAGE_KEYS.KPI, dataKpi);
+                }
                 renderKpi();
                 updateStats();
             }, err => console.warn("Listener kpi:", err));
         }
 
         // =========================================================
-        // 6. DIREKTORI 16 FOLDER TIM & FILTER PROKER
+        // 6. DIREKTORI 16 FOLDER TIM & HALAMAN PENGAJUAN PROKER (ATAS)
         // =========================================================
         function setFolderCategory(category) {
             activeFolderCategory = category;
@@ -2129,24 +2732,39 @@
             renderFolderGrid();
         }
 
-        function toggleFolderSelection(fullLabel) {
-            if (selectedTeamFilter === fullLabel) {
-                selectedTeamFilter = "ALL";
-            } else {
-                selectedTeamFilter = fullLabel;
-                const prokerSelect = document.getElementById('prokerTeam');
-                if (prokerSelect) {
-                    prokerSelect.value = fullLabel;
-                }
+        function openFolderPage(folderNama) {
+            if (!canOpenSpecificFolder(folderNama)) {
+                alert(`Akses Terkunci! Hanya BPH dan Komisi A yang memiliki hak akses khusus untuk membuka semua folder. Folder Anda saat ini: ${currentUserUnit}.`);
+                return;
             }
-            renderFolderGrid();
+
+            const entity = getAllFolderEntities().find(e => e.nama === folderNama);
+            if (!entity) return;
+
+            openedFolderEntity = entity;
+
+            document.getElementById('detailFolderThumb').src = entity.image_url;
+            document.getElementById('detailFolderTitle').textContent = `Pengajuan Program Kerja • ${entity.nama}`;
+            document.getElementById('detailFolderDesc').textContent = `Portal Pengajuan & Riwayat Program Kerja ${entity.nama}`;
+
+            const lockedInput = document.getElementById('prokerTargetLocked');
+            if (lockedInput) {
+                lockedInput.value = entity.nama;
+            }
+
+            document.getElementById('folderDirectoryView').style.display = 'none';
+            document.getElementById('folderDetailPageView').style.display = 'block';
+
             renderProker();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function resetFolderFilter() {
-            selectedTeamFilter = "ALL";
+        function closeFolderDetailView() {
+            openedFolderEntity = null;
+            document.getElementById('folderDetailPageView').style.display = 'none';
+            document.getElementById('folderDirectoryView').style.display = 'block';
             renderFolderGrid();
-            renderProker();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function renderFolderGrid() {
@@ -2159,31 +2777,31 @@
             });
 
             container.innerHTML = entities.map(item => {
-                const prokerCount = dataProker.filter(p => p.team === item.fullLabel || (p.team && p.team.startsWith(item.nama))).length;
-                const isSelected = selectedTeamFilter === item.fullLabel ? 'selected' : '';
-                const hasValidUrl = item.image_url && !item.image_url.startsWith("URL_FOTO_");
+                const prokerCount = dataProker.filter(p => p.team === item.nama || (p.team && p.team.startsWith(item.nama))).length;
+                const allowed = canOpenSpecificFolder(item.nama);
+                const lockedClass = allowed ? '' : 'folder-locked';
+                const accessBadge = allowed
+                    ? `<span class="folder-access-badge open"><i class="fa-solid fa-folder-open"></i> Buka</span>`
+                    : `<span class="folder-access-badge locked"><i class="fa-solid fa-lock"></i> Terkunci</span>`;
 
-                const mediaHtml = hasValidUrl
-                    ? `<img src="${item.image_url}" alt="${item.nama}" referrerpolicy="no-referrer" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                       <div class="folder-fallback" style="display:none;">
-                           <i class="fa-solid fa-folder-open"></i>
-                           <span>${item.slot}</span>
-                       </div>`
-                    : `<div class="folder-fallback">
-                           <i class="fa-solid fa-folder-open"></i>
-                           <span>${item.slot}</span>
-                       </div>`;
+                const mediaHtml = `
+                    <img src="${item.image_url}" alt="${item.nama}" referrerpolicy="no-referrer" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="folder-fallback" style="display:none;">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <span>${item.slot}</span>
+                    </div>
+                `;
 
                 return `
-                    <div class="folder-card ${isSelected}" onclick="toggleFolderSelection('${item.fullLabel.replace(/'/g, "\\'")}')">
+                    <div class="folder-card ${lockedClass}" onclick="openFolderPage('${item.nama.replace(/'/g, "\\'")}')">
                         <div class="folder-thumb">
                             <span class="folder-slot-tag">${item.slot}</span>
                             <span class="folder-count-tag">${prokerCount} Proker</span>
+                            ${accessBadge}
                             ${mediaHtml}
                         </div>
                         <div class="folder-info">
                             <h4>${item.nama}</h4>
-                            <p>${item.bidang}</p>
                         </div>
                     </div>
                 `;
@@ -2195,9 +2813,12 @@
         // =========================================================
         async function submitPresensi(event) {
             event.preventDefault();
+            const namaInput = document.getElementById('presensiNama').value.trim();
+            const kategoriInput = document.getElementById('presensiKategori').value;
+            const localId = "local_att_" + Date.now();
             const payload = {
-                nama: document.getElementById('presensiNama').value.trim(),
-                kategori: document.getElementById('presensiKategori').value,
+                nama: namaInput,
+                kategori: kategoriInput,
                 tanggal: document.getElementById('presensiTanggal').value,
                 gdrive: document.getElementById('presensiGdrive').value.trim(),
                 catatan: document.getElementById('presensiCatatan').value.trim() || "-",
@@ -2206,22 +2827,35 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
+            const localRecord = { ...payload, id: localId, createdAt: new Date().toISOString() };
+            dataPresensi = [localRecord, ...dataPresensi];
+            saveLocalArray(STORAGE_KEYS.PRESENSI, dataPresensi);
+            renderPresensi();
+            updateStats();
+            document.getElementById('formPresensi').reset();
+
+            showGopaySuccess(
+                "Presensi Berhasil Terkirim!",
+                `Kehadiran atas nama ${namaInput} (${kategoriInput}) telah tercatat.`,
+                `${namaInput} • ${kategoriInput}`
+            );
+
             try {
-                await colAttendance.add(payload);
-                document.getElementById('formPresensi').reset();
-                alert("Presensi dan bukti GDrive berhasil disimpan ke Firebase!");
+                const docRef = await colAttendance.add(payload);
+                dataPresensi = dataPresensi.map(item => item.id === localId ? { ...item, id: docRef.id } : item);
+                saveLocalArray(STORAGE_KEYS.PRESENSI, dataPresensi);
             } catch (error) {
-                console.error("Gagal menyimpan presensi:", error);
-                alert("Terjadi kesalahan saat mengirim presensi.");
+                console.warn("Tersimpan di penyimpanan lokal:", error);
             }
         }
 
         function renderPresensi() {
             const tbody = document.getElementById('tabelPresensiBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
             if (dataPresensi.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">Belum ada presensi tercatat.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#5f6e5c;">Belum ada presensi tercatat.</td></tr>`;
                 return;
             }
 
@@ -2231,7 +2865,7 @@
                     <tr>
                         <td><strong>${item.nama}</strong><br><small>${item.tanggal}</small></td>
                         <td><span class="badge-status ${badgeClass}">${item.kategori}</span></td>
-                        <td><a href="${item.gdrive}" target="_blank" rel="noopener noreferrer" style="color:var(--sman-blue);">Buka GDrive <i class="fa-solid fa-external-link-alt"></i></a></td>
+                        <td><a href="${item.gdrive}" target="_blank" rel="noopener noreferrer" style="color:var(--sage-dark); font-weight:700;">Buka GDrive <i class="fa-solid fa-external-link-alt"></i></a></td>
                         <td><span class="badge-status badge-success">${item.status || 'Terverifikasi'}</span></td>
                     </tr>
                 `;
@@ -2239,37 +2873,64 @@
         }
 
         // =========================================================
-        // 8. CRUD PERFORMA TIM & PROKER (COLLECTION: teams)
+        // 8. CRUD PERFORMA TIM & PROKER (ACC KOMISI A & ACC BPH)
         // =========================================================
+        function formatDateTimeDisplay(dtValue) {
+            if (!dtValue) return "-";
+            if (dtValue.includes("T")) {
+                const [datePart, timePart] = dtValue.split("T");
+                return `${datePart} • ${timePart} WIB`;
+            }
+            return dtValue;
+        }
+
         async function submitProker(event) {
             event.preventDefault();
+            if (!openedFolderEntity) return;
+
+            const lockedTarget = openedFolderEntity.nama;
+            const prokerTitle = document.getElementById('prokerTitle').value.trim();
+            const localId = "local_proker_" + Date.now();
             const payload = {
-                team: document.getElementById('prokerTeam').value,
-                title: document.getElementById('prokerTitle').value.trim(),
-                deadline: document.getElementById('prokerDeadline').value,
-                approvedKomisiA: currentUserRole === 'Komisi A' || currentUserRole === 'BPH',
-                approvedBph: currentUserRole === 'BPH',
-                check1: false,
-                check2: false,
+                team: lockedTarget,
+                title: prokerTitle,
+                description: document.getElementById('prokerDescription').value.trim(),
+                deadline: document.getElementById('prokerDateTime').value,
+                accKomisiA: false,
+                accBph: false,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
+            const localRecord = { ...payload, id: localId, createdAt: new Date().toISOString() };
+            dataProker = [localRecord, ...dataProker];
+            saveLocalArray(STORAGE_KEYS.PROKER, dataProker);
+            renderProker();
+            renderFolderGrid();
+            updateStats();
+
+            document.getElementById('prokerTitle').value = "";
+            document.getElementById('prokerDescription').value = "";
+            document.getElementById('prokerDateTime').value = "";
+            document.getElementById('prokerTargetLocked').value = lockedTarget;
+
+            showGopaySuccess(
+                "Program Kerja Diajukan!",
+                `Pengajuan proker "${prokerTitle}" untuk ${lockedTarget} berhasil disimpan.`,
+                `${lockedTarget} • ${prokerTitle}`
+            );
+
             try {
-                await colTeams.add(payload);
-                document.getElementById('formProker').reset();
-                if (selectedTeamFilter !== "ALL") {
-                    document.getElementById('prokerTeam').value = selectedTeamFilter;
-                }
-                alert("Program kerja berhasil diajukan ke Firestore!");
+                const docRef = await colTeams.add(payload);
+                dataProker = dataProker.map(item => item.id === localId ? { ...item, id: docRef.id } : item);
+                saveLocalArray(STORAGE_KEYS.PROKER, dataProker);
             } catch (error) {
-                console.error("Gagal mengajukan proker:", error);
-                alert("Terjadi kesalahan saat mengajukan program kerja.");
+                console.warn("Proker tersimpan lokal:", error);
             }
         }
 
-        async function toggleCheck(docId, field) {
-            if (currentUserRole !== 'BPH' && currentUserRole !== 'Komisi A') {
-                alert("Akses ditolak! Pengecekan tugas hanya dapat dilakukan oleh BPH dan Komisi A.");
+        async function toggleAccCheckbox(docId, field) {
+            if (!hasFullFolderAccess()) {
+                alert("Akses ditolak! Checklist ACC hanya dapat dilakukan oleh BPH dan Komisi A.");
                 renderProker();
                 return;
             }
@@ -2278,65 +2939,92 @@
             if (!target) return;
 
             const nextValue = !target[field];
-            const updateData = { [field]: nextValue };
 
-            if (field === 'check1') {
-                updateData.approvedBph = nextValue;
+            dataProker = dataProker.map(item => item.id === docId ? { ...item, [field]: nextValue } : item);
+            saveLocalArray(STORAGE_KEYS.PROKER, dataProker);
+            renderProker();
+            updateStats();
+
+            if (nextValue) {
+                const accLabel = field === 'accKomisiA' ? 'ACC dari Komisi A' : 'ACC dari BPH';
+                showGopaySuccess(
+                    "Verifikasi ACC Berhasil!",
+                    `${accLabel} untuk program kerja "${target.title}" telah disetujui.`,
+                    `${target.team} • ${accLabel}`
+                );
             }
 
-            try {
-                await colTeams.doc(docId).update(updateData);
-            } catch (error) {
-                console.error("Gagal memperbarui status checkbox:", error);
-                alert("Gagal memperbarui status proker.");
+            if (!docId.startsWith("local_")) {
+                try {
+                    await colTeams.doc(docId).update({ [field]: nextValue });
+                } catch (error) {
+                    console.warn("Gagal sinkronisasi ACC ke cloud:", error);
+                }
             }
         }
 
         function renderProker() {
             const tbody = document.getElementById('tabelProkerBody');
             const heading = document.getElementById('prokerTableHeading');
-            const resetBtn = document.getElementById('btnResetFolderFilter');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
-            const filteredProker = selectedTeamFilter === "ALL"
-                ? dataProker
-                : dataProker.filter(item => item.team === selectedTeamFilter);
+            const targetName = openedFolderEntity ? openedFolderEntity.nama : "";
+            const filteredProker = targetName
+                ? dataProker.filter(item => item.team === targetName || (item.team && item.team.startsWith(targetName)))
+                : dataProker;
 
-            if (heading) {
-                heading.textContent = selectedTeamFilter === "ALL"
-                    ? "Daftar Proker & Sistem Checkbox Ganda"
-                    : `Proker: ${selectedTeamFilter}`;
-            }
-
-            if (resetBtn) {
-                resetBtn.style.display = selectedTeamFilter === "ALL" ? "none" : "inline-block";
+            if (heading && targetName) {
+                heading.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pengajuan • ${targetName}`;
             }
 
             if (filteredProker.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">Belum ada program kerja pada folder ini.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#5f6e5c;">Belum ada riwayat pengajuan program kerja pada folder ini.</td></tr>`;
                 return;
             }
 
-            const canCheckTask = (currentUserRole === 'BPH' || currentUserRole === 'Komisi A');
-            const disabledAttr = canCheckTask ? '' : 'disabled';
-            const lockNote = canCheckTask
+            const canVerify = hasFullFolderAccess();
+            const disabledAttr = canVerify ? '' : 'disabled';
+            const lockNote = canVerify
                 ? ''
-                : `<span class="lock-note"><i class="fa-solid fa-lock"></i> Hanya BPH &amp; Komisi A</span>`;
+                : `<span class="lock-note"><i class="fa-solid fa-lock"></i> Khusus BPH &amp; Komisi A</span>`;
 
             filteredProker.forEach(item => {
-                const approvalText = item.approvedBph
-                    ? '<span class="badge-status badge-success">ACC BPH &amp; Pembina</span>'
-                    : '<span class="badge-status badge-pending">Review Komisi A / BPH</span>';
+                const isAccKomisiA = Boolean(item.accKomisiA || item.check1);
+                const isAccBph = Boolean(item.accBph || item.check2 || item.approvedBph);
+
+                let approvalBadge = '<span class="badge-status badge-pending">Menunggu ACC Komisi A &amp; BPH</span>';
+                if (isAccKomisiA && isAccBph) {
+                    approvalBadge = '<span class="badge-status badge-success"><i class="fa-solid fa-circle-check"></i> ACC Komisi A &amp; BPH</span>';
+                } else if (isAccKomisiA) {
+                    approvalBadge = '<span class="badge-status badge-partial">ACC Komisi A (Menunggu BPH)</span>';
+                } else if (isAccBph) {
+                    approvalBadge = '<span class="badge-status badge-partial">ACC BPH (Menunggu Komisi A)</span>';
+                }
+
+                const descHtml = item.description
+                    ? `<div style="color:#5f6e5c; font-size:0.78rem; margin-top:2px;">${item.description}</div>`
+                    : '';
 
                 tbody.innerHTML += `
                     <tr>
-                        <td><strong>${item.title}</strong><br><small>${item.team}</small></td>
-                        <td>${item.deadline}</td>
-                        <td>${approvalText}</td>
                         <td>
-                            <div class="checkbox-group-inline">
-                                <label><input type="checkbox" ${item.check1 ? 'checked' : ''} ${disabledAttr} onchange="toggleCheck('${item.id}', 'check1')"> Centang 1 (Di-ACC)</label>
-                                <label><input type="checkbox" ${item.check2 ? 'checked' : ''} ${disabledAttr} onchange="toggleCheck('${item.id}', 'check2')"> Centang 2 (Selesai)</label>
+                            <strong>${item.title}</strong>
+                            ${descHtml}
+                            <small style="color:var(--sage-dark); font-weight:700;">${item.team}</small>
+                        </td>
+                        <td style="white-space:nowrap;">${formatDateTimeDisplay(item.deadline)}</td>
+                        <td>${approvalBadge}</td>
+                        <td>
+                            <div class="checkbox-group-stack">
+                                <label class="acc-pink">
+                                    <input type="checkbox" ${isAccKomisiA ? 'checked' : ''} ${disabledAttr} onchange="toggleAccCheckbox('${item.id}', 'accKomisiA')">
+                                    ACC dari Komisi A
+                                </label>
+                                <label>
+                                    <input type="checkbox" ${isAccBph ? 'checked' : ''} ${disabledAttr} onchange="toggleAccCheckbox('${item.id}', 'accBph')">
+                                    ACC dari BPH
+                                </label>
                             </div>
                             ${lockNote}
                         </td>
@@ -2346,7 +3034,7 @@
         }
 
         // =========================================================
-        // 9. CRUD EVALUASI & REKAP KPI (COLLECTION: kpi_evaluations)
+        // 9. CRUD EVALUASI & REKAP KPI
         // =========================================================
         async function submitKpi(event) {
             event.preventDefault();
@@ -2355,39 +3043,55 @@
             const s3 = parseFloat(document.getElementById('score3').value);
             const s4 = parseFloat(document.getElementById('score4').value);
             const finalScore = parseFloat(((s1 + s2 + s3 + s4) / 4).toFixed(1));
+            const cleanTarget = document.getElementById('kpiTarget').value.replace(/\s*\([^)]*\)/g, '').trim();
+            const periodVal = document.getElementById('kpiPeriod').value.trim();
 
+            const localId = "local_kpi_" + Date.now();
             const payload = {
-                target: document.getElementById('kpiTarget').value.trim(),
-                period: document.getElementById('kpiPeriod').value.trim(),
+                target: cleanTarget,
+                period: periodVal,
                 scores: [s1, s2, s3, s4],
                 finalScore: finalScore,
                 evaluatedBy: currentUserRole,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
+            const localRecord = { ...payload, id: localId, createdAt: new Date().toISOString() };
+            dataKpi = [localRecord, ...dataKpi];
+            saveLocalArray(STORAGE_KEYS.KPI, dataKpi);
+            renderKpi();
+            updateStats();
+
+            showGopaySuccess(
+                "Penilaian KPI Tersimpan!",
+                `Evaluasi KPI untuk ${cleanTarget} (${periodVal}) berhasil direkap.`,
+                `${cleanTarget} • Skor ${finalScore.toFixed(1)} / 4.0`
+            );
+
             try {
-                await colKpi.add(payload);
-                document.getElementById('formKpi').reset();
-                alert("Penilaian KPI berhasil disimpan ke Firebase!");
+                const docRef = await colKpi.add(payload);
+                dataKpi = dataKpi.map(item => item.id === localId ? { ...item, id: docRef.id } : item);
+                saveLocalArray(STORAGE_KEYS.KPI, dataKpi);
             } catch (error) {
-                console.error("Gagal menyimpan KPI:", error);
-                alert("Terjadi kesalahan saat menyimpan penilaian KPI.");
+                console.warn("KPI tersimpan lokal:", error);
             }
         }
 
         function renderKpi() {
             const tbody = document.getElementById('tabelKpiBody');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
             if (dataKpi.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">Belum ada data evaluasi KPI.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#5f6e5c;">Belum ada data evaluasi KPI.</td></tr>`;
                 return;
             }
 
             dataKpi.forEach(item => {
+                const cleanTargetName = (item.target || "").replace(/\s*\([^)]*\)/g, '').trim();
                 tbody.innerHTML += `
                     <tr>
-                        <td><strong>${item.target}</strong></td>
+                        <td><strong>${cleanTargetName}</strong></td>
                         <td>${item.period}</td>
                         <td><small>Target: ${item.scores[0]} | Bukti: ${item.scores[1]} | Dampak: ${item.scores[2]} | TindakLanjut: ${item.scores[3]}</small></td>
                         <td><strong>${Number(item.finalScore).toFixed(1)} / 4.0</strong></td>
@@ -2397,14 +3101,14 @@
         }
 
         // =========================================================
-        // 10. UPDATE RINGKASAN STATISTIK DASHBOARD
+        // 10. UPDATE STATISTIK & MODAL MAINTENANCE ADMIN
         // =========================================================
         function updateStats() {
             document.getElementById('statPresensi').textContent = dataPresensi.length;
 
             const totalProker = dataProker.length;
-            const selesaiProker = dataProker.filter(p => p.check2).length;
-            document.getElementById('statProkerSelesai').textContent = `${selesaiProker} / ${totalProker}`;
+            const accLengkap = dataProker.filter(p => (p.accKomisiA || p.check1) && (p.accBph || p.check2 || p.approvedBph)).length;
+            document.getElementById('statProkerSelesai').textContent = `${accLengkap} / ${totalProker}`;
 
             if (dataKpi.length > 0) {
                 const sumKpi = dataKpi.reduce((acc, curr) => acc + parseFloat(curr.finalScore), 0);
@@ -2414,6 +3118,32 @@
                 document.getElementById('statKpiAvg').textContent = `0.0 / 4.0`;
             }
         }
+
+        function showAdminMaintenance() {
+            const modal = document.getElementById('maintenanceModal');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeAdminMaintenance() {
+            const modal = document.getElementById('maintenanceModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        // =========================================================
+        // 11. AUTO-RESTORE SESI & DATA SAAT HALAMAN DI-REFRESH
+        // =========================================================
+        window.addEventListener('DOMContentLoaded', () => {
+            populateUnitDropdowns();
+            updateRoleHint();
+
+            const savedRole = localStorage.getItem(STORAGE_KEYS.ROLE);
+            const savedUnit = localStorage.getItem(STORAGE_KEYS.UNIT) || "Sekbid 1";
+            const savedTab = localStorage.getItem(STORAGE_KEYS.TAB) || "dashboard";
+
+            if (savedRole) {
+                enterDashboardSession(savedRole, savedUnit, savedTab);
+            }
+        });
     </script>
 </body>
 </html>
